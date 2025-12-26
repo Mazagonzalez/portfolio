@@ -1,0 +1,36 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title></title>
+		
+		<!-- Favicon -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	</head>
+	<body>
+		<main class="scrollbar">
+			<slot />
+		</main>
+	</body>
+</html>
+
+<style is:global>
+	html {
+    background-color: #0a0712;
+    color: white;
+    scroll-behavior: smooth;
+		font-family: 'Manrope', sans-serif;
+	}
+    
+	@media(prefers-reduce-motion: reduce){
+        html{
+        scroll-behavior: auto;
+        }
+	}
+</style>
