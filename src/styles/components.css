@@ -38,9 +38,17 @@
 }
 
 .size-screen{
-    @apply lg:max-w-[1250px] lg:mx-auto px-4 lg:px-0
+    @apply lg:max-w-[1100px] lg:mx-auto px-4 lg:px-0
 }
 
 .padding-auto{
     @apply py-[50px] 
+}
+
+.box-gen{
+    @apply bg-[#18181b33] backdrop-blur-lg rounded-lg border border-[#ffffff1a]
+}
+
+.icon{
+    @apply size-6 stroke-zinc-500 hover:stroke-zinc-400 hover:scale-105 transition-all cursor-pointer outline-none
 }

@@ -1,0 +1,42 @@
+---
+import { iconsHero } from "@/constants/home";
+---
+
+<section class="size-screen mt-32">
+    <div class="bg-zinc-800 rounded-full size-20"></div>
+    
+    <div class="col gap-2 mt-3">
+        <h1 class="text-3xl font-bold">
+            Hi, i am Carlos Maza
+        </h1>
+
+        <p class="text-white/80 font-light [&>span]:font-bold">
+            <span>Frontend developer</span> capable of creating, modifying <br> 
+            and optimizing functions, ensuring high performance <br> 
+            and <span>an excellent user experience.</span>
+        </p>
+    </div>
+
+    <div class="box-gen w-fit mt-6 px-3 py-1 row gap-3 items-center">
+        <span class="relative flex size-2">
+            <span class="absolute size-full animate-ping rounded-full bg-lime-400/75"></span>
+            <span class="relative size-full rounded-full bg-lime-500"></span>
+        </span>
+
+        <span class="text-sm font-bold">
+            Available for new projects
+        </span>
+    </div>
+
+    <div class="row items-center gap-8 mt-7">
+        {iconsHero.map(({ url, icon: Icon, target }) => (
+            <a 
+                href={url} 
+                target={target === false ? "_self" : "_blank"} 
+                rel="noopener noreferrer"
+            >
+                <Icon class="icon" />
+            </a>
+        ))}
+    </div>
+</section>
