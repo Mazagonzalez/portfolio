@@ -8,7 +8,7 @@ import "../styles/global.css";
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title></title>
+		<title>AMG - devel</title>
 		
 		<!-- Favicon -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -20,6 +20,17 @@ import "../styles/global.css";
 	</body>
 </html>
 
+<script is:inline>
+    // Scroll to section
+    function scrollToSection(sectionId) {
+        var section = document.getElementById(sectionId);
+        if (section) {
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    // End Scroll to section
+</script>
+
 <style is:global>
 	html {
     background-color: #0a0712;
@@ -27,7 +38,7 @@ import "../styles/global.css";
     scroll-behavior: smooth;
 		font-family: 'Manrope', sans-serif;
 	}
-    
+
 	@media(prefers-reduce-motion: reduce){
         html{
         scroll-behavior: auto;
