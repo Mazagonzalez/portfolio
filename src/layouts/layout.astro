@@ -1,5 +1,7 @@
 ---
+import { ClientRouter } from "astro:transitions";
 import UsageAurora from "@/components/ui/usage-aurora";
+
 import "../styles/global.css";
 ---
 
@@ -10,6 +12,7 @@ import "../styles/global.css";
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>AMG - devel</title>
+		<ClientRouter transition:persist />
 
 		<!-- Fonts -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
