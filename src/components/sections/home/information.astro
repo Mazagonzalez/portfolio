@@ -2,11 +2,37 @@
 import Card from "@/components/ui/card.astro";
 import IconSuitcase from "@/components/icons/icon-suitcase.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
+import IconStart from "@/components/icons/icon-start.astro";
+
 import { jobsInformation as jobs } from "@/constants/home";
+import { iconsSkills as skills } from "@/constants/home";
 ---
 
 <section class="size-screen py-25 col gap-5">
     <div class="row gap-5">
+        <Card
+            title="Skills"
+            width="w-1/2"
+            component={IconStart}
+        >
+            <div slot="content" class="center-content col gap-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                   <div class="center-content gap-4">
+                        {skills
+                            .filter(skill => skill.position === i)
+                            .map(({ icon: Icon, color }) => (
+                                <div class="center-content gap-4">
+                                    <div class={`box-gen size-15 center-content ${color}`}>
+                                        <Icon class="size-5" />
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div> 
+                ))}
+            </div>
+        </Card>
+
         <Card
             title="Experience"
             width="w-1/2"

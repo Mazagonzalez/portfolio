@@ -2,4 +2,6 @@
 
 @import "./components.css";
 @import "./scrollbar.css";
+@import "./animations.css";
 @import "tw-animate-css";
+

@@ -1,7 +1,22 @@
+/* Social Media */
 import IconLinkedin from "@/components/icons/icon-linkedin.astro";
 import IconGithub from "@/components/icons/icon-github.astro";
 import IconInstagram from "@/components/icons/icon-instagram.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
+
+/* Skills */
+import IconLaravel from "@/components/icons/skills/icon-laravel.astro";
+import IconAstro from "@/components/icons/skills/icon-astro.astro";
+import IconReact from "@/components/icons/skills/icon-react.astro";
+import IconJs from "@/components/icons/skills/icon-js.astro";
+import IconTailwind from "@/components/icons/skills/icon-tailwind.astro";
+import IconScss from "@/components/icons/skills/icon-scss.astro";
+import IconCss from "@/components/icons/skills/icon-css.astro";
+import IconHtml from "@/components/icons/skills/icon-html.astro";
+import IconBootstrap from "@/components/icons/skills/icon-bootstrap.astro";
+import IconGithubSkills from "@/components/icons/skills/icon-github.astro";
+import IconGit from "@/components/icons/skills/icon-git.astro";
+import IconSublime from "@/components/icons/skills/icon-sublime.astro";
 
 export const iconsHero = [
     {
@@ -50,5 +65,68 @@ export const jobsInformation = [
         company: "Core Soft S.A.S",
         role: "Junior Developer",
         period: "2023 - 2024",
+    }
+]
+
+export const iconsSkills = [
+    {
+        position: 0,
+        icon: IconLaravel,
+        color: 'hover:border-red-400/20!'
+    },
+    {
+        position: 0,
+        icon: IconAstro,
+        color: 'hover:border-orange-400/20!'
+    },
+    {
+        position: 0,
+        icon: IconReact,
+        color: 'hover:border-cyan-300/20!'
+    },
+    {
+        position: 0,
+        icon: IconJs,
+        color: 'hover:border-yellow-400/20!'
+    },
+    {
+        position: 1,
+        icon: IconTailwind,
+        color: 'hover:border-sky-300/20!'
+    },
+    {
+        position: 1,
+        icon: IconBootstrap,
+        color: 'hover:border-purple-400/20!'
+    },
+    {
+        position: 1,
+        icon: IconScss,
+        color: 'hover:border-pink-300/20!'
+    },
+    {
+        position: 1,
+        icon: IconCss,
+        color: 'hover:border-blue-400/20!'
+    },
+    {
+        position: 1,
+        icon: IconHtml,
+        color: 'hover:border-orange-400/20!'
+    },
+    {
+        position: 2,
+        icon: IconGithubSkills,
+        color: 'hover:border-white/20!'
+    },
+    {
+        position: 2,
+        icon: IconGit,
+        color: 'hover:border-orange-400/20!'
+    },
+    {
+        position: 2,
+        icon: IconSublime,
+        color: 'hover:border-cyan-400/20!'
     }
 ]
