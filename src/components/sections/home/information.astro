@@ -3,6 +3,8 @@ import Card from "@/components/ui/card.astro";
 import IconSuitcase from "@/components/icons/icon-suitcase.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
 import IconStart from "@/components/icons/icon-start.astro";
+import IconProjects from "@/components/icons/icon-projects.astro";
+import IconContact from "@/components/icons/icon-contact.astro";
 
 import { jobsInformation as jobs } from "@/constants/home";
 import { iconsSkills as skills } from "@/constants/home";
@@ -79,7 +81,44 @@ import { iconsSkills as skills } from "@/constants/home";
         </Card>
     </div>
 
-    <div class="row gap-5">
+    <div class="grid grid-cols-3 gap-5">
+        <Card 
+            title="Projects"
+            component={IconProjects}
+        >
 
+        </Card>
+
+        <div class="col gap-5">
+            <Card 
+                headerContent={false}
+                height="h-[30%]"
+            >
+
+            </Card>
+
+            <Card 
+                title="Contact"
+                component={IconContact}
+                height="h-[70%]"
+            >
+                <div slot="content" class="col">
+                    <p class="text-sm text-[#a0a0a0]">
+                        Creating unique digital experiences. <br>
+                        Let's talk about your next project!
+                    </p>
+
+                    <button class="button-main mt-10">
+                        Send an Email
+                    </button>
+                </div>
+            </Card>
+        </div>
+
+        <Card 
+            headerContent={false}
+        >
+           
+        </Card>
     </div>
 </section>

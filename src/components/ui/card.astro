@@ -1,5 +1,6 @@
 ---
 const { 
+    headerContent = true,
     height = 'h-80', 
     title, 
     component: Component,
@@ -9,15 +10,17 @@ const {
 ---
 
 <div class:list={[height, "w-full box-gen p-5"]}>
-    <div class="w-fit! box-gen row items-center gap-1 rounded-full! py-1 px-3">
-        <Component class="size-4 stroke-white" />
+    {headerContent && (
+        <div class="w-fit! box-gen row items-center gap-1 rounded-full! py-1 px-3">
+            <Component class="size-4 stroke-white" />
+    
+            <span class="text-sm">
+                {title}
+            </span> 
+        </div>
+    )}
 
-        <span class="text-sm">
-            {title}
-        </span> 
-    </div>
-
-    <div class={`mt-5 ${overflow === true ? '' : 'overflow-hidden'}`}>
+    <div class={`${headerContent ? 'mt-5' : ''} ${overflow === true ? '' : 'overflow-hidden'}`}>
         <div class={`${overflow === true ? '' : 'overflow-y-auto scrollbar'}`}>
             <slot name="content" />
         </div>
