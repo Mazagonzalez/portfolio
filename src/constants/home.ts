@@ -25,3 +25,30 @@ export const iconsHero = [
         target: false
     },
 ]
+
+export const jobsInformation = [
+    {
+        logo: "/images/efinti.jpg",
+        company: "Efinti Holldings LLC",
+        role: "Main Developer Frontend",
+        period: "2025 - Present",
+    },
+    {
+        logo: "/images/openbox.jpg",
+        company: "OpenBox",
+        role: "Web Developer",
+        period: "2025 - Present",
+    },
+    {
+        logo: "/images/coresoft.jpg",
+        company: "Core Soft S.A.S",
+        role: "Frontend Developer",
+        period: "2024 - 2025",
+    },
+    {
+        logo: "/images/coresoft.jpg",
+        company: "Core Soft S.A.S",
+        role: "Junior Developer",
+        period: "2023 - 2024",
+    }
+]

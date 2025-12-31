@@ -1,0 +1,57 @@
+---
+import Card from "@/components/ui/card.astro";
+import IconSuitcase from "@/components/icons/icon-suitcase.astro";
+import IconDownload from "@/components/icons/icon-download.astro";
+import { jobsInformation as jobs } from "@/constants/home";
+---
+
+<section class="size-screen py-25 col gap-5">
+    <div class="row gap-5">
+        <Card
+            title="Experience"
+            width="w-1/2"
+            component={IconSuitcase}
+            overflow={false}
+            footerContent={true}
+        >
+            <div slot="content" class="h-46 pr-4">
+                {jobs.map(( item ) => (
+                    <div class="row items-center justify-between py-4">
+                        <div class="row items-center gap-2.5">
+                            <img 
+                                src={item.logo} 
+                                alt={item.company}
+                                width="32"
+                                height="32"
+                                loading="lazy" 
+                                class="rounded-lg"
+                            />
+
+                            <h2>
+                                <span class="font-medium">
+                                    {item.company}
+                                </span>
+
+                                <span class="ml-2 text-xs text-[#a0a0a0]">
+                                    {item.role}
+                                </span> 
+                            </h2>
+                        </div>
+
+                        <span class="text-xs text-[#a0a0a0]">
+                            {item.period}
+                        </span>
+                    </div>
+                ))}
+            </div>
+
+            <div slot="footer" class="w-full mt-4">
+                <button class="button-main">
+                    <IconDownload class="size-4 stroke-zinc-400" />
+
+                    <span class="text-sm">Download CV</span>
+                </button>
+            </div>
+        </Card>
+    </div>
+</section>

@@ -46,9 +46,13 @@
 }
 
 .box-gen{
-    @apply bg-[#18181b33] backdrop-blur-lg rounded-lg border border-[#ffffff1a]
+    @apply bg-[#18181b33] backdrop-blur-lg rounded-lg border border-[#ffffff1a] outline outline-black/25
 }
 
 .icon{
     @apply size-6 stroke-zinc-500 hover:stroke-zinc-400 hover:scale-105 transition-all cursor-pointer outline-none
+}
+
+.button-main{
+    @apply w-full border border-[#ffffff1a] text-zinc-400 flex justify-center items-center gap-2 py-1.5 rounded-lg cursor-pointer outline outline-black/25 hover:bg-zinc-900 hover:[&>span]:text-white hover:[&>svg]:stroke-white transition-all duration-300
 }

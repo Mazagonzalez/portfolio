@@ -1,0 +1,29 @@
+---
+const { 
+    width, 
+    title, 
+    component: Component,
+    overflow = true,
+    footerContent = false
+} = Astro.props;
+---
+
+<div class:list={[width, "box-gen p-5 h-80"]}>
+    <div class="w-fit! box-gen row items-center gap-1 rounded-full! py-1 px-3">
+        <Component class="size-4 stroke-white" />
+
+        <span class="text-sm">
+            {title}
+        </span> 
+    </div>
+
+    <div class={`mt-5 ${overflow === true ? '' : 'overflow-hidden'}`}>
+        <div class={`${overflow === true ? '' : 'overflow-y-auto scrollbar'}`}>
+            <slot name="content" />
+        </div>
+
+        {footerContent && (
+            <slot name="footer" />
+        )}
+    </div>
+</div>
