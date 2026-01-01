@@ -5,13 +5,14 @@ import IconDownload from "@/components/icons/icon-download.astro";
 import IconStart from "@/components/icons/icon-start.astro";
 import IconProjects from "@/components/icons/icon-projects.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
+import Disk from "@/components/ui/disk.astro";
 
 import { jobsInformation as jobs } from "@/constants/home";
 import { iconsSkills as skills } from "@/constants/home";
 ---
 
 <section class="size-screen py-25 col gap-5">
-    <div class="grid grid-cols-2 gap-5">
+    <div class="grid lg:grid-cols-2 gap-5">
         <Card
             title="Skills"
             component={IconStart}
@@ -81,7 +82,7 @@ import { iconsSkills as skills } from "@/constants/home";
         </Card>
     </div>
 
-    <div class="grid grid-cols-3 gap-5">
+    <div class="grid lg:grid-cols-3 gap-5">
         <Card 
             title="Projects"
             component={IconProjects}
@@ -94,7 +95,46 @@ import { iconsSkills as skills } from "@/constants/home";
                 headerContent={false}
                 height="h-[30%]"
             >
+                <div slot="content" class="row gap-5 items-center">
+                    <Disk 
+                        id="diskImg"
+                        src="/images/music/airbag.jpg" 
+                        alt="Cover"
+                    />
 
+                    <div class="col w-1/2">
+                        <p id="trackTitle" class="truncate font-semibold text-sm"></p>
+                        <p id="trackArtist" class="truncate text-xs opacity-50"></p>
+
+                        <div class="row gap-3 items-center mt-1">
+                            <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                                <div id="progress" class="h-full w-0 bg-white/50"></div>
+                            </div>
+    
+                            <span id="time" class="text-right text-[11px] tabular-nums text-white/70">0:00</span>
+                        </div>
+                    </div>
+
+                    <div class="row gap-2">
+                        <button
+                            id="playBtn"
+                            type="button" 
+                            class="size-8! center-content button-main"
+                            aria-label="Play"
+                        >
+                            <span id="playIcon">▶</span>
+                        </button>
+
+                        <button
+                            id="nextBtn"
+                            type="button"
+                            class="size-8! center-content button-main"
+                            aria-label="Next"
+                        >
+                            |▶
+                        </button>
+                    </div>
+                </div>
             </Card>
 
             <Card 
@@ -108,7 +148,7 @@ import { iconsSkills as skills } from "@/constants/home";
                         Let's talk about your next project!
                     </p>
 
-                    <button class="button-main mt-10">
+                    <button class="button-main mt-8">
                         Send an Email
                     </button>
                 </div>

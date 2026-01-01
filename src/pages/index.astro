@@ -1,11 +1,22 @@
 ---
 import Hero from "@/components/sections/home/hero.astro"
 import Information from "@/components/sections/home/information.astro"
+import MusicScript from "@/components/utils/MusicScript.astro";
 import Layout from "@/layouts/layout.astro"
+import { TRACKS } from "@/constants/home";
 ---
 
 <Layout>
     <Hero />
 
     <Information />
+
+    <audio 
+        id="player" 
+        preload="none"
+    ></audio>
+
+    <MusicScript 
+        TRACKS={TRACKS} 
+    />
 </Layout>

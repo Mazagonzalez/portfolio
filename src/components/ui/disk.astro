@@ -1,0 +1,22 @@
+---
+const { id, src, alt } = Astro.props;
+---
+
+<div class="w-fit relative">
+    <img
+        id={id} 
+        loading="lazy" 
+        width="64" 
+        height="64"
+        class="absolute bottom-0 left-0 right-0 top-0 z-10 m-auto aspect-square size-14 animate-[spin_4s_linear_infinite] rounded-full object-cover" 
+        src={src} 
+        alt={alt}
+        style="color: transparent;"
+    >
+
+    <div class="size-3 rounded-full bg-[#171717] absolute-center z-20 outline-offset-0 ring-1 ring-white/10 border-white/10 outline-[#1a1a1a]"></div>
+
+    <div 
+        class="shadow-md size-14 rounded-full border bg-black outline outline-offset-0 ring-2 ring-white/10 border-white/10 outline-[#1a1a1a]"
+    ></div>
+</div>
