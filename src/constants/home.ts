@@ -43,16 +43,22 @@ export const iconsHero = [
 
 export const jobsInformation = [
     {
-        logo: "/images/efinti.jpg",
-        company: "Efinti Holldings LLC",
-        role: "Main Developer Frontend",
-        period: "2025 - Present",
-    },
-    {
         logo: "/images/openbox.jpg",
         company: "OpenBox",
         role: "Web Developer",
         period: "2025 - Present",
+    },
+    {
+        logo: "/images/subito.jpg",
+        company: "Súbito",
+        role: "Web Developer",
+        period: "2025 - Present",
+    },
+    {
+        logo: "/images/efinti.jpg",
+        company: "Efinti Holldings LLC",
+        role: "Main Developer Frontend",
+        period: "2025 - 2026",
     },
     {
         logo: "/images/coresoft.jpg",
@@ -130,6 +136,33 @@ export const iconsSkills = [
         color: 'hover:border-cyan-400/20!'
     }
 ]
+
+export const projects = [
+    {
+        name: "RoofPixel",
+        description: "Plataforma de medición de techos con render en tiempo real.",
+        url: "https://roofpixel.co",
+        stack: ["React", "Tailwind", "Astro"],
+    },
+    {
+        name: "Súbito",
+        description: "App de delivery con tracking de pedidos en vivo.",
+        url: "https://subito.app",
+        stack: ["React", "Laravel", "Scss"],
+    },
+    {
+        name: "OpenBox",
+        description: "Dashboard de analítica e inventario para e-commerce.",
+        url: "https://openbox.io",
+        stack: ["Astro", "Tailwind", "Js"],
+    },
+    {
+        name: "Efinti Pay",
+        description: "Pasarela de pagos con panel administrativo y reportes.",
+        url: "https://efinti.com",
+        stack: ["React", "Tailwind", "Laravel"],
+    },
+];
 
 export const TRACKS = [
     {
