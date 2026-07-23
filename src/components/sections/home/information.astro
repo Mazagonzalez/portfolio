@@ -6,6 +6,7 @@ import IconStart from "@/components/icons/icon-start.astro";
 import IconProjects from "@/components/icons/icon-projects.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
 import Disk from "@/components/ui/disk.astro";
+import Hyperspace from "@/components/utils/Hyperspace.jsx";
 
 import { jobsInformation as jobs } from "@/constants/home";
 import { iconsSkills as skills } from "@/constants/home";
@@ -193,12 +194,19 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
             </Card>
         </div>
 
-        <!-- Character (Rengoku) -->
+        <!-- Signature -->
         <Card
             headerContent={false}
             overflow={false}
         >
-        
+            <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg">
+                <Hyperspace client:only="react" />
+
+                <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                    <span class="text-2xl font-bold tracking-wide">AMG</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">Hover to jump to lightspeed</span>
+                </div>
+            </div>
         </Card>
     </div>
 </section>
