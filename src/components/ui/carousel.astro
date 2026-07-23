@@ -64,26 +64,28 @@ const { images = [], alt = "" } = Astro.props;
 </div>
 
 <script>
-    const track = document.getElementById("carouselTrack");
-    const prevBtn = document.getElementById("carouselPrev");
-    const nextBtn = document.getElementById("carouselNext");
-    const dots = document.querySelectorAll<HTMLButtonElement>("#carouselDots button");
+    document.addEventListener("astro:page-load", () => {
+        const track = document.getElementById("carouselTrack");
+        const prevBtn = document.getElementById("carouselPrev");
+        const nextBtn = document.getElementById("carouselNext");
+        const dots = document.querySelectorAll<HTMLButtonElement>("#carouselDots button");
 
-    if (track && dots.length > 0) {
-        let index = 0;
+        if (track && dots.length > 0) {
+            let index = 0;
 
-        const goTo = (i: number) => {
-            index = (i + dots.length) % dots.length;
-            track.style.transform = `translateX(-${index * 100}%)`;
+            const goTo = (i: number) => {
+                index = (i + dots.length) % dots.length;
+                track.style.transform = `translateX(-${index * 100}%)`;
 
-            dots.forEach((dot, di) => {
-                dot.classList.toggle("bg-white/70", di === index);
-                dot.classList.toggle("bg-white/20", di !== index);
-            });
-        };
+                dots.forEach((dot, di) => {
+                    dot.classList.toggle("bg-white/70", di === index);
+                    dot.classList.toggle("bg-white/20", di !== index);
+                });
+            };
 
-        prevBtn?.addEventListener("click", () => goTo(index - 1));
-        nextBtn?.addEventListener("click", () => goTo(index + 1));
-        dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
-    }
+            prevBtn?.addEventListener("click", () => goTo(index - 1));
+            nextBtn?.addEventListener("click", () => goTo(index + 1));
+            dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+        }
+    });
 </script>

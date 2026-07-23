@@ -100,24 +100,26 @@ const filters = [
 </Layout>
 
 <script>
-    const buttons = document.querySelectorAll<HTMLButtonElement>("#projectFilters button");
-    const cards = document.querySelectorAll<HTMLAnchorElement>("#projectList a");
+    document.addEventListener("astro:page-load", () => {
+        const buttons = document.querySelectorAll<HTMLButtonElement>("#projectFilters button");
+        const cards = document.querySelectorAll<HTMLAnchorElement>("#projectList a");
 
-    buttons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const filter = btn.dataset.filter;
+        buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const filter = btn.dataset.filter;
 
-            buttons.forEach((b) => {
-                const isActive = b === btn;
-                b.classList.toggle("text-white", isActive);
-                b.classList.toggle("bg-white/10", isActive);
-                b.classList.toggle("border-white/20!", isActive);
-                b.classList.toggle("text-[#a0a0a0]", !isActive);
-            });
+                buttons.forEach((b) => {
+                    const isActive = b === btn;
+                    b.classList.toggle("text-white", isActive);
+                    b.classList.toggle("bg-white/10", isActive);
+                    b.classList.toggle("border-white/20!", isActive);
+                    b.classList.toggle("text-[#a0a0a0]", !isActive);
+                });
 
-            cards.forEach((card) => {
-                const show = filter === "all" || card.dataset.category === filter;
-                card.classList.toggle("hidden", !show);
+                cards.forEach((card) => {
+                    const show = filter === "all" || card.dataset.category === filter;
+                    card.classList.toggle("hidden", !show);
+                });
             });
         });
     });
