@@ -5,6 +5,11 @@ import Navbar from "@/components/navbar.astro";
 import Footer from "@/components/footer.astro";
 
 import "../styles/global.css";
+
+const {
+	title = "AMG - devel",
+	description = "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -13,7 +18,12 @@ import "../styles/global.css";
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>AMG - devel</title>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta name="twitter:card" content="summary" />
 		<ClientRouter transition:persist />
 
 		<!-- Fonts -->
