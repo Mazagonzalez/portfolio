@@ -140,27 +140,51 @@ export const iconsSkills = [
 export const projects = [
     {
         name: "RoofPixel",
-        description: "Plataforma de medición de techos con render en tiempo real.",
+        description: "Design and web development agency crafting branding, UI/UX, and websites for startups.",
         url: "https://roofpixel.co",
         stack: ["React", "Tailwind", "Astro"],
     },
     {
-        name: "Súbito",
-        description: "App de delivery con tracking de pedidos en vivo.",
-        url: "https://subito.app",
-        stack: ["React", "Laravel", "Scss"],
+        name: "EFY Finance",
+        description: "Financial platform for personal and corporate accounts, backed by iOS and Android apps.",
+        url: "https://app.efyfinance.com/",
+        stack: ["Laravel", "Livewire", "Tailwind", "AlpineJS"]
     },
     {
-        name: "OpenBox",
-        description: "Dashboard de analítica e inventario para e-commerce.",
-        url: "https://openbox.io",
-        stack: ["Astro", "Tailwind", "Js"],
+        name: "CBI",
+        description: "Church website for a Barranquilla community sharing worship and discipleship content.",
+        url: "https://cbi-theta.vercel.app/",
+        stack: ["React", "Astro", "Tailwind"]
     },
     {
-        name: "Efinti Pay",
-        description: "Pasarela de pagos con panel administrativo y reportes.",
-        url: "https://efinti.com",
-        stack: ["React", "Tailwind", "Laravel"],
+        name: "Facíl",
+        description: "",
+        url: "https://facil-app-nxg8exqh.on-forge.com/login",
+        stack: ["Laravel", "Livewire", "Tailwind", "AlpineJS"]
+    },
+    {
+        name: "VPM Tech",
+        description: "Recruitment platform connecting Latin American tech talent with international companies.",
+        url: "https://vpm-tech.vercel.app/",
+        stack: ["React", "Astro", "Tailwind"]
+    },
+    {
+        name: "Technohub",
+        description: "Online tech retailer selling computer hardware, audio gear, and gaming accessories.",
+        url: "https://technohub.com.co/",
+        stack: ["Wordpress", "HTML", "CSS", "JS"]
+    },
+    {
+        name: "One Caribe",
+        description: "Corporate site for a beverage manufacturer distributing sodas, water, and juices.",
+        url: "https://one-caribe.vercel.app/",
+        stack: ["Astro", "Tailwind"]
+    },
+    {
+        name: "Kivo",
+        description: "Online store curating board games chosen for the experiences they create.",
+        url: "https://juegoskivo.com/",
+        stack: ["Wordpress", "HTML", "CSS"]
     },
 ];
 

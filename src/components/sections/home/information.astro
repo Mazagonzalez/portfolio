@@ -10,6 +10,7 @@ import Disk from "@/components/ui/disk.astro";
 import { jobsInformation as jobs } from "@/constants/home";
 import { iconsSkills as skills } from "@/constants/home";
 import { projects } from "@/constants/home";
+import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 ---
 
 <section class="size-screen py-25 col gap-5">
@@ -105,8 +106,8 @@ import { projects } from "@/constants/home";
                                 {project.name}
                             </h2>
 
-                            <span class="text-[#a0a0a0] text-xs transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white">
-                                ↗
+                            <span class="stroke-[#a0a0a0] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
+                                <IconArrowUpRight class="size-3" />
                             </span>
                         </div>
 
