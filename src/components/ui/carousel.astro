@@ -1,0 +1,89 @@
+---
+import IconChevronLeft from "@/components/icons/icon-chevron-left.astro";
+import IconChevronRight from "@/components/icons/icon-chevron-right.astro";
+
+const { images = [], alt = "" } = Astro.props;
+---
+
+<div class="col gap-3">
+    <div class="box-gen relative aspect-video overflow-hidden">
+        {images.length > 0 ? (
+            <>
+                <div id="carouselTrack" class="row h-full transition-transform duration-500 ease-out">
+                    {images.map((src: string) => (
+                        <img
+                            src={src}
+                            alt={alt}
+                            loading="lazy"
+                            class="h-full w-full shrink-0 object-cover"
+                        />
+                    ))}
+                </div>
+
+                {images.length > 1 && (
+                    <>
+                        <button
+                            id="carouselPrev"
+                            type="button"
+                            aria-label="Previous image"
+                            class="absolute-center-y left-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
+                        >
+                            <IconChevronLeft class="size-4" />
+                        </button>
+
+                        <button
+                            id="carouselNext"
+                            type="button"
+                            aria-label="Next image"
+                            class="absolute-center-y right-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
+                        >
+                            <IconChevronRight class="size-4" />
+                        </button>
+                    </>
+                )}
+            </>
+        ) : (
+            <div class="size-full center-content">
+                <p class="text-sm text-[#a0a0a0]">Preview images coming soon.</p>
+            </div>
+        )}
+    </div>
+
+    {images.length > 1 && (
+        <div id="carouselDots" class="row justify-center gap-2">
+            {images.map((_: string, i: number) => (
+                <button
+                    type="button"
+                    data-index={i}
+                    aria-label={`Go to image ${i + 1}`}
+                    class:list={["size-1.5 rounded-full transition-colors cursor-pointer", i === 0 ? "bg-white/70" : "bg-white/20"]}
+                ></button>
+            ))}
+        </div>
+    )}
+</div>
+
+<script>
+    const track = document.getElementById("carouselTrack");
+    const prevBtn = document.getElementById("carouselPrev");
+    const nextBtn = document.getElementById("carouselNext");
+    const dots = document.querySelectorAll<HTMLButtonElement>("#carouselDots button");
+
+    if (track && dots.length > 0) {
+        let index = 0;
+
+        const goTo = (i: number) => {
+            index = (i + dots.length) % dots.length;
+            track.style.transform = `translateX(-${index * 100}%)`;
+
+            dots.forEach((dot, di) => {
+                dot.classList.toggle("bg-white/70", di === index);
+                dot.classList.toggle("bg-white/20", di !== index);
+            });
+        };
+
+        prevBtn?.addEventListener("click", () => goTo(index - 1));
+        nextBtn?.addEventListener("click", () => goTo(index + 1));
+        dots.forEach((dot, i) => dot.addEventListener("click", () => goTo(i)));
+    }
+</script>
