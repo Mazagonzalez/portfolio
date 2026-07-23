@@ -3,6 +3,8 @@ import Layout from "@/layouts/layout.astro";
 import Card from "@/components/ui/card.astro";
 import IconUser from "@/components/icons/icon-user.astro";
 import IconBook from "@/components/icons/icon-book.astro";
+import IconWorkflow from "@/components/icons/icon-workflow.astro";
+import IconCoffe from "@/components/icons/icon-coffe.astro";
 import IconImage from "@/components/icons/icon-image.astro";
 
 const hobbies = [
@@ -16,7 +18,7 @@ const hobbies = [
 
 const stats = [
     { value: "3", label: "Years writing code" },
-    { value: "not found", label: "Cups of coffee" },
+    { value: "Many", label: "Cups of coffee" },
     { value: "1,000+", label: "Bugs squashed (a few still hiding)" },
 ];
 ---
@@ -62,7 +64,7 @@ const stats = [
                 </div>
 
                 <Card headerContent={false} overflow={false}>
-                    <div slot="content" class="relative h-64 w-full lg:h-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                    <div slot="content" class="relative h-68 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2">
                         <div class="col items-center gap-2 text-center">
                             <IconImage class="size-6 stroke-white/20" />
                             <span class="text-xs text-white/30">Photo coming soon</span>
@@ -74,7 +76,7 @@ const stats = [
             <!-- Row 2: Quote + Today + Photo -->
             <div class="grid lg:grid-cols-3 gap-5">
                 <Card headerContent={false}>
-                    <div slot="content" class="h-full center-content col gap-2 text-center py-4">
+                    <div slot="content" class="size-full center-content col gap-2 text-center px-7 absolute-center">
                         <p class="text-xl font-semibold tracking-wide">
                             "Per Aspera Ad Astra"
                         </p>
@@ -85,7 +87,7 @@ const stats = [
                     </div>
                 </Card>
 
-                <Card title="What I Do Today" component={IconUser}>
+                <Card title="What I Do Today" component={IconWorkflow}>
                     <div slot="content" class="col gap-3">
                         <p class="text-sm text-[#a0a0a0] leading-relaxed">
                             These days I especially enjoy frontend development — mixing logic with
@@ -102,7 +104,7 @@ const stats = [
                 </Card>
 
                 <Card headerContent={false} overflow={false}>
-                    <div slot="content" class="relative h-64 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                    <div slot="content" class="relative h-68 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2">
                         <div class="col items-center gap-2 text-center">
                             <IconImage class="size-6 stroke-white/20" />
                             <span class="text-xs text-white/30">Photo coming soon</span>
@@ -114,7 +116,7 @@ const stats = [
             <!-- Row 3: Hobbies + Photo/Stats -->
             <div class="grid lg:grid-cols-3 gap-5">
                 <div class="lg:col-span-2">
-                    <Card title="Off the Clock" component={IconUser} height="h-fit" overflow={false}>
+                    <Card title="Off the Clock" component={IconCoffe} height="h-fit" overflow={false}>
                         <div slot="content" class="col gap-4">
                             <p class="text-sm text-[#a0a0a0] leading-relaxed">
                                 When I'm not coding: music always playing, deep in a video game, binging
@@ -136,7 +138,7 @@ const stats = [
 
                 <div class="col gap-5">
                     <Card headerContent={false} overflow={false} height="h-[45%]">
-                        <div slot="content" class="relative h-full w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                        <div slot="content" class="relative h-full w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2">
                             <div class="col items-center gap-2 text-center">
                                 <IconImage class="size-6 stroke-white/20" />
                                 <span class="text-xs text-white/30">Photo coming soon</span>
