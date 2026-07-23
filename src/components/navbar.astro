@@ -1,0 +1,89 @@
+---
+import IconHome from "@/components/icons/icon-home.astro";
+import IconProjects from "@/components/icons/icon-projects.astro";
+import IconStart from "@/components/icons/icon-start.astro";
+import IconContact from "@/components/icons/icon-contact.astro";
+
+const items = [
+    { href: "/", label: "Home", icon: IconHome },
+    { href: "/projects", label: "Projects", icon: IconProjects },
+    { href: "/skills", label: "Skills", icon: IconStart },
+    { href: "mailto:mazagonzalez61@gmail.com", label: "Contact", icon: IconContact },
+];
+
+const path = Astro.url.pathname;
+---
+
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+    <div id="dock" class="box-gen row items-center gap-1.5 px-3 py-2.5">
+        {items.map((item) => {
+            const isActive = item.href === "/"
+                ? path === "/"
+                : !item.href.startsWith("mailto:") && path.startsWith(item.href);
+
+            return (
+                <div class="dock-item relative group">
+                    <span class="tooltip pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-black/80 backdrop-blur px-2.5 py-1 text-xs text-white opacity-0 scale-90 transition-all duration-200 group-hover:opacity-100 group-hover:scale-100">
+                        {item.label}
+                    </span>
+
+                    <a
+                        href={item.href}
+                        aria-label={item.label}
+                        class:list={[
+                            "dock-icon center-content size-11 rounded-full transition-colors duration-300",
+                            isActive ? "bg-white/10 stroke-white" : "stroke-[#a0a0a0] hover:stroke-white"
+                        ]}
+                    >
+                        <item.icon class="size-5 pointer-events-none" />
+                    </a>
+                </div>
+            );
+        })}
+    </div>
+</nav>
+
+<style>
+    .dock-icon {
+        transform-origin: bottom center;
+        will-change: transform;
+        transition: transform 0.15s ease-out, color 0.3s ease;
+    }
+</style>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const dock = document.getElementById("dock");
+        if (!dock) return;
+
+        const items = Array.from(dock.querySelectorAll<HTMLElement>(".dock-item"));
+        const icons = items.map((item) => item.querySelector<HTMLElement>(".dock-icon")!);
+
+        const maxScale = 1.4;
+        const lift = 10;
+        const spread = 100;
+
+        const onMove = (e: MouseEvent) => {
+            const mouseX = e.clientX;
+
+            items.forEach((item, i) => {
+                const rect = item.getBoundingClientRect();
+                const center = rect.left + rect.width / 2;
+                const distance = Math.abs(mouseX - center);
+                const influence = Math.max(0, 1 - distance / spread);
+                const scale = 1 + influence * (maxScale - 1);
+
+                icons[i].style.transform = `scale(${scale}) translateY(${-influence * lift}px)`;
+            });
+        };
+
+        const onLeave = () => {
+            icons.forEach((icon) => {
+                icon.style.transform = "scale(1) translateY(0)";
+            });
+        };
+
+        dock.addEventListener("mousemove", onMove);
+        dock.addEventListener("mouseleave", onLeave);
+    });
+</script>
