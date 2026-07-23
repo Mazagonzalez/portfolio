@@ -1,0 +1,39 @@
+---
+import { iconsHero } from "@/constants/home";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="size-screen relative z-10 pb-10">
+    <div class="col gap-6">
+        <div class="row flex-wrap items-center justify-between gap-6">
+            <div class="col gap-1">
+                <h2 class="text-lg font-semibold">
+                    Carlos Maza
+                </h2>
+
+                <p class="text-sm text-[#a0a0a0]">
+                    Frontend developer building fast, thoughtful web experiences.
+                </p>
+            </div>
+
+            <div class="row items-center gap-5">
+                {iconsHero.map(({ url, icon: Icon, target }) => (
+                    <a
+                        href={url}
+                        target={target === false ? "_self" : "_blank"}
+                        rel="noopener noreferrer"
+                    >
+                        <Icon class="icon" />
+                    </a>
+                ))}
+            </div>
+        </div>
+
+        <div class="h-px w-full bg-white/10"></div>
+
+        <p class="text-xs text-[#a0a0a0] text-end">
+            &copy; {year} Carlos Maza. All rights reserved.
+        </p>
+    </div>
+</footer>
