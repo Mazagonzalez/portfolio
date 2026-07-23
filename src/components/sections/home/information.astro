@@ -15,7 +15,7 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 ---
 
 <section class="size-screen py-25 col gap-5">
-    <div class="grid lg:grid-cols-2 gap-5">
+    <div class="grid md:grid-cols-2 gap-5">
         <!-- Skills -->
         <Card
             title="Skills"
@@ -88,7 +88,7 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
         </Card>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-5">
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         <!-- Projects -->
         <Card
             title="Projects"
@@ -195,18 +195,20 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
         </div>
 
         <!-- Signature -->
-        <Card
-            headerContent={false}
-            overflow={false}
-        >
-            <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg">
-                <Hyperspace client:only="react" />
+        <div class="md:col-span-2 lg:col-span-1">
+            <Card
+                headerContent={false}
+                overflow={false}
+            >
+                <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg">
+                    <Hyperspace client:only="react" />
 
-                <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
-                    <span class="text-2xl font-bold tracking-wide">AMG</span>
-                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">Hover to jump to lightspeed</span>
+                    <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                        <span class="text-2xl font-bold tracking-wide">AMG</span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">Hover to jump to lightspeed</span>
+                    </div>
                 </div>
-            </div>
-        </Card>
+            </Card>
+        </div>
     </div>
 </section>
