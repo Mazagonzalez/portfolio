@@ -1,0 +1,76 @@
+---
+import IconStart from "@/components/icons/icon-start.astro";
+import IconCode from "@/components/icons/icon-code.astro";
+import IconTerminal from "@/components/icons/icon-terminal.astro";
+import IconVs from "@/components/icons/icon-vs.astro";
+import IconSquareEdit from "@/components/icons/icon-square-edit.astro";
+import IconAi from "@/components/icons/icon-ai.astro";
+import Layout from "@/layouts/layout.astro";
+import Card from "@/components/ui/card.astro";
+
+import { skills } from "@/constants/skills";
+
+const types = [...new Set(skills.map((skill) => skill.type))];
+
+const typeIcons: Record<string, typeof IconCode> = {
+    Frontend: IconCode,
+    Backend: IconTerminal,
+    Tools: IconVs,
+    CMS: IconSquareEdit,
+    AI: IconAi,
+};
+---
+
+<Layout>
+    <section class="size-screen mt-32">
+        <div class="col gap-2">
+            <div class="row items-center gap-2">
+                <IconStart class="size-7 stroke-white" />
+
+                <h1 class="text-3xl font-bold">
+                    Skills
+                </h1>
+            </div>
+            
+            <p class="text-white/80 font-light [&>span]:font-bold">
+                Technologies and tools that I use in my day-to-day work. <br>
+                Some are part of the stack of the projects I work on, while <br>
+                others support my personal development workflow and productivity.
+            </p>
+        </div>
+
+        <div class="py-20 col gap-5">
+            {types.map((type) => (
+                <Card
+                    title={type}
+                    component={typeIcons[type]}
+                    height="h-fit"
+                    overflow={false}
+                >
+                    <div slot="content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {skills
+                            .filter((skill) => skill.type === type)
+                            .map(({ icon: Icon, name, description }) => (
+                                <div class="group box-gen p-3 row items-start gap-3 transition-all duration-300 hover:border-white/20!">
+                                    <div class="box-gen size-10 center-content shrink-0 transition-colors duration-300 group-hover:border-white/20!">
+                                        <Icon class="size-5" />
+                                    </div>
+
+                                    <div class="col gap-0.5 min-w-0">
+                                        <h3 class="font-medium text-sm">
+                                            {name}
+                                        </h3>
+
+                                        <p class="text-xs text-[#a0a0a0] leading-snug">
+                                            {description}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))
+                        }
+                    </div>
+                </Card>
+            ))}
+        </div>
+    </section>
+</Layout>
