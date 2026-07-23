@@ -1,0 +1,126 @@
+---
+import Layout from "@/layouts/layout.astro";
+import IconProjects from "@/components/icons/icon-projects.astro";
+import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
+
+import { projects } from "@/constants/home";
+
+const filters = [
+    { label: "All", value: "all" },
+    { label: "Landings", value: "landing" },
+    { label: "Apps", value: "app" },
+    { label: "Ecommerce", value: "ecommerce" },
+];
+---
+
+<Layout>
+    <section class="size-screen mt-32">
+        <div class="col gap-2">
+            <div class="row items-center gap-2">
+                <IconProjects class="size-7 stroke-white" />
+
+                <h1 class="text-3xl font-bold">
+                    Projects
+                </h1>
+            </div>
+
+            <p class="text-white/80 font-light [&>span]:font-bold">
+                A selection of products and platforms I've helped build. <br>
+                Each one reflects a different stack, industry, and set of <br>
+                challenges I worked through with the team.
+            </p>
+        </div>
+
+        <div id="projectFilters" class="row flex-wrap gap-2 mt-8">
+            {filters.map((filter, i) => (
+                <button
+                    type="button"
+                    data-filter={filter.value}
+                    class:list={[
+                        "box-gen rounded-full! text-xs py-1.5 px-4 transition-colors duration-300 cursor-pointer",
+                        i === 0 ? "text-white bg-white/10 border-white/20!" : "text-[#a0a0a0]"
+                    ]}
+                >
+                    {filter.label}
+                </button>
+            ))}
+        </div>
+
+        <div id="projectList" class="py-8 col gap-4">
+            {projects.map((project) => (
+                <a
+                    href={`/projects/${project.slug}`}
+                    data-category={project.category}
+                    class="group box-gen p-4 md:p-5 grid md:grid-cols-5 items-center gap-5 transition-all duration-300 hover:border-white/20!"
+                >
+                    <div class="md:col-span-2 aspect-video rounded-lg overflow-hidden bg-white/5 relative">
+                        {project.images?.[0] ? (
+                            <img
+                                src={project.images[0]}
+                                alt={project.name}
+                                loading="lazy"
+                                class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                        ) : (
+                            <div class="size-full center-content">
+                                <IconProjects class="size-8 stroke-white/15" />
+                            </div>
+                        )}
+                    </div>
+
+                    <div class="md:col-span-3 col gap-2">
+                        <div class="row items-center justify-between gap-2">
+                            <h2 class="text-lg font-semibold group-hover:text-white">
+                                {project.name}
+                            </h2>
+
+                            <span class="stroke-[#a0a0a0] shrink-0 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
+                                <IconArrowUpRight class="size-4" />
+                            </span>
+                        </div>
+
+                        {project.description && (
+                            <p class="text-sm text-[#a0a0a0] leading-relaxed line-clamp-2">
+                                {project.description}
+                            </p>
+                        )}
+
+                        <div class="row flex-wrap gap-1.5 mt-1">
+                            {project.stack.map((tech) => (
+                                <span class="box-gen rounded-full! text-[10px] leading-3.75 text-[#a0a0a0] py-0.5 px-2">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </section>
+</Layout>
+
+<script>
+    document.addEventListener("astro:page-load", () => {
+        const buttons = document.querySelectorAll<HTMLButtonElement>("#projectFilters button");
+        const cards = document.querySelectorAll<HTMLAnchorElement>("#projectList a");
+
+        buttons.forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const filter = btn.dataset.filter;
+
+                buttons.forEach((b) => {
+                    const isActive = b === btn;
+                    b.classList.toggle("text-white", isActive);
+                    b.classList.toggle("bg-white/10", isActive);
+                    b.classList.toggle("border-white/20!", isActive);
+                    b.classList.toggle("text-[#a0a0a0]", !isActive);
+                });
+
+                cards.forEach((card) => {
+                    const show = filter === "all" || card.dataset.category === filter;
+                    card.classList.toggle("hidden", !show);
+                });
+            });
+        });
+    });
+</script>

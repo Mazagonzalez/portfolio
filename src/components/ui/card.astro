@@ -1,15 +1,21 @@
 ---
 const { 
     headerContent = true,
+    link = false,
     height = 'h-80', 
     title, 
     component: Component,
     overflow = true,
     footerContent = false
 } = Astro.props;
+
+let ComponentMain = link ? 'a' : 'div';
 ---
 
-<div class:list={[height, "w-full box-gen p-5"]}>
+<ComponentMain
+    {...(link && { href: link })}
+    class:list={[height, `w-full box-gen p-5 ${link ? 'transition-all duration-300 hover:border-white/20!' : ''}`]}
+>
     {headerContent && (
         <div class="w-fit! box-gen row items-center gap-1 rounded-full! py-1 px-3">
             <Component class="size-4 stroke-white" />
@@ -29,4 +35,4 @@ const {
             <slot name="footer" />
         )}
     </div>
-</div>
+</ComponentMain>

@@ -1,6 +1,8 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import UsageAurora from "@/components/ui/usage-aurora";
+import Navbar from "@/components/navbar.astro";
+import Footer from "@/components/footer.astro";
 
 import "../styles/global.css";
 ---
@@ -29,9 +31,13 @@ import "../styles/global.css";
 			/>
 		</div>
 
+		<Navbar />
+
 		<main class="scrollbar relative z-10">	
 			<slot />
 		</main>
+
+		<Footer />
 	</body>
 </html>
 

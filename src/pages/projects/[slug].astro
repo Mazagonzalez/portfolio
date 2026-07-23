@@ -1,0 +1,64 @@
+---
+import Layout from "@/layouts/layout.astro";
+import Carousel from "@/components/ui/carousel.astro";
+import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
+
+import { projects } from "@/constants/home";
+import IconChevron from "@/components/icons/icon-chevron.astro";
+
+export function getStaticPaths() {
+    return projects.map((project) => ({
+        params: { slug: project.slug },
+        props: { project },
+    }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout>
+    <section class="size-screen mt-32 col gap-6">
+        <div class="col gap-3">
+            <div class="row items-center flex-wrap gap-4">
+                <a 
+                    href="/projects"
+                    class="rotate-180 -mr-2"
+                >
+                    <IconChevron class="size-6 stroke-[#a0a0a0] hover:stroke-white" />
+                </a>
+
+                <h1 class="text-3xl font-bold">
+                    {project.name}
+                </h1>
+
+                <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="button-main w-fit! px-5 stroke-[#a0a0a0] hover:stroke-white"
+                >
+                    <span>Visit site</span>
+                    <IconArrowUpRight class="size-4" />
+                </a>
+            </div>
+
+            {project.description && (
+                <p class="text-white/80 font-light max-w-2xl">
+                    {project.description}
+                </p>
+            )}
+
+            <div class="row flex-wrap gap-1.5">
+                {project.stack.map((tech: string) => (
+                    <span class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
+                        {tech}
+                    </span>
+                ))}
+            </div>
+        </div>
+
+        <div class="pt-6 pb-20">
+            <Carousel images={project.images} alt={project.name} />
+        </div>
+    </section>
+</Layout>

@@ -6,15 +6,20 @@ import IconStart from "@/components/icons/icon-start.astro";
 import IconProjects from "@/components/icons/icon-projects.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
 import Disk from "@/components/ui/disk.astro";
+import Hyperspace from "@/components/utils/Hyperspace.jsx";
 
 import { jobsInformation as jobs } from "@/constants/home";
 import { iconsSkills as skills } from "@/constants/home";
+import { projects } from "@/constants/home";
+import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 ---
 
 <section class="size-screen py-25 col gap-5">
     <div class="grid lg:grid-cols-2 gap-5">
+        <!-- Skills -->
         <Card
             title="Skills"
+            link="/skills"
             component={IconStart}
         >
             <div slot="content" class="center-content col gap-4">
@@ -35,6 +40,7 @@ import { iconsSkills as skills } from "@/constants/home";
             </div>
         </Card>
 
+        <!-- Experience -->
         <Card
             title="Experience"
             component={IconSuitcase}
@@ -83,14 +89,46 @@ import { iconsSkills as skills } from "@/constants/home";
     </div>
 
     <div class="grid lg:grid-cols-3 gap-5">
-        <Card 
+        <!-- Projects -->
+        <Card
             title="Projects"
             component={IconProjects}
+            overflow={false}
         >
+            <div slot="content" class="h-54 col gap-3 pr-3">
+                {projects.map(( project ) => (
+                    <a
+                        href={`/projects/${project.slug}`}
+                        class="group box-gen p-3 col gap-2 transition-all duration-300 hover:border-white/20!"
+                    >
+                        <div class="row items-center justify-between gap-2">
+                            <h2 class="font-medium text-sm group-hover:text-white">
+                                {project.name}
+                            </h2>
 
+                            <span class="stroke-[#a0a0a0] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
+                                <IconArrowUpRight class="size-3" />
+                            </span>
+                        </div>
+
+                        <p class="text-xs text-[#a0a0a0] leading-snug">
+                            {project.description}
+                        </p>
+
+                        <div class="row flex-wrap gap-1.5 mt-1">
+                            {project.stack.map(( tech ) => (
+                                <span class="box-gen rounded-full! text-[10px] text-[#a0a0a0] py-0.5 px-2">
+                                    {tech}
+                                </span>
+                            ))}
+                        </div>
+                    </a>
+                ))}
+            </div>
         </Card>
 
         <div class="col gap-5">
+            <!-- Tracks -->
             <Card 
                 headerContent={false}
                 height="h-[30%]"
@@ -137,6 +175,7 @@ import { iconsSkills as skills } from "@/constants/home";
                 </div>
             </Card>
 
+            <!-- Contact -->
             <Card 
                 title="Contact"
                 component={IconContact}
@@ -148,17 +187,26 @@ import { iconsSkills as skills } from "@/constants/home";
                         Let's talk about your next project!
                     </p>
 
-                    <button class="button-main mt-8">
+                    <a href="mailto:mazagonzalez@gmail.com" class="button-main mt-8">
                         Send an Email
-                    </button>
+                    </a>
                 </div>
             </Card>
         </div>
 
-        <Card 
+        <!-- Signature -->
+        <Card
             headerContent={false}
+            overflow={false}
         >
-           
+            <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg">
+                <Hyperspace client:only="react" />
+
+                <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                    <span class="text-2xl font-bold tracking-wide">AMG</span>
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">Hover to jump to lightspeed</span>
+                </div>
+            </div>
         </Card>
     </div>
 </section>

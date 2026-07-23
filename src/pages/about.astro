@@ -1,0 +1,161 @@
+---
+import Layout from "@/layouts/layout.astro";
+import Card from "@/components/ui/card.astro";
+import IconUser from "@/components/icons/icon-user.astro";
+import IconBook from "@/components/icons/icon-book.astro";
+import IconImage from "@/components/icons/icon-image.astro";
+
+const hobbies = [
+    "Music",
+    "Gaming",
+    "Movies & Series",
+    "Star Wars fan",
+    "Good food",
+    "Always down to hang out",
+];
+
+const stats = [
+    { value: "3", label: "Years writing code" },
+    { value: "not found", label: "Cups of coffee" },
+    { value: "1,000+", label: "Bugs squashed (a few still hiding)" },
+];
+---
+
+<Layout>
+    <section class="size-screen mt-32">
+        <div class="col gap-2">
+            <div class="row items-center gap-2">
+                <IconUser class="size-7 stroke-white" />
+
+                <h1 class="text-3xl font-bold">
+                    About Me
+                </h1>
+            </div>
+
+            <p class="text-white/80 font-light [&>span]:font-bold">
+                The short version: I fell into code by accident <br>
+                and never left. Here's the long version.
+            </p>
+        </div>
+
+        <div class="py-20 col gap-5">
+            <!-- Row 1: Story + Photo -->
+            <div class="grid lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2">
+                    <Card title="My Story" component={IconBook} height="h-full" overflow={false}>
+                        <div slot="content" class="col gap-4">
+                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                                I'm a web developer from Barranquilla, Colombia, with about three years of
+                                experience building modern apps and websites. Funny thing is, I never
+                                planned to end up here — my original plan was to study Accounting.
+                            </p>
+
+                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                                A friend of mine was studying programming, and out of curiosity I started
+                                messing around with a few exercises. When it was time to apply to
+                                sena, I picked programming as a backup option, almost as a joke...
+                                and got in. What started as an unexpected turn became one of the best
+                                decisions of my life.
+                            </p>
+                        </div>
+                    </Card>
+                </div>
+
+                <Card headerContent={false} overflow={false}>
+                    <div slot="content" class="relative h-64 w-full lg:h-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                        <div class="col items-center gap-2 text-center">
+                            <IconImage class="size-6 stroke-white/20" />
+                            <span class="text-xs text-white/30">Photo coming soon</span>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            <!-- Row 2: Quote + Today + Photo -->
+            <div class="grid lg:grid-cols-3 gap-5">
+                <Card headerContent={false}>
+                    <div slot="content" class="h-full center-content col gap-2 text-center py-4">
+                        <p class="text-xl font-semibold tracking-wide">
+                            "Per Aspera Ad Astra"
+                        </p>
+
+                        <p class="text-xs text-white/40">
+                            Through hardships, to the stars — the line I keep coming back to.
+                        </p>
+                    </div>
+                </Card>
+
+                <Card title="What I Do Today" component={IconUser}>
+                    <div slot="content" class="col gap-3">
+                        <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                            These days I especially enjoy frontend development — mixing logic with
+                            design to build interfaces that feel intuitive and look good. I care about
+                            solving problems, keeping my code clean, and sweating the small visual
+                            details that make an experience feel finished.
+                        </p>
+
+                        <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                            I'm always learning new tech and trying to get better at what I do, because
+                            constant learning is just part of building better products.
+                        </p>
+                    </div>
+                </Card>
+
+                <Card headerContent={false} overflow={false}>
+                    <div slot="content" class="relative h-64 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                        <div class="col items-center gap-2 text-center">
+                            <IconImage class="size-6 stroke-white/20" />
+                            <span class="text-xs text-white/30">Photo coming soon</span>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            <!-- Row 3: Hobbies + Photo/Stats -->
+            <div class="grid lg:grid-cols-3 gap-5">
+                <div class="lg:col-span-2">
+                    <Card title="Off the Clock" component={IconUser} height="h-fit" overflow={false}>
+                        <div slot="content" class="col gap-4">
+                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                                When I'm not coding: music always playing, deep in a video game, binging
+                                a new series, or re-watching Star Wars for the hundredth time (yes, I'm
+                                that fan). I'm pretty easygoing — always down for good food and even
+                                better company.
+                            </p>
+
+                            <div class="row flex-wrap gap-1.5">
+                                {hobbies.map((hobby) => (
+                                    <span class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
+                                        {hobby}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                <div class="col gap-5">
+                    <Card headerContent={false} overflow={false} height="h-[45%]">
+                        <div slot="content" class="relative h-full w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/[0.02]">
+                            <div class="col items-center gap-2 text-center">
+                                <IconImage class="size-6 stroke-white/20" />
+                                <span class="text-xs text-white/30">Photo coming soon</span>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card headerContent={false} height="h-[55%]">
+                        <div slot="content" class="h-full col justify-center gap-3">
+                            {stats.map((stat) => (
+                                <div class="row items-baseline justify-between gap-2">
+                                    <span class="text-lg font-bold">{stat.value}</span>
+                                    <span class="text-xs text-[#a0a0a0] text-right">{stat.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>
