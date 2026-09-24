@@ -4,6 +4,7 @@ import IconUser from "@/components/icons/icon-user.astro";
 import IconProjects from "@/components/icons/icon-projects.astro";
 import IconStart from "@/components/icons/icon-start.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
+import IconSearch from "@/components/icons/icon-search.astro";
 import { email } from "@/data/social";
 
 const items = [
@@ -18,7 +19,7 @@ const path = Astro.url.pathname;
 ---
 
 <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" aria-label="Main">
-    <ul id="dock" class="box-gen row items-center gap-3 px-6 py-3" transition:name="dock">
+    <ul id="dock" class="box-gen row items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3" transition:name="dock">
         {items.map((item) => {
             const isActive = item.href === "/"
                 ? path === "/"
@@ -35,7 +36,7 @@ const path = Astro.url.pathname;
                         aria-label={item.label}
                         aria-current={isActive ? "page" : undefined}
                         class:list={[
-                            "dock-icon center-content size-11 rounded-full transition-colors duration-300",
+                            "dock-icon center-content size-10 sm:size-11 rounded-full transition-colors duration-300",
                             isActive ? "bg-white/10 stroke-white" : "stroke-muted hover:stroke-white"
                         ]}
                     >
@@ -44,6 +45,23 @@ const path = Astro.url.pathname;
                 </li>
             );
         })}
+
+        <li class="dock-item relative group">
+            <span aria-hidden="true" class="tooltip pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-black/80 backdrop-blur px-2.5 py-1 text-xs text-white opacity-0 scale-90 transition-all duration-200 group-hover:opacity-100 group-hover:scale-100">
+                Search <span data-cmdk-shortcut class="text-white/50">Ctrl K</span>
+            </span>
+
+            <button
+                type="button"
+                data-cmdk-open
+                aria-label="Search"
+                aria-haspopup="dialog"
+                aria-keyshortcuts="Control+K Meta+K"
+                class="dock-icon center-content size-10 sm:size-11 rounded-full transition-colors duration-300 stroke-muted hover:stroke-white cursor-pointer"
+            >
+                <IconSearch class="size-5 pointer-events-none" />
+            </button>
+        </li>
     </ul>
 </nav>
 

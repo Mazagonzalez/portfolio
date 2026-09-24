@@ -1,0 +1,316 @@
+---
+import IconSearch from "@/components/icons/icon-search.astro";
+import IconHome from "@/components/icons/icon-home.astro";
+import IconUser from "@/components/icons/icon-user.astro";
+import IconProjects from "@/components/icons/icon-projects.astro";
+import IconStart from "@/components/icons/icon-start.astro";
+import IconCode from "@/components/icons/icon-code.astro";
+import IconEmail from "@/components/icons/icon-email.astro";
+import IconDownload from "@/components/icons/icon-download.astro";
+import IconMusic from "@/components/icons/icon-music.astro";
+
+import { getProjects } from "@/data/projects";
+import { email, socialLinks } from "@/data/social";
+
+interface Item {
+    label: string;
+    icon: (props: Record<string, any>) => any;
+    href?: string;
+    action?: "copy-email" | "toggle-music";
+    hint?: string;
+    keywords?: string;
+    download?: boolean;
+    external?: boolean;
+    // Only shown when that element exists on the current page
+    requires?: "player";
+}
+
+const kbd = "min-w-5 px-1.5 py-0.5 rounded border border-white/10 bg-white/5 font-[inherit] text-center text-[10px] text-white/50";
+
+const projects = await getProjects();
+
+const groups: { label: string; items: Item[] }[] = [
+    {
+        label: "Pages",
+        items: [
+            { label: "Home", href: "/", icon: IconHome, keywords: "start index" },
+            { label: "About", href: "/about", icon: IconUser, keywords: "me story bio" },
+            { label: "Projects", href: "/projects", icon: IconProjects, keywords: "work portfolio" },
+            { label: "Skills", href: "/skills", icon: IconStart, keywords: "stack tech tools" },
+        ],
+    },
+    {
+        label: "Projects",
+        items: projects.map(({ id, data }) => ({
+            label: data.name,
+            href: `/projects/${id}`,
+            icon: IconCode,
+            hint: data.stack.slice(0, 3).join(" · "),
+            keywords: `project ${data.category} ${data.stack.join(" ")}`,
+        })),
+    },
+    {
+        label: "Actions",
+        items: [
+            { label: "Copy email", action: "copy-email", icon: IconEmail, hint: email, keywords: "contact mail" },
+            { label: "Send an email", href: `mailto:${email}`, icon: IconEmail, keywords: "contact mail write" },
+            { label: "Download CV", href: "/Carlos-Maza-CV.pdf", download: true, icon: IconDownload, keywords: "resume curriculum pdf" },
+            { label: "Play music", action: "toggle-music", icon: IconMusic, keywords: "song player pause audio", requires: "player" },
+        ],
+    },
+    {
+        label: "Social",
+        items: socialLinks
+            .filter((link) => link.target)
+            .map(({ label, url, icon }) => ({ label, href: url, external: true, icon, keywords: "social profile" })),
+    },
+];
+---
+
+<dialog
+    id="cmdk"
+    aria-label="Command palette"
+    transition:persist="command-palette"
+    class="w-[min(560px,calc(100%-32px))] max-w-none mx-auto mt-[15vh] p-0 bg-transparent text-white overflow-visible backdrop:bg-black/50 backdrop:backdrop-blur-xs backdrop:animate-overlay-in motion-reduce:backdrop:animate-none"
+>
+    <div class="box-gen bg-zinc-900/85! overflow-hidden shadow-2xl shadow-black/50 animate-pop-in motion-reduce:animate-none">
+        <div class="row items-center gap-3 px-4 border-b border-white/10">
+            <IconSearch class="size-4 shrink-0 stroke-muted" />
+
+            <input
+                id="cmdkInput"
+                type="text"
+                role="combobox"
+                aria-expanded="true"
+                aria-controls="cmdkList"
+                aria-autocomplete="list"
+                aria-label="Search pages, projects and actions"
+                placeholder="Search pages, projects, actions…"
+                autocomplete="off"
+                spellcheck="false"
+                class="w-full bg-transparent py-4 text-sm outline-none placeholder:text-white/40"
+            />
+
+            <kbd class:list={[kbd, "hidden sm:block"]}>esc</kbd>
+        </div>
+
+        <div id="cmdkList" role="listbox" aria-label="Results" class="max-h-[min(22rem,55vh)] overflow-y-auto scrollbar p-2">
+            {groups.map((group, g) => (
+                <div role="group" aria-labelledby={`cmdk-group-${g}`} class="cmdk-group">
+                    <p id={`cmdk-group-${g}`} class="px-2.5 pt-2 pb-1.5 text-[11px] uppercase tracking-wider text-white/40">
+                        {group.label}
+                    </p>
+
+                    {group.items.map((item, i) => (
+                        <div
+                            id={`cmdk-option-${g}-${i}`}
+                            role="option"
+                            aria-selected="false"
+                            class="flex items-center gap-3 p-2.5 rounded-lg text-sm text-white/80 cursor-pointer scroll-mt-10 scroll-mb-2 aria-selected:bg-white/10 aria-selected:text-white aria-selected:[&_svg]:stroke-white"
+                            data-search={`${item.label} ${item.keywords ?? ""}`.toLowerCase()}
+                            data-href={item.href}
+                            data-action={item.action}
+                            data-download={item.download ? "" : undefined}
+                            data-external={item.external ? "" : undefined}
+                            data-requires={item.requires}
+                        >
+                            <item.icon class="size-4 shrink-0 stroke-muted" />
+                            <span class="cmdk-label truncate">{item.label}</span>
+                            {item.hint && <span class="cmdk-hint ml-auto truncate text-xs text-white/40">{item.hint}</span>}
+                            {item.external && <span class="sr-only">(opens in a new tab)</span>}
+                        </div>
+                    ))}
+                </div>
+            ))}
+
+            <p id="cmdkEmpty" hidden class="py-10 text-center text-sm text-muted">
+                No results
+            </p>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-4 px-4 py-2.5 border-t border-white/10 text-[11px] text-white/40" aria-hidden="true">
+            <span class="row items-center gap-1.5"><kbd class={kbd}>↑</kbd><kbd class={kbd}>↓</kbd> navigate</span>
+            <span class="row items-center gap-1.5"><kbd class={kbd}>↵</kbd> open</span>
+            <span class="row items-center gap-1.5 ml-auto"><kbd class={kbd} data-cmdk-shortcut>Ctrl K</kbd> toggle</span>
+        </div>
+    </div>
+</dialog>
+
+<script>
+    import { navigate } from "astro:transitions/client";
+
+    // The dialog is persisted across navigations, so this runs once
+    const dialog = document.getElementById("cmdk") as HTMLDialogElement;
+    const input = document.getElementById("cmdkInput") as HTMLInputElement;
+    const empty = document.getElementById("cmdkEmpty") as HTMLElement;
+    const groups = Array.from(dialog.querySelectorAll<HTMLElement>(".cmdk-group"));
+    const options = Array.from(dialog.querySelectorAll<HTMLElement>("[role='option']"));
+
+    const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+    let activeIndex = -1;
+
+    const visibleOptions = () => options.filter((option) => !option.hidden);
+
+    function setActive(index: number) {
+        const visible = visibleOptions();
+        options.forEach((option) => option.setAttribute("aria-selected", "false"));
+
+        if (visible.length === 0) {
+            activeIndex = -1;
+            input.removeAttribute("aria-activedescendant");
+            return;
+        }
+
+        activeIndex = (index + visible.length) % visible.length;
+        const option = visible[activeIndex];
+        option.setAttribute("aria-selected", "true");
+        input.setAttribute("aria-activedescendant", option.id);
+        option.scrollIntoView({ block: "nearest" });
+    }
+
+    function filter(query: string) {
+        const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+        const hasPlayer = Boolean(document.getElementById("playBtn"));
+
+        options.forEach((option) => {
+            const matches = words.every((word) => option.dataset.search!.includes(word));
+            const available = option.dataset.requires !== "player" || hasPlayer;
+            option.hidden = !matches || !available;
+        });
+
+        groups.forEach((group) => {
+            group.hidden = !group.querySelector("[role='option']:not([hidden])");
+        });
+
+        empty.hidden = visibleOptions().length > 0;
+        setActive(0);
+    }
+
+    function updateMusicLabel() {
+        const player = document.getElementById("player") as HTMLAudioElement | null;
+        const label = dialog.querySelector("[data-action='toggle-music'] .cmdk-label");
+        if (label) label.textContent = player && !player.paused ? "Pause music" : "Play music";
+    }
+
+    function open() {
+        if (dialog.open) return;
+        input.value = "";
+        updateMusicLabel();
+        filter("");
+        dialog.showModal();
+        input.focus();
+    }
+
+    function close() {
+        if (dialog.open) dialog.close();
+    }
+
+    async function copyText(text: string) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch {
+            // Fallback for browsers or contexts that block the Clipboard API
+            const field = document.createElement("textarea");
+            field.value = text;
+            field.setAttribute("readonly", "");
+            field.style.cssText = "position:fixed;opacity:0";
+            dialog.append(field);
+            field.select();
+            const copied = document.execCommand("copy");
+            field.remove();
+            input.focus();
+            return copied;
+        }
+    }
+
+    async function copyEmail(option: HTMLElement) {
+        const hint = option.querySelector(".cmdk-hint");
+        const address = hint?.textContent ?? "";
+
+        if (hint) hint.textContent = (await copyText(address)) ? "Copied!" : "Couldn't copy";
+
+        setTimeout(() => {
+            close();
+            if (hint) hint.textContent = address;
+        }, 700);
+    }
+
+    function run(option: HTMLElement | undefined) {
+        if (!option) return;
+        const { href, action } = option.dataset;
+
+        if (action === "copy-email") {
+            copyEmail(option);
+            return;
+        }
+
+        close();
+
+        if (action === "toggle-music") {
+            document.getElementById("playBtn")?.click();
+        } else if (href && "download" in option.dataset) {
+            const link = document.createElement("a");
+            link.href = href;
+            link.download = "";
+            link.click();
+        } else if (href && "external" in option.dataset) {
+            window.open(href, "_blank", "noopener");
+        } else if (href?.startsWith("mailto:")) {
+            window.location.href = href;
+        } else if (href) {
+            navigate(href);
+        }
+    }
+
+    // Ctrl+K / Cmd+K anywhere toggles the palette
+    document.addEventListener("keydown", (event) => {
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+            event.preventDefault();
+            dialog.open ? close() : open();
+        }
+    });
+
+    // Any element with data-cmdk-open (like the dock button) opens it
+    document.addEventListener("click", (event) => {
+        if ((event.target as HTMLElement).closest("[data-cmdk-open]")) open();
+    });
+
+    input.addEventListener("input", () => filter(input.value));
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "ArrowDown") {
+            event.preventDefault();
+            setActive(activeIndex + 1);
+        } else if (event.key === "ArrowUp") {
+            event.preventDefault();
+            setActive(activeIndex - 1);
+        } else if (event.key === "Enter") {
+            event.preventDefault();
+            run(visibleOptions()[activeIndex]);
+        }
+    });
+
+    options.forEach((option) => {
+        option.addEventListener("mousemove", () => {
+            const index = visibleOptions().indexOf(option);
+            if (index !== activeIndex) setActive(index);
+        });
+        option.addEventListener("click", () => run(option));
+    });
+
+    // Clicking the backdrop (outside the panel) closes it
+    dialog.addEventListener("click", (event) => {
+        if (event.target === dialog) close();
+    });
+
+    document.addEventListener("astro:before-swap", close);
+
+    // Show ⌘K on Apple devices; runs on every page since the dock is re-rendered
+    document.addEventListener("astro:page-load", () => {
+        if (!isMac) return;
+        document.querySelectorAll("[data-cmdk-shortcut]").forEach((el) => {
+            el.textContent = "⌘K";
+        });
+    });
+</script>

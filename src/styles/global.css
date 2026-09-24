@@ -10,17 +10,3 @@
     --color-muted: #a0a0a0;
     --color-scrollbar: #696969;
 }
-
-/* Page transitions: smoother morph for shared elements (project cover, title, dock) */
-::view-transition-group(*) {
-    animation-duration: 450ms;
-    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-    ::view-transition-group(*),
-    ::view-transition-old(*),
-    ::view-transition-new(*) {
-        animation: none !important;
-    }
-}
