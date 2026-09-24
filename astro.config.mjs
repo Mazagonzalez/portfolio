@@ -6,7 +6,7 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://portfolio-vovx.vercel.app",
+  site: "https://amg-devel.vercel.app",
 
   vite: {
     plugins: [tailwindcss()],

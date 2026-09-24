@@ -31,13 +31,23 @@ const { TRACKS } = Astro.props;
         isPlaying = false;
     }
 
+    function play() {
+        audio.play()
+            .then(() => {
+                playIcon.textContent = "⏸";
+                isPlaying = true;
+            })
+            .catch(() => {
+                playIcon.textContent = "▶";
+                isPlaying = false;
+            });
+    }
+
     function togglePlay() {
         if (!audio.src) loadTrack(index);
 
         if (audio.paused) {
-            audio.play();
-            playIcon.textContent = "⏸";
-            isPlaying = true;
+            play();
         } else {
             audio.pause();
             playIcon.textContent = "▶";
@@ -48,9 +58,7 @@ const { TRACKS } = Astro.props;
     function nextTrack() {
         index = (index + 1) % TRACKS.length;
         loadTrack(index);
-        audio.play();
-        playIcon.textContent = "⏸";
-        isPlaying = true;
+        play();
     }
 
     audio.addEventListener("timeupdate", () => {
