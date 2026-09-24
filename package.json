@@ -9,12 +9,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
+    "spotify:auth": "node scripts/spotify-auth.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.0",
     "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.11",
     "@tailwindcss/vite": "^4.3.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",

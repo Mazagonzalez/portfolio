@@ -1,0 +1,56 @@
+---
+// Carlos's local time, plus how it compares to the visitor's.
+// The page is static, so the time is filled in by the browser;
+// until then (or without JS) it just shows the city.
+const TIME_ZONE = "America/Bogota";
+---
+
+<span
+    id="localTime"
+    data-time-zone={TIME_ZONE}
+    class="row items-center gap-1.5 text-sm text-white/60"
+>
+    <time data-lt="time" class="font-semibold text-white tabular-nums">Local time</time>
+    <span>in Barranquilla</span>
+    <span data-lt="diff" class="hidden sm:inline text-white/40"></span>
+</span>
+
+<script>
+    let timer: ReturnType<typeof setTimeout> | undefined;
+
+    // Hours between two time zones at this moment (handles DST on the visitor's side)
+    function offsetHours(timeZone: string, now: Date) {
+        const local = new Date(now.toLocaleString("en-US", { timeZone }));
+        const visitor = new Date(now.toLocaleString("en-US"));
+        // Rounded to half hours: some zones (India, Newfoundland…) are offset by :30
+        return Math.round(((local.getTime() - visitor.getTime()) / 36e5) * 2) / 2;
+    }
+
+    function describe(hours: number) {
+        if (hours === 0) return "· same time as you";
+        const amount = `${Math.abs(hours)}h`;
+        return hours > 0 ? `· ${amount} ahead of you` : `· ${amount} behind you`;
+    }
+
+    function update() {
+        const root = document.getElementById("localTime");
+        if (!root) return;
+
+        const timeZone = root.dataset.timeZone!;
+        const now = new Date();
+
+        const time = root.querySelector<HTMLTimeElement>("[data-lt='time']")!;
+        time.textContent = now.toLocaleTimeString("en-US", { timeZone, hour: "numeric", minute: "2-digit" });
+        time.dateTime = now.toISOString();
+
+        root.querySelector("[data-lt='diff']")!.textContent = describe(offsetHours(timeZone, now));
+
+        // Tick right when the next minute starts
+        timer = setTimeout(update, 60_000 - (now.getTime() % 60_000));
+    }
+
+    document.addEventListener("astro:page-load", () => {
+        clearTimeout(timer);
+        update();
+    });
+</script>

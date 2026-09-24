@@ -1,0 +1,83 @@
+---
+// Live "now playing" pill fed by /api/now-playing. Hidden until there is data,
+// so it never shows up empty (or at all, if Spotify isn't configured).
+---
+
+<a
+    id="nowPlaying"
+    hidden
+    target="_blank"
+    rel="noopener noreferrer"
+    class="group box-gen w-fit max-w-full row items-center gap-3 py-1.5 pl-1.5 pr-4 transition-colors duration-300 hover:border-white/20!"
+>
+    <img
+        data-np="cover"
+        alt=""
+        width="32"
+        height="32"
+        class="size-8 shrink-0 rounded-md bg-white/5 object-cover"
+    />
+
+    <span class="col min-w-0 leading-tight">
+        <span class="row items-center gap-1.5 text-[10px] uppercase tracking-wider text-white/50">
+            <!-- Equalizer bars, only while a track is playing -->
+            <span class="hidden group-data-playing:flex items-end gap-0.5 h-2.5" aria-hidden="true">
+                <span class="w-0.5 h-full rounded-full bg-lime-400 origin-bottom animate-equalizer motion-reduce:animate-none"></span>
+                <span class="w-0.5 h-full rounded-full bg-lime-400 origin-bottom animate-equalizer [animation-delay:-0.4s] motion-reduce:animate-none"></span>
+                <span class="w-0.5 h-full rounded-full bg-lime-400 origin-bottom animate-equalizer [animation-delay:-0.7s] motion-reduce:animate-none"></span>
+            </span>
+
+            <span data-np="status">Last played</span>
+            <span aria-hidden="true">· Spotify</span>
+        </span>
+
+        <span class="truncate text-sm">
+            <span data-np="title" class="font-semibold"></span>
+            {" "}
+            <span class="text-white/60">— <span data-np="artist"></span></span>
+        </span>
+    </span>
+
+    <span class="sr-only">(opens in a new tab)</span>
+</a>
+
+<script>
+    import type { NowPlaying } from "@/pages/api/now-playing";
+
+    const REFRESH_MS = 30_000;
+    let timer: ReturnType<typeof setInterval> | undefined;
+
+    async function update() {
+        const pill = document.getElementById("nowPlaying") as HTMLAnchorElement | null;
+        if (!pill || document.hidden) return;
+
+        try {
+            const response = await fetch("/api/now-playing");
+            const track: NowPlaying | null = response.ok ? await response.json() : null;
+            if (!track) return;
+
+            const field = (name: string) => pill.querySelector<HTMLElement>(`[data-np="${name}"]`)!;
+
+            pill.href = track.url;
+            field("title").textContent = track.title;
+            field("artist").textContent = track.artist;
+            field("status").textContent = track.isPlaying ? "Now playing" : "Last played";
+            (field("cover") as HTMLImageElement).src = track.cover ?? "";
+            pill.toggleAttribute("data-playing", track.isPlaying);
+            pill.hidden = false;
+        } catch {
+            // Offline or API down: keep whatever is shown (or stay hidden)
+        }
+    }
+
+    document.addEventListener("astro:page-load", () => {
+        clearInterval(timer);
+        if (!document.getElementById("nowPlaying")) return;
+
+        update();
+        timer = setInterval(update, REFRESH_MS);
+    });
+
+    // Refresh right away when coming back to the tab
+    document.addEventListener("visibilitychange", update);
+</script>
