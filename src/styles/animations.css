@@ -46,6 +46,18 @@
       opacity: 0;
     }
   }
+
+  /* Now playing: equalizer bars bouncing (animate-equalizer) */
+  --animate-equalizer: equalizer 0.9s ease-in-out infinite;
+
+  @keyframes equalizer {
+    0%, 100% {
+      transform: scaleY(0.3);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+  }
 }
 
 /* Page transitions: smoother morph for shared elements (project cover, title, dock) */

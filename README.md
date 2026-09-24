@@ -18,7 +18,7 @@ Requires Node.js 22.12 or newer.
 ```sh
 npm install
 npm run dev       # http://localhost:4321
-npm run build     # output in ./dist
+npm run build     # output in ./.vercel/output
 npm run check     # type-check .astro and .ts files
 npm run preview   # serve the production build
 ```
@@ -48,6 +48,20 @@ src/
 ├── pages/          home, about, projects, projects/[slug], skills, 404
 └── styles/         global Tailwind entry and custom CSS
 ```
+
+## Spotify "now playing"
+
+The hero shows what I'm listening to on Spotify (or the last track played),
+served by `src/pages/api/now-playing.ts`, the only route that runs as a
+Vercel function. Without credentials the widget just stays hidden.
+
+1. Create an app at the [Spotify dashboard](https://developer.spotify.com/dashboard)
+   with the Redirect URI `http://127.0.0.1:8888/callback`.
+2. Copy `.env.example` to `.env` and fill in `SPOTIFY_CLIENT_ID` and
+   `SPOTIFY_CLIENT_SECRET`.
+3. Run `npm run spotify:auth`, open the URL it prints and accept. Paste the
+   refresh token it gives you into `.env`.
+4. Add the three variables in Vercel → Settings → Environment Variables.
 
 ## Continuous integration
 
