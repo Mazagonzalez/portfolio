@@ -25,10 +25,11 @@ npm run preview   # serve the production build
 public/
 ├── images/
 │   ├── companies/  logos for the experience list
-│   ├── music/      album covers
-│   └── projects/   project screenshots
+│   └── music/      album covers
 └── music/          audio tracks
 src/
+├── assets/
+│   └── projects/   project screenshots (optimized by Astro)
 ├── components/
 │   ├── backgrounds/  Aurora and Hyperspace (React + OGL)
 │   ├── icons/        SVG icons (skills/ for tech logos)
@@ -36,14 +37,23 @@ src/
 │   ├── music/        music player and its spinning disk
 │   ├── sections/     page sections (home/)
 │   └── ui/           reusable pieces: card, carousel
-├── data/           content: projects, experience, skills, social links, tracks
+├── content/
+│   └── projects/   one Markdown file per project (case studies)
+├── data/           content: experience, skills, social links, tracks
 ├── layouts/        base layout with SEO / Open Graph metadata
-├── pages/          home, about, projects, projects/[slug], skills
+├── pages/          home, about, projects, projects/[slug], skills, 404
 └── styles/         global Tailwind entry and custom CSS
 ```
 
 ## Adding a project
 
-Add an entry to `src/data/projects.ts`. Screenshots go in
-`public/images/projects/` (WebP, ~1920px wide) and are listed in the `images`
-array; a detail page is generated automatically at `/projects/<slug>`.
+1. Copy `src/content/projects/_template.md` to `src/content/projects/<slug>.md`.
+   The filename becomes the URL: `/projects/<slug>`.
+2. Put the screenshots in `src/assets/projects/<slug>/` (PNG, JPG or WebP, any
+   size) and list them in `images`. Astro generates responsive WebP versions,
+   and the first image is used as the cover and the social preview.
+3. Write the case study below the frontmatter (challenge, what you built,
+   results). It is optional; projects without it only show the gallery.
+
+The frontmatter is validated in `src/content.config.ts`, so a missing field or
+a wrong image path fails the build with a clear error.

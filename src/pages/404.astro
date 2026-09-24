@@ -1,0 +1,47 @@
+---
+import Layout from "@/layouts/layout.astro";
+
+const links = [
+    { href: "/projects", label: "Projects" },
+    { href: "/about", label: "About" },
+    { href: "/skills", label: "Skills" },
+];
+---
+
+<Layout
+    title="Page not found — AMG"
+    description="The page you're looking for doesn't exist or was moved."
+    noindex
+>
+    <section class="size-screen min-h-screen center-content col gap-6 text-center" aria-labelledby="not-found-title">
+        <p class="text-8xl md:text-9xl font-bold tracking-tight text-white/10 select-none" aria-hidden="true">
+            404
+        </p>
+
+        <div class="col items-center gap-2 -mt-4">
+            <h1 id="not-found-title" class="text-3xl font-bold">
+                Lost in space
+            </h1>
+
+            <p class="text-white/80 font-light max-w-sm">
+                This page doesn't exist or was moved. Let's get you back on track.
+            </p>
+        </div>
+
+        <a href="/" class="button-main w-fit! px-6">
+            <span>Back to home</span>
+        </a>
+
+        <nav aria-label="Other pages">
+            <ul class="row gap-4 text-sm text-muted">
+                {links.map((link) => (
+                    <li>
+                        <a href={link.href} class="hover:text-white transition-colors">
+                            {link.label}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    </section>
+</Layout>

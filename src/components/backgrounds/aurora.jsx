@@ -118,10 +118,13 @@ export default function Aurora(props) {
     const ctn = ctnDom.current;
     if (!ctn) return;
 
+    // The aurora is a soft gradient, so half resolution looks the same
+    // and needs a quarter of the GPU work
     const renderer = new Renderer({
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true
+      antialias: false,
+      dpr: 0.5
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -129,37 +132,24 @@ export default function Aurora(props) {
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     gl.canvas.style.backgroundColor = 'transparent';
 
-    let program;
-
-    function resize() {
-      if (!ctn) return;
-      const width = ctn.offsetWidth;
-      const height = ctn.offsetHeight;
-      renderer.setSize(width, height);
-      if (program) {
-        program.uniforms.uResolution.value = [width, height];
-      }
-    }
-    window.addEventListener('resize', resize);
+    const toRgb = stops => stops.map(hex => {
+      const c = new Color(hex);
+      return [c.r, c.g, c.b];
+    });
 
     const geometry = new Triangle(gl);
     if (geometry.attributes.uv) {
       delete geometry.attributes.uv;
     }
 
-    const colorStopsArray = colorStops.map(hex => {
-      const c = new Color(hex);
-      return [c.r, c.g, c.b];
-    });
-
-    program = new Program(gl, {
+    const program = new Program(gl, {
       vertex: VERT,
       fragment: FRAG,
       uniforms: {
         uTime: { value: 0 },
         uAmplitude: { value: amplitude },
-        uColorStops: { value: colorStopsArray },
-        uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
+        uColorStops: { value: toRgb(colorStops) },
+        uResolution: { value: [1, 1] },
         uBlend: { value: blend }
       }
     });
@@ -167,28 +157,65 @@ export default function Aurora(props) {
     const mesh = new Mesh(gl, { geometry, program });
     ctn.appendChild(gl.canvas);
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let lastStops = null;
     let animateId = 0;
-    const update = t => {
-      animateId = requestAnimationFrame(update);
+
+    const draw = t => {
       const { time = t * 0.01, speed = 1.0 } = propsRef.current;
       program.uniforms.uTime.value = time * speed * 0.1;
       program.uniforms.uAmplitude.value = propsRef.current.amplitude ?? 1.0;
       program.uniforms.uBlend.value = propsRef.current.blend ?? blend;
       const stops = propsRef.current.colorStops ?? colorStops;
-      program.uniforms.uColorStops.value = stops.map(hex => {
-        const c = new Color(hex);
-        return [c.r, c.g, c.b];
-      });
+      if (stops !== lastStops) {
+        program.uniforms.uColorStops.value = toRgb(stops);
+        lastStops = stops;
+      }
       renderer.render({ scene: mesh });
     };
-    animateId = requestAnimationFrame(update);
+
+    const update = t => {
+      animateId = requestAnimationFrame(update);
+      draw(t);
+    };
+
+    const stop = () => {
+      cancelAnimationFrame(animateId);
+      animateId = 0;
+    };
+
+    // Animate only while the tab is visible and motion is allowed;
+    // otherwise keep a single still frame
+    const sync = () => {
+      const shouldAnimate = !document.hidden && !reducedMotion.matches;
+      if (shouldAnimate && !animateId) {
+        animateId = requestAnimationFrame(update);
+      } else if (!shouldAnimate) {
+        stop();
+        draw(performance.now());
+      }
+    };
+
+    function resize() {
+      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+      // gl_FragCoord is in canvas pixels, which differ from CSS pixels at dpr 0.5
+      program.uniforms.uResolution.value = [gl.canvas.width, gl.canvas.height];
+      if (!animateId) draw(performance.now());
+    }
+
+    window.addEventListener('resize', resize);
+    document.addEventListener('visibilitychange', sync);
+    reducedMotion.addEventListener('change', sync);
 
     resize();
+    sync();
 
     return () => {
-      cancelAnimationFrame(animateId);
+      stop();
       window.removeEventListener('resize', resize);
-      if (ctn && gl.canvas.parentNode === ctn) {
+      document.removeEventListener('visibilitychange', sync);
+      reducedMotion.removeEventListener('change', sync);
+      if (gl.canvas.parentNode === ctn) {
         ctn.removeChild(gl.canvas);
       }
       gl.getExtension('WEBGL_lose_context')?.loseContext();

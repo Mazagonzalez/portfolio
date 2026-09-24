@@ -47,8 +47,10 @@ export default function Hyperspace() {
             });
         }
 
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
         function onEnter() {
-            targetSpeed = WARP_SPEED;
+            if (!reducedMotion.matches) targetSpeed = WARP_SPEED;
         }
 
         function onLeave() {
@@ -63,9 +65,14 @@ export default function Hyperspace() {
         initStars();
 
         let animId = 0;
+        let onScreen = false;
+
         function frame() {
             animId = requestAnimationFrame(frame);
+            draw();
+        }
 
+        function draw() {
             speed += (targetSpeed - speed) * 0.06;
 
             ctx.fillStyle = 'rgba(6, 6, 10, 0.55)';
@@ -103,10 +110,33 @@ export default function Hyperspace() {
                 ctx.stroke();
             }
         }
-        animId = requestAnimationFrame(frame);
+        // Animate only while the card is on screen, the tab is visible
+        // and motion is allowed; otherwise keep a still starfield
+        function sync() {
+            const shouldAnimate = onScreen && !document.hidden && !reducedMotion.matches;
+            if (shouldAnimate && !animId) {
+                animId = requestAnimationFrame(frame);
+            } else if (!shouldAnimate && animId) {
+                cancelAnimationFrame(animId);
+                animId = 0;
+            }
+        }
+
+        const observer = new IntersectionObserver(([entry]) => {
+            onScreen = entry.isIntersecting;
+            sync();
+        });
+        observer.observe(container);
+        document.addEventListener('visibilitychange', sync);
+        reducedMotion.addEventListener('change', sync);
+
+        draw();
 
         return () => {
             cancelAnimationFrame(animId);
+            observer.disconnect();
+            document.removeEventListener('visibilitychange', sync);
+            reducedMotion.removeEventListener('change', sync);
             window.removeEventListener('resize', resize);
             container.removeEventListener('pointerenter', onEnter);
             container.removeEventListener('pointerleave', onLeave);
