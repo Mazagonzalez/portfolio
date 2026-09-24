@@ -25,7 +25,7 @@ export const iconsHero = [
         target: true
     },
     {
-        url: 'https://www.linkedin.com/in/carlos-arturo-maza-gonzalez-254b70249',
+        url: 'https://www.linkedin.com/in/carlos-arturo-maza-gonzalez',
         icon: IconLinkedin,
         target: true
     },
@@ -145,7 +145,7 @@ export const projects = [
         description: "Design and web development agency crafting branding, UI/UX, and websites for startups.",
         url: "https://roofpixel.co",
         stack: ["React", "Tailwind", "Astro"],
-        images: ["/images/projects/roofpixel-1.png", "/images/projects/roofpixel-2.png", "/images/projects/roofpixel-3.png", "/images/projects/roofpixel-4.png"]
+        images: ["/images/projects/roofpixel-1.webp", "/images/projects/roofpixel-2.webp", "/images/projects/roofpixel-3.webp", "/images/projects/roofpixel-4.webp"]
     },
     {
         name: "EFY Finance",
