@@ -1,15 +1,19 @@
 ---
-const { 
+const {
     headerContent = true,
     link = false,
-    height = 'h-80', 
-    title, 
+    height = 'h-80',
+    title,
     component: Component,
     overflow = true,
-    footerContent = false
+    footerContent = false,
+    headingLevel = 'h2'
 } = Astro.props;
 
-let ComponentMain = link ? 'a' : 'div';
+const hasHeading = headerContent && title;
+
+let ComponentMain = link ? 'a' : hasHeading ? 'section' : 'div';
+const Heading = headingLevel;
 ---
 
 <ComponentMain
@@ -19,10 +23,10 @@ let ComponentMain = link ? 'a' : 'div';
     {headerContent && (
         <div class="w-fit! box-gen row items-center gap-1 rounded-full! py-1 px-3">
             <Component class="size-4 stroke-white" />
-    
-            <span class="text-sm">
+
+            <Heading class="text-sm font-normal">
                 {title}
-            </span> 
+            </Heading>
         </div>
     )}
 

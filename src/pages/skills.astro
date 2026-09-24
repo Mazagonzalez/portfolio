@@ -25,19 +25,19 @@ const typeIcons: Record<string, typeof IconCode> = {
     title="Skills — AMG"
     description="Technologies and tools I use day-to-day, from frontend frameworks to AI-assisted workflows."
 >
-    <section class="size-screen mt-32">
+    <section class="size-screen mt-32" aria-labelledby="skills-title">
         <div class="col gap-2">
             <div class="row items-center gap-2">
                 <IconStart class="size-7 stroke-white" />
 
-                <h1 class="text-3xl font-bold">
+                <h1 id="skills-title" class="text-3xl font-bold">
                     Skills
                 </h1>
             </div>
             
-            <p class="text-white/80 font-light [&>span]:font-bold">
-                Technologies and tools that I use in my day-to-day work. <br>
-                Some are part of the stack of the projects I work on, while <br>
+            <p class="text-white/80 font-light max-w-lg">
+                Technologies and tools that I use in my day-to-day work.
+                Some are part of the stack of the projects I work on, while
                 others support my personal development workflow and productivity.
             </p>
         </div>
@@ -50,11 +50,11 @@ const typeIcons: Record<string, typeof IconCode> = {
                     height="h-fit"
                     overflow={false}
                 >
-                    <div slot="content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <ul slot="content" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {skills
                             .filter((skill) => skill.type === type)
                             .map(({ icon: Icon, name, description }) => (
-                                <div class="group box-gen p-3 row items-start gap-3 transition-all duration-300 hover:border-white/20!">
+                                <li class="group box-gen p-3 row items-start gap-3 transition-all duration-300 hover:border-white/20!">
                                     <div class="box-gen size-10 center-content shrink-0 transition-colors duration-300 group-hover:border-white/20!">
                                         <Icon class="size-5" />
                                     </div>
@@ -68,10 +68,10 @@ const typeIcons: Record<string, typeof IconCode> = {
                                             {description}
                                         </p>
                                     </div>
-                                </div>
+                                </li>
                             ))
                         }
-                    </div>
+                    </ul>
                 </Card>
             ))}
         </div>
