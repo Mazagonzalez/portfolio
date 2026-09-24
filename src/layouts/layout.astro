@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import Aurora from "@/components/backgrounds/aurora.jsx";
 import Navbar from "@/components/layout/navbar.astro";
 import Footer from "@/components/layout/footer.astro";
+import { email, socialLinks } from "@/data/social";
 
 import "../styles/global.css";
 
@@ -12,6 +13,39 @@ const {
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const siteURL = new URL("/", Astro.site).href;
+
+const jsonLd = {
+	"@context": "https://schema.org",
+	"@graph": [
+		{
+			"@type": "Person",
+			"@id": `${siteURL}#person`,
+			name: "Carlos Maza",
+			jobTitle: "Frontend Developer",
+			url: siteURL,
+			email: `mailto:${email}`,
+			description: "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
+			sameAs: socialLinks.filter((link) => link.target).map((link) => link.url),
+		},
+		{
+			"@type": "WebSite",
+			"@id": `${siteURL}#website`,
+			url: siteURL,
+			name: "AMG - devel",
+			publisher: { "@id": `${siteURL}#person` },
+		},
+		{
+			"@type": "WebPage",
+			"@id": `${canonicalURL.href}#webpage`,
+			url: canonicalURL.href,
+			name: title,
+			description,
+			isPartOf: { "@id": `${siteURL}#website` },
+			about: { "@id": `${siteURL}#person` },
+		},
+	],
+};
 ---
 
 <!doctype html>
@@ -53,37 +87,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<meta name="twitter:description" content={description}>
 		<meta name="twitter:image" content="https://amg-devel.vercel.app/OG.png">
 
-		<script type="application/ld+json">
-			{
-				"@context": "https://schema.org",
-				"@graph": [
-					{
-						"@type": "Person",
-						"name": "Carlos Maza",
-						"jobTitle": "Frontend Developer",
-						"url": "https://amg-devel.vercel.app/",
-						"email": "mailto:mazagonzalez61@gmail.com",
-						"description": "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
-						"sameAs": [
-							"https://github.com/Mazagonzalez",
-							"https://www.linkedin.com/in/carlos-arturo-maza-gonzalez",
-							"https://www.instagram.com/carlosmaza_17/"
-						]
-					},
-					{
-						"@type": "WebSite",
-						"url": "https://amg-devel.vercel.app/",
-						"name": "AMG - devel"
-					},
-					{
-						"@type": "WebPage",
-						"url": "https://amg-devel.vercel.app/",
-						"name": "Home",
-						"isPartOf": { "@id": "https://amg-devel.vercel.app/" }
-					}
-				]
-			}
-		</script>
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 	</head>
 	<body class="scrollbar">
 		<a
@@ -115,7 +119,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 <style is:global>
 	html {
-		background-color: #171717;
+		background-color: var(--color-surface);
 		color: white;
 		scroll-behavior: smooth;
 		font-family: "Geist", sans-serif;

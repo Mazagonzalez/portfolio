@@ -5,3 +5,9 @@
 @import "./animations.css";
 @import "tw-animate-css";
 
+@theme {
+    --color-surface: #171717;
+    --color-muted: #a0a0a0;
+    --color-scrollbar: #696969;
+}
+

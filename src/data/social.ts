@@ -3,6 +3,8 @@ import IconLinkedin from "@/components/icons/icon-linkedin.astro";
 import IconInstagram from "@/components/icons/icon-instagram.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 
+export const email = 'mazagonzalez61@gmail.com';
+
 export const socialLinks = [
     {
         url: 'https://github.com/Mazagonzalez',
@@ -23,7 +25,7 @@ export const socialLinks = [
         target: true
     },
     {
-        url: 'mailto:mazagonzalez61@gmail.com',
+        url: `mailto:${email}`,
         label: 'Email',
         icon: IconEmail,
         target: false
