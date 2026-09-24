@@ -49,13 +49,13 @@ const stats = [
                 <div class="lg:col-span-2">
                     <Card title="My Story" component={IconBook} height="h-full" overflow={false}>
                         <div slot="content" class="col gap-4">
-                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                            <p class="text-sm text-muted leading-relaxed">
                                 I'm a web developer from Barranquilla, Colombia, with about three years of
                                 experience building modern apps and websites. Funny thing is, I never
                                 planned to end up here — my original plan was to study Accounting.
                             </p>
 
-                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                            <p class="text-sm text-muted leading-relaxed">
                                 A friend of mine was studying programming, and out of curiosity I started
                                 messing around with a few exercises. When it was time to apply to
                                 sena, I picked programming as a backup option, almost as a joke...
@@ -92,14 +92,14 @@ const stats = [
 
                 <Card title="What I Do Today" component={IconWorkflow}>
                     <div slot="content" class="col gap-3">
-                        <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                        <p class="text-sm text-muted leading-relaxed">
                             These days I especially enjoy frontend development — mixing logic with
                             design to build interfaces that feel intuitive and look good. I care about
                             solving problems, keeping my code clean, and sweating the small visual
                             details that make an experience feel finished.
                         </p>
 
-                        <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                        <p class="text-sm text-muted leading-relaxed">
                             I'm always learning new tech and trying to get better at what I do, because
                             constant learning is just part of building better products.
                         </p>
@@ -123,7 +123,7 @@ const stats = [
                 <div class="lg:col-span-2">
                     <Card title="Off the Clock" component={IconCoffee} height="h-fit" overflow={false}>
                         <div slot="content" class="col gap-4">
-                            <p class="text-sm text-[#a0a0a0] leading-relaxed">
+                            <p class="text-sm text-muted leading-relaxed">
                                 When I'm not coding: music always playing, deep in a video game, binging
                                 a new series, or re-watching Star Wars for the hundredth time (yes, I'm
                                 that fan). I'm pretty easygoing — always down for good food and even
@@ -132,7 +132,7 @@ const stats = [
 
                             <ul class="row flex-wrap gap-1.5" aria-label="Hobbies">
                                 {hobbies.map((hobby) => (
-                                    <li class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
+                                    <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
                                         {hobby}
                                     </li>
                                 ))}
@@ -155,7 +155,7 @@ const stats = [
                         <dl slot="content" class="h-full col justify-center gap-3">
                             {stats.map((stat) => (
                                 <div class="row-reverse items-baseline justify-between gap-2">
-                                    <dt class="text-xs text-[#a0a0a0] text-right">{stat.label}</dt>
+                                    <dt class="text-xs text-muted text-right">{stat.label}</dt>
                                     <dd class="text-lg font-bold">{stat.value}</dd>
                                 </div>
                             ))}

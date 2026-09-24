@@ -12,7 +12,7 @@
 
     /* Maneja el scrollbar del agarrador */
     .scrollbar::-webkit-scrollbar-thumb {
-        background: #696969;
+        background: var(--color-scrollbar);
         border-radius: 999px;
     }
 }

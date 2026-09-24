@@ -12,6 +12,7 @@ import MusicPlayer from "@/components/music/music-player.astro";
 import { experience } from "@/data/experience";
 import { featuredSkills } from "@/data/skills";
 import { projects } from "@/data/projects";
+import { email } from "@/data/social";
 ---
 
 <div class="size-screen py-25 col gap-5">
@@ -64,13 +65,13 @@ import { projects } from "@/data/projects";
                                         {item.company}
                                     </span>
 
-                                    <span class="ml-2 text-xs text-[#a0a0a0]">
+                                    <span class="ml-2 text-xs text-muted">
                                         {item.role}
                                     </span>
                                 </p>
                             </div>
 
-                            <span class="text-xs text-[#a0a0a0]">
+                            <span class="text-xs text-muted">
                                 <time datetime={start}>{start}</time>
                                 {" - "}
                                 {endIsYear ?<time datetime={end}>{end}</time> : end}
@@ -109,18 +110,18 @@ import { projects } from "@/data/projects";
                                     {project.name}
                                 </h3>
 
-                                <span class="stroke-[#a0a0a0] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
+                                <span class="stroke-muted transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
                                     <IconArrowUpRight class="size-3" />
                                 </span>
                             </div>
 
-                            <p class="text-xs text-[#a0a0a0] leading-snug">
+                            <p class="text-xs text-muted leading-snug">
                                 {project.description}
                             </p>
 
                             <ul class="row flex-wrap gap-1.5 mt-1" aria-label="Stack">
                                 {project.stack.map(( tech ) => (
-                                    <li class="box-gen rounded-full! text-[10px] text-[#a0a0a0] py-0.5 px-2">
+                                    <li class="box-gen rounded-full! text-[10px] text-muted py-0.5 px-2">
                                         {tech}
                                     </li>
                                 ))}
@@ -147,12 +148,12 @@ import { projects } from "@/data/projects";
                 height="h-[70%]"
             >
                 <div slot="content" class="col">
-                    <p class="text-sm text-[#a0a0a0]">
+                    <p class="text-sm text-muted">
                         Creating unique digital experiences. <br>
                         Let's talk about your next project!
                     </p>
 
-                    <a href="mailto:mazagonzalez61@gmail.com" class="button-main mt-8">
+                    <a href={`mailto:${email}`} class="button-main mt-8">
                         Send an Email
                     </a>
                 </div>

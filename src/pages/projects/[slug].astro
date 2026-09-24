@@ -28,7 +28,7 @@ const { project } = Astro.props;
                     aria-label="Back to projects"
                     class="rotate-180 -mr-2"
                 >
-                    <IconChevron class="size-6 stroke-[#a0a0a0] hover:stroke-white" />
+                    <IconChevron class="size-6 stroke-muted hover:stroke-white" />
                 </a>
 
                 <h1 id="project-title" class="text-3xl font-bold">
@@ -39,7 +39,7 @@ const { project } = Astro.props;
                     href={project.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="button-main w-fit! px-5 stroke-[#a0a0a0] hover:stroke-white"
+                    class="button-main w-fit! px-5 stroke-muted hover:stroke-white"
                 >
                     <span>Visit site</span>
                     <span class="sr-only">(opens in a new tab)</span>
@@ -55,7 +55,7 @@ const { project } = Astro.props;
 
             <ul class="row flex-wrap gap-1.5" aria-label="Stack">
                 {project.stack.map((tech: string) => (
-                    <li class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
+                    <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
                         {tech}
                     </li>
                 ))}
