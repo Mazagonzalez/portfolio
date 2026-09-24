@@ -1,8 +1,63 @@
 ---
-const { TRACKS } = Astro.props;
+import Disk from "@/components/music/disk.astro";
+
+import { tracks } from "@/data/tracks";
 ---
 
-<script define:vars={{ TRACKS }}>
+<section class="row gap-5 items-center" aria-labelledby="player-title">
+    <h2 id="player-title" class="sr-only">Music player</h2>
+
+    <Disk
+        id="diskImg"
+        src="/images/music/airbag.jpg"
+        alt=""
+    />
+
+    <div class="col w-1/2">
+        <p id="trackTitle" class="truncate font-semibold text-sm"></p>
+        <p id="trackArtist" class="truncate text-xs opacity-50"></p>
+
+        <div class="row gap-3 items-center mt-1">
+            <div
+                id="progressBar"
+                role="progressbar"
+                aria-label="Track progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                aria-valuenow="0"
+                class="h-1.5 w-full overflow-hidden rounded-full bg-white/10"
+            >
+                <div id="progress" class="h-full w-0 bg-white/50"></div>
+            </div>
+
+            <span id="time" class="text-right text-[11px] tabular-nums text-white/70">0:00</span>
+        </div>
+    </div>
+
+    <div class="row gap-2">
+        <button
+            id="playBtn"
+            type="button"
+            class="size-8! center-content button-main"
+            aria-label="Play"
+        >
+            <span id="playIcon" aria-hidden="true">▶</span>
+        </button>
+
+        <button
+            id="nextBtn"
+            type="button"
+            class="size-8! center-content button-main"
+            aria-label="Next track"
+        >
+            <span aria-hidden="true">|▶</span>
+        </button>
+    </div>
+</section>
+
+<audio id="player" preload="none"></audio>
+
+<script define:vars={{ tracks }}>
     const audio = document.getElementById("player");
 
     const titleEl = document.getElementById("trackTitle");
@@ -15,7 +70,7 @@ const { TRACKS } = Astro.props;
     const progressBar = document.getElementById("progressBar");
     const timeEl = document.getElementById("time");
 
-    let index = Math.floor(Math.random() * TRACKS.length);
+    let index = Math.floor(Math.random() * tracks.length);
     let isPlaying = false;
 
     function setPlaying(playing) {
@@ -25,7 +80,7 @@ const { TRACKS } = Astro.props;
     }
 
     function loadTrack(i) {
-        const track = TRACKS[i];
+        const track = tracks[i];
 
         audio.src = track.src;
         titleEl.textContent = track.title;
@@ -56,7 +111,7 @@ const { TRACKS } = Astro.props;
     }
 
     function nextTrack() {
-        index = (index + 1) % TRACKS.length;
+        index = (index + 1) % tracks.length;
         loadTrack(index);
         play();
     }

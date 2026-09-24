@@ -22,10 +22,21 @@ npm run preview   # serve the production build
 ## Project structure
 
 ```text
-public/             static assets (CV, images, music, OG image)
+public/
+├── images/
+│   ├── companies/  logos for the experience list
+│   ├── music/      album covers
+│   └── projects/   project screenshots
+└── music/          audio tracks
 src/
-├── components/     navbar, footer, icons, sections and UI pieces
-├── constants/      content: jobs, projects, skills, music tracks
+├── components/
+│   ├── backgrounds/  Aurora and Hyperspace (React + OGL)
+│   ├── icons/        SVG icons (skills/ for tech logos)
+│   ├── layout/       navbar and footer
+│   ├── music/        music player and its spinning disk
+│   ├── sections/     page sections (home/)
+│   └── ui/           reusable pieces: card, carousel
+├── data/           content: projects, experience, skills, social links, tracks
 ├── layouts/        base layout with SEO / Open Graph metadata
 ├── pages/          home, about, projects, projects/[slug], skills
 └── styles/         global Tailwind entry and custom CSS
@@ -33,6 +44,6 @@ src/
 
 ## Adding a project
 
-Add an entry to `projects` in `src/constants/home.ts`. Screenshots go in
+Add an entry to `src/data/projects.ts`. Screenshots go in
 `public/images/projects/` (WebP, ~1920px wide) and are listed in the `images`
 array; a detail page is generated automatically at `/projects/<slug>`.

@@ -22,72 +22,84 @@ export const skills = [
         type: "Frontend",
         name: "HTML",
         icon: IconHtml,
+        accent: 'hover:border-orange-400/20!',
         description: "Markup language used to structure content on the web."
     },
     {
         type: "Frontend",
         name: "CSS",
         icon: IconCss,
+        accent: 'hover:border-blue-400/20!',
         description: "Style sheet language used to design and layout web pages."
     },
     {
         type: "Frontend",
         name: "SCSS",
         icon: IconScss,
+        accent: 'hover:border-pink-300/20!',
         description: "CSS preprocessor adding variables, nesting, and mixins for scalable styles."
     },
     {
         type: "Frontend",
         name: "JavaScript",
         icon: IconJs,
+        accent: 'hover:border-yellow-400/20!',
         description: "Core scripting language for building interactive web experiences."
     },
     {
         type: "Frontend",
         name: "Tailwind CSS",
         icon: IconTailwind,
+        accent: 'hover:border-sky-300/20!',
         description: "Utility-first CSS framework for building custom designs quickly."
     },
     {
         type: "Frontend",
         name: "Bootstrap",
         icon: IconBootstrap,
+        accent: 'hover:border-purple-400/30!',
         description: "CSS framework with prebuilt components for responsive layouts."
     },
     {
         type: "Frontend",
         name: "React",
         icon: IconReact,
+        accent: 'hover:border-cyan-300/20!',
         description: "JavaScript library for building fast, component-based user interfaces."
     },
     {
         type: "Frontend",
         name: "Astro",
         icon: IconAstro,
+        accent: 'hover:border-orange-400/20!',
         description: "Web framework focused on shipping fast, content-driven sites."
     },
     {
         type: "Backend",
         name: "Laravel",
         icon: IconLaravel,
+        accent: 'hover:border-red-400/20!',
         description: "PHP framework for building robust, scalable backend applications."
     },
     {
         type: "Tools",
         name: "Git",
         icon: IconGit,
+        accent: 'hover:border-orange-400/20!',
         description: "Version control system for tracking and managing code changes."
     },
     {
         type: "Tools",
         name: "GitHub",
         icon: IconGithubSkills,
+        accent: 'hover:border-white/20!',
         description: "Platform for hosting, reviewing, and collaborating on Git repositories."
     },
     {
         type: "Tools",
         name: "Sublime Text",
         icon: IconSublime,
+        accent: 'hover:border-cyan-400/20!',
         description: "Lightweight and fast source code editor."
     },
     {
@@ -127,3 +139,10 @@ export const skills = [
         description: "Google's agentic AI-powered code editor for building software faster."
     }
 ]
+
+/* Rows shown in the Skills card on the home page, by skill name */
+export const featuredSkills = [
+    ["Laravel", "Astro", "React", "JavaScript"],
+    ["Tailwind CSS", "Bootstrap", "SCSS", "CSS", "HTML"],
+    ["GitHub", "Git", "Sublime Text"],
+].map((row) => row.map((name) => skills.find((skill) => skill.name === name)!));
