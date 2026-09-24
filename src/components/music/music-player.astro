@@ -71,10 +71,8 @@ import { tracks } from "@/data/tracks";
     const timeEl = document.getElementById("time");
 
     let index = Math.floor(Math.random() * tracks.length);
-    let isPlaying = false;
 
     function setPlaying(playing) {
-        isPlaying = playing;
         playIcon.textContent = playing ? "⏸" : "▶";
         playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
     }

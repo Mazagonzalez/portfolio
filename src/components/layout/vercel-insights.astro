@@ -1,0 +1,15 @@
+---
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+
+// Only in production builds deployed to Vercel's production environment:
+// nothing runs in `astro dev`, local builds or preview deployments.
+const isProduction = import.meta.env.PROD && process.env.VERCEL_ENV === "production";
+---
+
+{isProduction && (
+    <>
+        <Analytics />
+        <SpeedInsights />
+    </>
+)}
