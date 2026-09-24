@@ -16,7 +16,10 @@ export function getStaticPaths() {
 const { project } = Astro.props;
 ---
 
-<Layout>
+<Layout
+    title={`${project.name} — AMG`}
+    description={project.description || `${project.name} — a project by Carlos Maza.`}
+>
     <section class="size-screen mt-32 col gap-6">
         <div class="col gap-3">
             <div class="row items-center flex-wrap gap-4">
