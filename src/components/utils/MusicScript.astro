@@ -12,10 +12,17 @@ const { TRACKS } = Astro.props;
     const playIcon = document.getElementById("playIcon");
     const nextBtn = document.getElementById("nextBtn");
     const progressEl = document.getElementById("progress");
+    const progressBar = document.getElementById("progressBar");
     const timeEl = document.getElementById("time");
 
     let index = Math.floor(Math.random() * TRACKS.length);
     let isPlaying = false;
+
+    function setPlaying(playing) {
+        isPlaying = playing;
+        playIcon.textContent = playing ? "⏸" : "▶";
+        playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
+    }
 
     function loadTrack(i) {
         const track = TRACKS[i];
@@ -26,21 +33,15 @@ const { TRACKS } = Astro.props;
         coverEl.src = track.cover;
 
         progressEl.style.width = "0%";
+        progressBar.setAttribute("aria-valuenow", "0");
         timeEl.textContent = "0:00";
-        playIcon.textContent = "▶";
-        isPlaying = false;
+        setPlaying(false);
     }
 
     function play() {
         audio.play()
-            .then(() => {
-                playIcon.textContent = "⏸";
-                isPlaying = true;
-            })
-            .catch(() => {
-                playIcon.textContent = "▶";
-                isPlaying = false;
-            });
+            .then(() => setPlaying(true))
+            .catch(() => setPlaying(false));
     }
 
     function togglePlay() {
@@ -50,8 +51,7 @@ const { TRACKS } = Astro.props;
             play();
         } else {
             audio.pause();
-            playIcon.textContent = "▶";
-            isPlaying = false;
+            setPlaying(false);
         }
     }
 
@@ -66,6 +66,7 @@ const { TRACKS } = Astro.props;
         ? (audio.currentTime / audio.duration) * 100
         : 0;
         progressEl.style.width = `${percent}%`;
+        progressBar.setAttribute("aria-valuenow", String(Math.round(percent)));
         timeEl.textContent = formatTime(audio.currentTime);
     });
 

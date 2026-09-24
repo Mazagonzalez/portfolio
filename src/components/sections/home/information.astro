@@ -14,7 +14,7 @@ import { projects } from "@/constants/home";
 import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 ---
 
-<section class="size-screen py-25 col gap-5">
+<div class="size-screen py-25 col gap-5">
     <div class="grid md:grid-cols-2 gap-5">
         <!-- Skills -->
         <Card
@@ -22,7 +22,7 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
             link="/skills"
             component={IconStart}
         >
-            <div slot="content" class="center-content col gap-4">
+            <div slot="content" class="center-content col gap-4" aria-hidden="true">
                 {Array.from({ length: 3 }).map((_, i) => (
                    <div class="center-content gap-4">
                         {skills
@@ -35,7 +35,7 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
                                 </div>
                             ))
                         }
-                    </div> 
+                    </div>
                 ))}
             </div>
         </Card>
@@ -47,36 +47,43 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
             overflow={false}
             footerContent={true}
         >
-            <div slot="content" class="h-46 pr-4">
-                {jobs.map(( item ) => (
-                    <div class="row items-center justify-between py-4">
-                        <div class="row items-center gap-2.5">
-                            <img 
-                                src={item.logo} 
-                                alt={item.company}
-                                width="32"
-                                height="32"
-                                loading="lazy" 
-                                class="rounded-lg"
-                            />
+            <ul slot="content" class="h-46 pr-4">
+                {jobs.map(( item ) => {
+                    const [start, end] = item.period.split(" - ");
+                    const endIsYear = !Number.isNaN(Number(end));
 
-                            <h2>
-                                <span class="font-medium">
-                                    {item.company}
-                                </span>
+                    return (
+                        <li class="row items-center justify-between py-4">
+                            <div class="row items-center gap-2.5">
+                                <img
+                                    src={item.logo}
+                                    alt=""
+                                    width="32"
+                                    height="32"
+                                    loading="lazy"
+                                    class="rounded-lg"
+                                />
 
-                                <span class="ml-2 text-xs text-[#a0a0a0]">
-                                    {item.role}
-                                </span> 
-                            </h2>
-                        </div>
+                                <p>
+                                    <span class="font-medium">
+                                        {item.company}
+                                    </span>
 
-                        <span class="text-xs text-[#a0a0a0]">
-                            {item.period}
-                        </span>
-                    </div>
-                ))}
-            </div>
+                                    <span class="ml-2 text-xs text-[#a0a0a0]">
+                                        {item.role}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <span class="text-xs text-[#a0a0a0]">
+                                <time datetime={start}>{start}</time>
+                                {" - "}
+                                {endIsYear ?<time datetime={end}>{end}</time> : end}
+                            </span>
+                        </li>
+                    );
+                })}
+            </ul>
 
             <div slot="footer" class="w-full mt-4">
                 <a href="/Carlos-Maza-CV.pdf" download class="button-main">
@@ -95,49 +102,53 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
             component={IconProjects}
             overflow={false}
         >
-            <div slot="content" class="h-54 col gap-3 pr-3">
+            <ul slot="content" class="h-54 col gap-3 pr-3">
                 {projects.map(( project ) => (
-                    <a
-                        href={`/projects/${project.slug}`}
-                        class="group box-gen p-3 col gap-2 transition-all duration-300 hover:border-white/20!"
-                    >
-                        <div class="row items-center justify-between gap-2">
-                            <h2 class="font-medium text-sm group-hover:text-white">
-                                {project.name}
-                            </h2>
+                    <li>
+                        <a
+                            href={`/projects/${project.slug}`}
+                            class="group box-gen p-3 col gap-2 transition-all duration-300 hover:border-white/20!"
+                        >
+                            <div class="row items-center justify-between gap-2">
+                                <h3 class="font-medium text-sm group-hover:text-white">
+                                    {project.name}
+                                </h3>
 
-                            <span class="stroke-[#a0a0a0] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
-                                <IconArrowUpRight class="size-3" />
-                            </span>
-                        </div>
-
-                        <p class="text-xs text-[#a0a0a0] leading-snug">
-                            {project.description}
-                        </p>
-
-                        <div class="row flex-wrap gap-1.5 mt-1">
-                            {project.stack.map(( tech ) => (
-                                <span class="box-gen rounded-full! text-[10px] text-[#a0a0a0] py-0.5 px-2">
-                                    {tech}
+                                <span class="stroke-[#a0a0a0] transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
+                                    <IconArrowUpRight class="size-3" />
                                 </span>
-                            ))}
-                        </div>
-                    </a>
+                            </div>
+
+                            <p class="text-xs text-[#a0a0a0] leading-snug">
+                                {project.description}
+                            </p>
+
+                            <ul class="row flex-wrap gap-1.5 mt-1" aria-label="Stack">
+                                {project.stack.map(( tech ) => (
+                                    <li class="box-gen rounded-full! text-[10px] text-[#a0a0a0] py-0.5 px-2">
+                                        {tech}
+                                    </li>
+                                ))}
+                            </ul>
+                        </a>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </Card>
 
         <div class="col gap-5">
             <!-- Tracks -->
-            <Card 
+            <Card
                 headerContent={false}
                 height="h-[30%]"
             >
-                <div slot="content" class="row gap-5 items-center">
-                    <Disk 
+                <section slot="content" class="row gap-5 items-center" aria-labelledby="player-title">
+                    <h2 id="player-title" class="sr-only">Music player</h2>
+
+                    <Disk
                         id="diskImg"
-                        src="/images/music/airbag.jpg" 
-                        alt="Cover"
+                        src="/images/music/airbag.jpg"
+                        alt=""
                     />
 
                     <div class="col w-1/2">
@@ -145,10 +156,18 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
                         <p id="trackArtist" class="truncate text-xs opacity-50"></p>
 
                         <div class="row gap-3 items-center mt-1">
-                            <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                            <div
+                                id="progressBar"
+                                role="progressbar"
+                                aria-label="Track progress"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="0"
+                                class="h-1.5 w-full overflow-hidden rounded-full bg-white/10"
+                            >
                                 <div id="progress" class="h-full w-0 bg-white/50"></div>
                             </div>
-    
+
                             <span id="time" class="text-right text-[11px] tabular-nums text-white/70">0:00</span>
                         </div>
                     </div>
@@ -156,27 +175,27 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
                     <div class="row gap-2">
                         <button
                             id="playBtn"
-                            type="button" 
+                            type="button"
                             class="size-8! center-content button-main"
                             aria-label="Play"
                         >
-                            <span id="playIcon">▶</span>
+                            <span id="playIcon" aria-hidden="true">▶</span>
                         </button>
 
                         <button
                             id="nextBtn"
                             type="button"
                             class="size-8! center-content button-main"
-                            aria-label="Next"
+                            aria-label="Next track"
                         >
-                            |▶
+                            <span aria-hidden="true">|▶</span>
                         </button>
                     </div>
-                </div>
+                </section>
             </Card>
 
             <!-- Contact -->
-            <Card 
+            <Card
                 title="Contact"
                 component={IconContact}
                 height="h-[70%]"
@@ -195,7 +214,7 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
         </div>
 
         <!-- Signature -->
-        <div class="md:col-span-2 lg:col-span-1">
+        <div class="md:col-span-2 lg:col-span-1" aria-hidden="true">
             <Card
                 headerContent={false}
                 overflow={false}
@@ -211,4 +230,4 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
             </Card>
         </div>
     </div>
-</section>
+</div>

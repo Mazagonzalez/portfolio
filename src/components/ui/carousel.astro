@@ -5,15 +5,16 @@ import IconChevronRight from "@/components/icons/icon-chevron-right.astro";
 const { images = [], alt = "" } = Astro.props;
 ---
 
-<div class="col gap-3">
+<section class="col gap-3" aria-roledescription="carousel" aria-label={`${alt} screenshots`}>
     <div class="box-gen relative aspect-video overflow-hidden">
         {images.length > 0 ? (
             <>
                 <div id="carouselTrack" class="row h-full transition-transform duration-500 ease-out">
-                    {images.map((src: string) => (
+                    {images.map((src: string, i: number) => (
                         <img
                             src={src}
-                            alt={alt}
+                            alt={`${alt} — screenshot ${i + 1} of ${images.length}`}
+                            aria-hidden={i === 0 ? undefined : "true"}
                             loading="lazy"
                             class="h-full w-full shrink-0 object-cover"
                         />
@@ -50,18 +51,19 @@ const { images = [], alt = "" } = Astro.props;
     </div>
 
     {images.length > 1 && (
-        <div id="carouselDots" class="row justify-center gap-2">
+        <div id="carouselDots" role="group" aria-label="Choose screenshot" class="row justify-center gap-2">
             {images.map((_: string, i: number) => (
                 <button
                     type="button"
                     data-index={i}
                     aria-label={`Go to image ${i + 1}`}
+                    aria-current={i === 0 ? "true" : undefined}
                     class:list={["size-1.5 rounded-full transition-colors cursor-pointer", i === 0 ? "bg-white/70" : "bg-white/20"]}
                 ></button>
             ))}
         </div>
     )}
-</div>
+</section>
 
 <script>
     document.addEventListener("astro:page-load", () => {
@@ -77,7 +79,14 @@ const { images = [], alt = "" } = Astro.props;
                 index = (i + dots.length) % dots.length;
                 track.style.transform = `translateX(-${index * 100}%)`;
 
+                Array.from(track.children).forEach((img, ii) => {
+                    if (ii === index) img.removeAttribute("aria-hidden");
+                    else img.setAttribute("aria-hidden", "true");
+                });
+
                 dots.forEach((dot, di) => {
+                    if (di === index) dot.setAttribute("aria-current", "true");
+                    else dot.removeAttribute("aria-current");
                     dot.classList.toggle("bg-white/70", di === index);
                     dot.classList.toggle("bg-white/20", di !== index);
                 });

@@ -21,21 +21,25 @@ import IconSublime from "@/components/icons/skills/icon-sublime.astro";
 export const iconsHero = [
     {
         url: 'https://github.com/Mazagonzalez',
+        label: 'GitHub',
         icon: IconGithub,
         target: true
     },
     {
         url: 'https://www.linkedin.com/in/carlos-arturo-maza-gonzalez',
+        label: 'LinkedIn',
         icon: IconLinkedin,
         target: true
     },
     {
         url: 'https://www.instagram.com/carlosmaza_17/',
+        label: 'Instagram',
         icon: IconInstagram,
         target: true
     },
     {
         url: 'mailto:mazagonzalez61@gmail.com',
+        label: 'Email',
         icon: IconEmail,
         target: false
     },

@@ -20,17 +20,18 @@ const { project } = Astro.props;
     title={`${project.name} — AMG`}
     description={project.description || `${project.name} — a project by Carlos Maza.`}
 >
-    <section class="size-screen mt-32 col gap-6">
+    <article class="size-screen mt-32 col gap-6" aria-labelledby="project-title">
         <div class="col gap-3">
             <div class="row items-center flex-wrap gap-4">
                 <a 
                     href="/projects"
+                    aria-label="Back to projects"
                     class="rotate-180 -mr-2"
                 >
                     <IconChevron class="size-6 stroke-[#a0a0a0] hover:stroke-white" />
                 </a>
 
-                <h1 class="text-3xl font-bold">
+                <h1 id="project-title" class="text-3xl font-bold">
                     {project.name}
                 </h1>
 
@@ -41,6 +42,7 @@ const { project } = Astro.props;
                     class="button-main w-fit! px-5 stroke-[#a0a0a0] hover:stroke-white"
                 >
                     <span>Visit site</span>
+                    <span class="sr-only">(opens in a new tab)</span>
                     <IconArrowUpRight class="size-4" />
                 </a>
             </div>
@@ -51,17 +53,17 @@ const { project } = Astro.props;
                 </p>
             )}
 
-            <div class="row flex-wrap gap-1.5">
+            <ul class="row flex-wrap gap-1.5" aria-label="Stack">
                 {project.stack.map((tech: string) => (
-                    <span class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
+                    <li class="box-gen rounded-full! text-xs text-[#a0a0a0] py-1 px-3">
                         {tech}
-                    </span>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
 
         <div class="pt-6 pb-20">
             <Carousel images={project.images} alt={project.name} />
         </div>
-    </section>
+    </article>
 </Layout>

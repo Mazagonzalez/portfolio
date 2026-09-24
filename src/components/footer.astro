@@ -8,32 +8,35 @@ const year = new Date().getFullYear();
     <div class="col gap-6">
         <div class="row flex-wrap items-center justify-between gap-6">
             <div class="col gap-1">
-                <h2 class="text-lg font-semibold">
+                <p class="text-lg font-semibold">
                     Carlos Maza
-                </h2>
+                </p>
 
                 <p class="text-sm text-[#a0a0a0]">
                     Frontend developer building fast, thoughtful web experiences.
                 </p>
             </div>
 
-            <div class="row items-center gap-5">
-                {iconsHero.map(({ url, icon: Icon, target }) => (
-                    <a
-                        href={url}
-                        target={target === false ? "_self" : "_blank"}
-                        rel="noopener noreferrer"
-                    >
-                        <Icon class="icon" />
-                    </a>
+            <ul class="row items-center gap-5" aria-label="Social links">
+                {iconsHero.map(({ url, label, icon: Icon, target }) => (
+                    <li>
+                        <a
+                            href={url}
+                            target={target === false ? "_self" : "_blank"}
+                            rel="noopener noreferrer"
+                            aria-label={label}
+                        >
+                            <Icon class="icon" />
+                        </a>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
 
-        <div class="h-px w-full bg-white/10"></div>
+        <hr class="h-px w-full border-0 bg-white/10" />
 
         <p class="text-xs text-[#a0a0a0] text-end">
-            &copy; {year} Carlos Maza. All rights reserved.
+            <small class="text-xs">&copy; {year} Carlos Maza. All rights reserved.</small>
         </p>
     </div>
 </footer>

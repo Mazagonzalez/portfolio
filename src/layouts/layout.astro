@@ -86,7 +86,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		</script>
 	</head>
 	<body class="scrollbar">
-		<div class="fixed top-0 left-0 w-screen h-screen">
+		<a
+			href="#main"
+			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-lg focus:bg-black focus:px-4 focus:py-2 focus:text-sm"
+		>
+			Skip to content
+		</a>
+
+		<div class="fixed top-0 left-0 w-screen h-screen" aria-hidden="true">
 			<UsageAurora 
 				client:only="react" 
 			/>
@@ -94,7 +101,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 		<Navbar />
 
-		<main class="scrollbar relative z-10">	
+		<main id="main" tabindex="-1" class="scrollbar relative z-10 outline-none">	
 			<slot />
 		</main>
 
