@@ -10,8 +10,6 @@ import vercel from "@astrojs/vercel";
 export default defineConfig({
   site: "https://amg-devel.vercel.app",
 
-  output: 'server',
-
   // Pages stay static; only routes with `prerender = false` (the Spotify
   // endpoint) run as Vercel functions
   adapter: vercel(),
