@@ -175,6 +175,11 @@ const projects = await getProjects();
                         <span class="text-2xl font-bold tracking-wide">AMG</span>
                         <span class="text-[10px] uppercase tracking-[0.2em] text-white/40">Hover to jump to lightspeed</span>
                     </div>
+
+                    <!-- Easter egg hint: shows up once the stars reach lightspeed -->
+                    <p class="absolute inset-x-0 bottom-5 text-center text-[11px] tracking-[0.35em] text-white/35 pointer-events-none opacity-0 blur-sm transition-all duration-700 group-hover:opacity-100 group-hover:blur-none group-hover:delay-700">
+                        ↑ ↑ ↓ ↓ ← → ← → B A
+                    </p>
                 </div>
             </Card>
         </div>

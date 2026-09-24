@@ -1,0 +1,104 @@
+---
+// Konami code (↑ ↑ ↓ ↓ ← → ← → B A) jumps the whole page to lightspeed
+---
+
+<div
+    id="lightspeed"
+    hidden
+    aria-hidden="true"
+    class="fixed inset-0 z-100 bg-[#05050a] pointer-events-none opacity-0 transition-opacity duration-500 data-active:opacity-100"
+>
+    <canvas class="block"></canvas>
+</div>
+
+<p
+    id="lightspeedToast"
+    role="status"
+    class="fixed top-6 left-1/2 z-101 -translate-x-1/2 box-gen bg-zinc-900/85! px-4 py-2 text-sm whitespace-nowrap pointer-events-none opacity-0 -translate-y-2 transition-all duration-300 data-active:opacity-100 data-active:translate-y-0"
+></p>
+
+<script>
+    const SEQUENCE = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
+    const WARP_MS = 2600;
+    const FADE_MS = 500;
+
+    const recent: string[] = [];
+    let running = false;
+    let cleanup: (() => void) | null = null;
+
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    async function showToast(message: string) {
+        const toast = document.getElementById("lightspeedToast");
+        if (!toast) return;
+
+        toast.textContent = message;
+        toast.dataset.active = "";
+        await wait(3200);
+        delete toast.dataset.active;
+    }
+
+    async function jumpToLightspeed() {
+        const overlay = document.getElementById("lightspeed");
+        const canvas = overlay?.querySelector("canvas");
+        if (!overlay || !canvas || running) return;
+
+        running = true;
+
+        // Respect reduced motion: skip the animation, keep the reward
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            await showToast("🚀 Lightspeed unlocked");
+            running = false;
+            return;
+        }
+
+        // Loaded on demand: costs nothing until someone finds the secret
+        const { createStarfield } = await import("@/components/backgrounds/starfield");
+
+        overlay.hidden = false;
+        const starfield = createStarfield(overlay, canvas, { starCount: 900, warpSpeed: 32 });
+        cleanup = () => {
+            starfield.destroy();
+            overlay.hidden = true;
+            delete overlay.dataset.active;
+            cleanup = null;
+            running = false;
+        };
+
+        // Force a reflow so the fade-in transition starts from opacity 0
+        void overlay.offsetHeight;
+        overlay.dataset.active = "";
+        starfield.warp(true);
+        showToast("🚀 Lightspeed unlocked. You found the secret!");
+
+        await wait(WARP_MS);
+        starfield.warp(false);
+        delete overlay.dataset.active;
+
+        await wait(FADE_MS);
+        cleanup?.();
+    }
+
+    document.addEventListener("keydown", (event) => {
+        const target = event.target as HTMLElement;
+        // Ignore typing in fields and the command palette
+        if (target.closest("input, textarea, [contenteditable], dialog[open]")) return;
+
+        // Keep the last keys pressed and compare them with the sequence
+        recent.push(event.key.toLowerCase());
+        if (recent.length > SEQUENCE.length) recent.shift();
+
+        if (recent.join() === SEQUENCE.join()) {
+            recent.length = 0;
+            jumpToLightspeed();
+        }
+    });
+
+    // Navigating mid-jump removes the overlay, so stop the animation too
+    document.addEventListener("astro:before-swap", () => cleanup?.());
+
+    console.log(
+        "%cpsst… try ↑ ↑ ↓ ↓ ← → ← → B A",
+        "color: #7453ED; font-size: 12px; font-family: monospace;",
+    );
+</script>
