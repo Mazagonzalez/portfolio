@@ -4,15 +4,20 @@ import Aurora from "@/components/backgrounds/aurora.jsx";
 import Navbar from "@/components/layout/navbar.astro";
 import Footer from "@/components/layout/footer.astro";
 import VercelInsights from "@/components/layout/vercel-insights.astro";
+import CommandPalette from "@/components/layout/command-palette.astro";
+import EasterEgg from "@/components/layout/easter-egg.astro";
 import { email, socialLinks } from "@/data/social";
 
 import "../styles/global.css";
 
+// Each page gets its generated Open Graph image: /about -> /og/about.png
+const ogPath = Astro.url.pathname.replace(/\/$/, "") || "/index";
+
 const {
 	title = "AMG - devel",
 	description = "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
-	image = { src: "/OG.png", width: 2400, height: 1254, type: "image/png" },
-	imageAlt = "Carlos Maza — Frontend Developer",
+	image = { src: `/og${ogPath}.png`, width: 1200, height: 630, type: "image/png" },
+	imageAlt = title,
 	noindex = false,
 } = Astro.props;
 
@@ -54,7 +59,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="has-[#cmdk[open]]:overflow-hidden">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -121,6 +126,10 @@ const jsonLd = {
 		</main>
 
 		<Footer />
+
+		<CommandPalette />
+		
+		<EasterEgg />
 
 		<VercelInsights />
 	</body>
