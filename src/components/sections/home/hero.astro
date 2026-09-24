@@ -1,5 +1,6 @@
 ---
 import NowPlaying from "@/components/sections/home/now-playing.astro";
+import LocalTime from "@/components/sections/home/local-time.astro";
 import { socialLinks } from "@/data/social";
 ---
 
@@ -19,7 +20,7 @@ import { socialLinks } from "@/data/social";
     </div>
 
     <div class="col gap-3 mt-6">
-        <p class="box-gen w-fit px-3 py-1 row gap-3 items-center">
+        <p class="box-gen w-fit max-w-full px-3 py-1 row flex-wrap gap-x-3 gap-y-1 items-center">
             <span class="relative flex size-2" aria-hidden="true">
                 <span class="absolute size-full animate-ping rounded-full bg-lime-400/75"></span>
                 <span class="relative size-full rounded-full bg-lime-500"></span>
@@ -28,6 +29,10 @@ import { socialLinks } from "@/data/social";
             <span class="text-sm font-semibold">
                 Available for new projects
             </span>
+
+            <span class="hidden sm:block w-px h-4 bg-white/15" aria-hidden="true"></span>
+
+            <LocalTime />
         </p>
 
         <NowPlaying />
