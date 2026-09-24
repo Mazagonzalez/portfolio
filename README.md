@@ -19,6 +19,7 @@ Requires Node.js 22.12 or newer.
 npm install
 npm run dev       # http://localhost:4321
 npm run build     # output in ./dist
+npm run check     # type-check .astro and .ts files
 npm run preview   # serve the production build
 ```
 
@@ -47,6 +48,12 @@ src/
 ├── pages/          home, about, projects, projects/[slug], skills, 404
 └── styles/         global Tailwind entry and custom CSS
 ```
+
+## Continuous integration
+
+Every pull request runs `.github/workflows/check.yml`: a clean `npm ci`, a
+type check (`npm run check`) and a full build. If either step fails, the PR
+shows a red check before anything reaches `main`.
 
 ## Adding a project
 
