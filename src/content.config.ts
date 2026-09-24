@@ -1,4 +1,5 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 const projects = defineCollection({
@@ -12,8 +13,8 @@ const projects = defineCollection({
             order: z.number(),
             year: z.number().optional(),
             role: z.string().optional(),
-            url: z.string().url().optional(),
-            repo: z.string().url().optional(),
+            url: z.url().optional(),
+            repo: z.url().optional(),
             stack: z.array(z.string()),
             // First image is used as the cover and the Open Graph image
             images: z.array(image()).default([]),

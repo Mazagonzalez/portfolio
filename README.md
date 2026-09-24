@@ -6,11 +6,14 @@ Live: [amg-devel.vercel.app](https://amg-devel.vercel.app)
 
 ## Stack
 
-- [Astro 5](https://astro.build) with view transitions
+- [Astro 7](https://astro.build) with view transitions and content collections
 - [Tailwind CSS 4](https://tailwindcss.com)
 - React islands for the animated backgrounds (`Aurora`, `Hyperspace`, built on [OGL](https://github.com/oframe/ogl))
+- Vercel Web Analytics and Speed Insights (production deployments only)
 
 ## Getting started
+
+Requires Node.js 22.12 or newer.
 
 ```sh
 npm install
