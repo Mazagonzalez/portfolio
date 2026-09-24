@@ -11,7 +11,7 @@ import MusicPlayer from "@/components/music/music-player.astro";
 
 import { experience } from "@/data/experience";
 import { featuredSkills } from "@/data/skills";
-import { getProjects } from "@/data/projects";
+import { getProjects, projectTransition } from "@/data/projects";
 import { email } from "@/data/social";
 
 const projects = await getProjects();
@@ -108,7 +108,7 @@ const projects = await getProjects();
                             class="group box-gen p-3 col gap-2 transition-all duration-300 hover:border-white/20!"
                         >
                             <div class="row items-center justify-between gap-2">
-                                <h3 class="font-medium text-sm group-hover:text-white">
+                                <h3 class="font-medium text-sm group-hover:text-white w-fit" transition:name={projectTransition(id).title}>
                                     {project.name}
                                 </h3>
 

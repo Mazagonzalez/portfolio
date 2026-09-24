@@ -7,13 +7,14 @@ import type { ImageMetadata } from "astro";
 interface Props {
     images?: ImageMetadata[];
     alt?: string;
+    transitionName?: string;
 }
 
-const { images = [], alt = "" } = Astro.props;
+const { images = [], alt = "", transitionName } = Astro.props;
 ---
 
 <section class="col gap-3" aria-roledescription="carousel" aria-label={`${alt} screenshots`}>
-    <div class="box-gen relative aspect-video overflow-hidden">
+    <div class="box-gen relative aspect-video overflow-hidden" transition:name={transitionName}>
         {images.length > 0 ? (
             <>
                 <div id="carouselTrack" class="row h-full transition-transform duration-500 ease-out">

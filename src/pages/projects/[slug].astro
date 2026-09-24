@@ -7,7 +7,7 @@ import IconGithub from "@/components/icons/icon-github.astro";
 import { getImage } from "astro:assets";
 import { render } from "astro:content";
 
-import { getProjects } from "@/data/projects";
+import { getProjects, projectTransition } from "@/data/projects";
 
 export async function getStaticPaths() {
     const projects = await getProjects();
@@ -20,6 +20,7 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { data } = project;
+const transition = projectTransition(project.id);
 const { Content } = await render(project);
 const hasContent = Boolean(project.body?.trim());
 
@@ -58,7 +59,7 @@ const details = [
                     <IconChevron class="size-6 stroke-muted hover:stroke-white" />
                 </a>
 
-                <h1 id="project-title" class="text-3xl font-bold">
+                <h1 id="project-title" class="text-3xl font-bold" transition:name={transition.title}>
                     {data.name}
                 </h1>
 
@@ -105,7 +106,7 @@ const details = [
         </div>
 
         <div class="pt-6">
-            <Carousel images={data.images} alt={data.name} />
+            <Carousel images={data.images} alt={data.name} transitionName={transition.cover} />
         </div>
 
         <div class="grid md:grid-cols-4 gap-8 pb-20">
