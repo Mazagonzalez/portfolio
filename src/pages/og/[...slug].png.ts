@@ -7,6 +7,7 @@ import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 
 import { getProjects } from "@/data/projects";
+import { getPosts, getTags, formatDate } from "@/data/blog";
 import { featuredSkills } from "@/data/skills";
 
 interface OgPage {
@@ -18,6 +19,8 @@ interface OgPage {
     cover?: string;
     // Name in the bottom-right corner (off when the title already is the name)
     signature?: boolean;
+    // Smaller headline for long titles (blog posts)
+    compact?: boolean;
 }
 
 // Astro keeps each image's file path in a non-enumerable `fsPath` property.
@@ -29,6 +32,7 @@ const CATEGORY = { landing: "Landing page", app: "Web app", ecommerce: "Ecommerc
 
 export const getStaticPaths = (async () => {
     const projects = await getProjects();
+    const posts = await getPosts();
     const topSkills = featuredSkills[0].map((skill) => skill.name);
 
     const pages: { slug: string; page: OgPage }[] = [
@@ -69,6 +73,25 @@ export const getStaticPaths = (async () => {
                 tags: featuredSkills.flat().slice(0, 6).map((skill) => skill.name),
             },
         },
+        {
+            slug: "blog",
+            page: {
+                eyebrow: "Blog",
+                title: "Notes & write-ups",
+                description: "Frontend, the tools I use every day and the small details that make an interface feel finished.",
+                tags: getTags(posts).slice(0, 5),
+            },
+        },
+        ...posts.map(({ id, data }) => ({
+            slug: `blog/${id}`,
+            page: {
+                eyebrow: `Blog · ${formatDate(data.pubDate)}`,
+                title: data.title,
+                description: data.description,
+                tags: data.tags,
+                compact: true,
+            },
+        })),
         ...projects.map(({ id, data }) => ({
             slug: `projects/${id}`,
             page: {
@@ -101,6 +124,10 @@ const fonts = Promise.all([400, 500, 700].map(async (weight) => ({
     style: "normal" as const,
 })));
 
+// Long texts would push the footer out of the card
+const truncate = (text: string, max: number) =>
+    text.length > max ? `${text.slice(0, max).replace(/\s+\S*$/, "")}…` : text;
+
 const toDataUrl = (png: Buffer) => `data:image/png;base64,${png.toString("base64")}`;
 
 // Blurred aurora glow in the site's colors, rendered once and reused
@@ -123,7 +150,7 @@ async function coverDataUrl(path: string) {
     return toDataUrl(png);
 }
 
-async function render({ eyebrow, title, description, tags, cover, signature = true }: OgPage) {
+async function render({ eyebrow, title, description, tags, cover, signature = true, compact = false }: OgPage) {
     const image = cover ? await coverDataUrl(cover) : undefined;
     const textWidth = image ? 560 : 960;
 
@@ -175,12 +202,12 @@ async function render({ eyebrow, title, description, tags, cover, signature = tr
                     letterSpacing: 4,
                     color: "rgba(255, 255, 255, 0.55)",
                 }, eyebrow),
-                el("span", { fontSize: image ? 72 : 88, fontWeight: 700, lineHeight: 1.05 }, title),
+                el("span", { fontSize: compact ? 60 : image ? 72 : 88, fontWeight: 700, lineHeight: 1.1 }, title),
                 description && el("span", {
                     fontSize: 28,
                     lineHeight: 1.4,
                     color: "rgba(255, 255, 255, 0.7)",
-                }, description),
+                }, truncate(description, 150)),
             ]),
 
             // Footer: tags + name

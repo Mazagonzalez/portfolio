@@ -63,11 +63,11 @@
 }
 
 .prose-case h2{
-    @apply text-xl font-semibold text-white mt-6 first:mt-0
+    @apply text-xl font-semibold text-white mt-6 first:mt-0 scroll-mt-28
 }
 
 .prose-case h3{
-    @apply text-base font-semibold text-white mt-2
+    @apply text-base font-semibold text-white mt-2 scroll-mt-28
 }
 
 .prose-case a{
@@ -75,11 +75,11 @@
 }
 
 .prose-case ul{
-    @apply list-disc pl-5 flex flex-col gap-1.5
+    @apply list-disc pl-5 flex flex-col gap-1.5 marker:text-white/40
 }
 
 .prose-case ol{
-    @apply list-decimal pl-5 flex flex-col gap-1.5
+    @apply list-decimal pl-5 flex flex-col gap-1.5 marker:text-white/40
 }
 
 .prose-case strong{
@@ -92,4 +92,37 @@
 
 .prose-case img{
     @apply w-full rounded-lg border border-white/10
+}
+
+/* Code blocks (colored by Shiki; its inline background is replaced) */
+.prose-case pre{
+    @apply rounded-lg border border-white/10 bg-black/40! p-4 text-sm leading-relaxed overflow-x-auto
+}
+
+.prose-case pre code{
+    @apply border-0 bg-transparent p-0 rounded-none text-[length:inherit]
+}
+
+.prose-case kbd{
+    @apply rounded border border-white/15 bg-white/5 px-1.5 py-0.5 text-xs font-[inherit] text-white
+}
+
+.prose-case blockquote{
+    @apply border-l-2 border-violet-400/60 pl-4 italic text-white/70
+}
+
+.prose-case hr{
+    @apply border-white/10 my-2
+}
+
+.prose-case table{
+    @apply w-full text-sm text-left border-collapse
+}
+
+.prose-case th{
+    @apply font-medium text-white border-b border-white/20 py-2 pr-4
+}
+
+.prose-case td{
+    @apply border-b border-white/10 py-2 pr-4
 }

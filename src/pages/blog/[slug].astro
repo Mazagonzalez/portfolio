@@ -1,0 +1,166 @@
+---
+import Layout from "@/layouts/layout.astro";
+import PostMeta from "@/components/blog/post-meta.astro";
+import IconChevron from "@/components/icons/icon-chevron.astro";
+import IconEmail from "@/components/icons/icon-email.astro";
+import { render } from "astro:content";
+
+import { getPosts, postTransition } from "@/data/blog";
+import { email } from "@/data/social";
+
+export async function getStaticPaths() {
+    const posts = await getPosts();
+
+    // Posts are newest first: "newer" is the one before, "older" the one after
+    return posts.map((post, i) => ({
+        params: { slug: post.id },
+        props: { post, newer: posts[i - 1], older: posts[i + 1] },
+    }));
+}
+
+const { post, newer, older } = Astro.props;
+const { data } = post;
+const { Content, headings } = await render(post);
+
+const toc = headings.filter((heading) => heading.depth <= 3);
+const siblings = [
+    older && { label: "Older", post: older },
+    newer && { label: "Newer", post: newer },
+].filter(Boolean) as { label: string; post: typeof post }[];
+---
+
+<Layout
+    title={`${data.title} — AMG`}
+    description={data.description}
+    article={{ headline: data.title, publishedTime: data.pubDate, modifiedTime: data.updatedDate, tags: data.tags }}
+>
+    <!-- Reading progress, driven by the scroll (browsers without scroll timelines just don't show it) -->
+    <div
+        aria-hidden="true"
+        class="hidden supports-[animation-timeline:scroll()]:block fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-linear-to-r from-violet-400 via-sky-400 to-violet-500 animate-reading-progress [animation-timeline:scroll(root)]"
+    ></div>
+
+    <article class="size-screen mt-32 pb-20" aria-labelledby="post-title">
+        <header class="col gap-4 max-w-3xl">
+            <a href="/blog" class="row items-center gap-1 w-fit text-sm text-muted hover:text-white stroke-muted hover:stroke-white transition-colors">
+                <IconChevron class="size-4 rotate-180" />
+                <span>All posts</span>
+            </a>
+
+            <h1 id="post-title" class="text-3xl md:text-5xl font-bold leading-tight text-balance w-fit" transition:name={postTransition(post.id)}>
+                {data.title}
+            </h1>
+
+            <p class="text-white/80 font-light md:text-lg leading-relaxed">
+                {data.description}
+            </p>
+
+            <div class="row flex-wrap items-center gap-3">
+                <PostMeta post={post} />
+
+                {data.tags.length > 0 && (
+                    <ul class="row flex-wrap gap-1.5" aria-label="Topics">
+                        {data.tags.map((tag) => (
+                            <li class="box-gen rounded-full! text-[10px] leading-3.75 text-muted py-0.5 px-2">
+                                {tag}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+        </header>
+
+        <div class="mt-12 grid lg:grid-cols-[minmax(0,1fr)_220px] gap-12">
+            <div class="prose-case max-w-3xl! md:text-[17px]">
+                <Content />
+            </div>
+
+            {toc.length > 1 && (
+                <aside class="hidden lg:block">
+                    <nav id="toc" aria-labelledby="toc-title" class="sticky top-28 col gap-3 border-l border-white/10 pl-4">
+                        <p id="toc-title" class="text-xs uppercase tracking-wider text-white/40">On this page</p>
+
+                        <ul class="col gap-2 text-sm">
+                            {toc.map((heading) => (
+                                <li class:list={[heading.depth === 3 && "pl-3"]}>
+                                    <a
+                                        href={`#${heading.slug}`}
+                                        class="block text-muted hover:text-white transition-colors data-active:text-white data-active:font-medium"
+                                    >
+                                        {heading.text}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
+                </aside>
+            )}
+        </div>
+
+        <footer class="mt-16 col gap-6 max-w-3xl">
+            {data.ai && (
+                <p class="text-xs text-white/40 leading-relaxed">
+                    This post was drafted with the help of AI (Gemini) and reviewed by me before publishing.
+                    Spotted a mistake? <a href={`mailto:${email}`} class="underline underline-offset-4 hover:text-white">Let me know</a>.
+                </p>
+            )}
+
+            <a
+                href={`mailto:${email}?subject=${encodeURIComponent(`About "${data.title}"`)}`}
+                class="group box-gen p-5 row items-center gap-4 transition-colors duration-300 hover:border-white/20!"
+            >
+                <span class="center-content size-10 shrink-0 rounded-full bg-white/5 stroke-muted group-hover:stroke-white transition-colors">
+                    <IconEmail class="size-5" />
+                </span>
+                <span class="col">
+                    <span class="font-semibold">Enjoyed it? Say hi</span>
+                    <span class="text-sm text-muted">Questions, ideas or a project in mind, my inbox is open.</span>
+                </span>
+            </a>
+
+            {siblings.length > 0 && (
+                <nav aria-label="More posts" class="grid sm:grid-cols-2 gap-4">
+                    {siblings.map(({ label, post: sibling }) => (
+                        <a
+                            href={`/blog/${sibling.id}`}
+                            class:list={[
+                                "group box-gen p-5 col gap-1 transition-colors duration-300 hover:border-white/20!",
+                                label === "Newer" && "sm:col-start-2 sm:text-right",
+                            ]}
+                        >
+                            <span class="text-xs uppercase tracking-wider text-white/40">{label}</span>
+                            <span class="font-semibold line-clamp-2 group-hover:text-white">{sibling.data.title}</span>
+                        </a>
+                    ))}
+                </nav>
+            )}
+        </footer>
+    </article>
+</Layout>
+
+<script>
+    // Highlight the section being read in the table of contents
+    let observer: IntersectionObserver | undefined;
+
+    document.addEventListener("astro:page-load", () => {
+        observer?.disconnect();
+
+        const links = document.querySelectorAll<HTMLAnchorElement>("#toc a");
+        if (links.length === 0) return;
+
+        const byId = new Map([...links].map((link) => [decodeURIComponent(link.hash.slice(1)), link]));
+
+        observer = new IntersectionObserver((entries) => {
+            const visible = entries.filter((entry) => entry.isIntersecting);
+            if (visible.length === 0) return;
+
+            links.forEach((link) => link.removeAttribute("data-active"));
+            byId.get(visible[0].target.id)?.setAttribute("data-active", "");
+        }, { rootMargin: "-100px 0px -65% 0px" });
+
+        byId.forEach((_, id) => {
+            const heading = document.getElementById(id);
+            if (heading) observer!.observe(heading);
+        });
+    });
+</script>

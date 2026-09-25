@@ -1,0 +1,79 @@
+name: Blog post
+
+# Every Monday Gemini drafts a new post (scripts/blog/generate-post.mjs)
+# and opens a pull request. Nothing is published until that PR is merged.
+# Run it by hand from Actions → Blog post → Run workflow, optionally with a topic.
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Mondays, 8:00 in Barranquilla (UTC-5)
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "Topic (empty: next idea in scripts/blog/topics.md, or Gemini picks one)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: blog-post
+
+jobs:
+  draft:
+    name: Draft a post with Gemini
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Draft the post
+        id: post
+        run: node scripts/blog/generate-post.mjs
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL }}
+          BLOG_TOPIC: ${{ inputs.topic }}
+
+      # A post that breaks the build (bad frontmatter, broken code fence…) never becomes a PR
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Make sure the site still builds
+        run: npm run build
+
+      - name: Open a pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          # With a personal access token the PR also triggers the "Check" workflow;
+          # with the default token it doesn't (GitHub's rule to avoid loops)
+          token: ${{ secrets.BLOG_BOT_TOKEN || github.token }}
+          branch: blog/${{ steps.post.outputs.slug }}
+          base: main
+          add-paths: |
+            src/content/blog
+            scripts/blog/topics.md
+          commit-message: "Add blog post: ${{ steps.post.outputs.title }}"
+          title: "Blog: ${{ steps.post.outputs.title }}"
+          labels: blog
+          body: |
+            New post drafted by **${{ steps.post.outputs.model }}**.
+
+            - **Topic:** ${{ steps.post.outputs.topic }}
+            - **File:** `${{ steps.post.outputs.file }}`
+
+            Before merging:
+            - [ ] Read it through on the Vercel preview
+            - [ ] Check that the code examples are correct
+            - [ ] Tweak the tone, title or tags if needed (edit the file in this branch)
+
+            Merging publishes it. Closing the PR discards it.

@@ -10,11 +10,13 @@
     "build": "astro build",
     "check": "astro check",
     "spotify:auth": "node scripts/spotify-auth.mjs",
+    "blog:generate": "node scripts/blog/generate-post.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@astrojs/react": "^7.0.0",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@astrojs/vercel": "^11.0.11",
     "@tailwindcss/vite": "^4.3.3",

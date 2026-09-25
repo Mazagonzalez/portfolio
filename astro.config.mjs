@@ -29,6 +29,11 @@ export default defineConfig({
 
   integrations: [react(), sitemap()],
 
+  markdown: {
+    // Code blocks in blog posts and case studies
+    shikiConfig: { theme: "houston" },
+  },
+
   server: {
     host: true,
   },
