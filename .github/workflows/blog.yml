@@ -71,6 +71,9 @@ jobs:
             - **Topic:** ${{ steps.post.outputs.topic }}
             - **File:** `${{ steps.post.outputs.file }}`
 
+            Automatic checks:
+            ${{ steps.post.outputs.notes }}
+
             Before merging:
             - [ ] Read it through on the Vercel preview
             - [ ] Check that the code examples are correct

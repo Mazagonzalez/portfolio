@@ -19,6 +19,15 @@ const MODELS = [process.env.GEMINI_MODEL, "gemini-3.8-flash", "gemini-3.5-flash"
     .filter((model, i, all) => model && all.indexOf(model) === i);
 
 const MIN_WORDS = 600;
+
+// Filler that makes a post sound machine-written. Listed in the prompt, and
+// flagged in the pull request if any slips through
+const BANNED_PHRASES = [
+    "magic", "magical", "seamless", "seamlessly", "elevate", "elevating", "game-changer", "game changer",
+    "supercharge", "unlock", "unleash", "delve", "dive into", "deep dive", "in today's", "fast-paced",
+    "feels premium", "literally", "state-of-the-art", "cutting-edge", "effortless", "effortlessly",
+    "revolutionize", "harness the power", "look no further", "buckle up", "without further ado",
+];
 const ATTEMPTS = 2;
 
 const { GEMINI_API_KEY: apiKey } = process.env;
@@ -80,9 +89,13 @@ const systemInstruction = `${readFileSync(PERSONA_FILE, "utf8")}
 - Write in English, in Markdown. Do not include a top-level "# " heading: the title is rendered separately.
 - Structure with "## " sections (and "### " when useful): a short intro, 3 to 6 sections, and a brief wrap-up.
 - Length: ${MIN_WORDS} to 1200 words.
+- Title and headings in sentence case ("Morphing cards in Astro", not "Morphing Cards In Astro").
 - Code blocks must declare their language (\`\`\`ts, \`\`\`astro, \`\`\`css, \`\`\`html...) and be correct for the current versions of the tools.
-- Never invent personal stories, clients, numbers, benchmarks, quotes or links. Share techniques, reasoning and opinions instead.
-- If you are not sure an API or feature exists, leave it out.
+- Inline code (single backticks) must never contain a backtick. For template literals or anything with backticks, use a code block or double backticks (\`\` \`a-\${id}\` \`\`).
+- Code examples must follow the post's own advice; never recommend one thing and show another.
+- Only explain how a tool works internally (what it compiles to, how the browser implements it) when you are certain. If you are not sure an API or feature exists, leave it out.
+- Never invent personal stories, clients, numbers, benchmarks, quotes or links. The only personal experiences you may mention are the ones listed under "Things I've run into", and only when they are relevant.
+- Sound like a person talking to a teammate: no hype, no filler openings, no rhetorical question to start the post. Never use these words or phrases: ${BANNED_PHRASES.join(", ")}.
 - The description is one or two sentences (max 160 characters) that make someone want to read the post.
 - Tags: 1 to 3 short tags in Title Case. Reuse existing tags when they fit: ${knownTags.join(", ") || "(none yet)"}.`;
 
@@ -161,7 +174,30 @@ function problems(post) {
         words < MIN_WORDS && `only ${words} words`,
         !/^## /m.test(post.body) && "no sections",
         existing.some((other) => other.title?.toLowerCase() === post.title.toLowerCase()) && "duplicate title",
+        brokenInlineCode(post.body) && "broken inline code",
     ].filter(Boolean);
+}
+
+// A template literal inside single backticks splits the inline code in pieces:
+// `transition:name={` image-${id} `}`. Those pieces end with an opening
+// bracket, start with a closing one or wrap across lines
+function brokenInlineCode(body) {
+    const prose = body.replace(/^```[\s\S]*?^```/gm, "");
+    const spans = [...prose.matchAll(/(?<!`)`(?!`)([^`]+)`(?!`)/g)].map((match) => match[1]);
+
+    return (
+        spans.some((code) => code.includes("\n") || /[{([=]\s*$/.test(code) || /^\s*[})\]]/.test(code)) ||
+        // An odd number of backticks in a paragraph: a span was left open
+        prose.split(/\n\s*\n/).some((paragraph) => (paragraph.match(/`/g)?.length ?? 0) % 2 === 1)
+    );
+}
+
+// Not worth another attempt, but worth a look in the pull request
+function warnings(post) {
+    const text = `${post.title} ${post.description} ${post.body.replace(/^```[\s\S]*?^```/gm, "")}`.toLowerCase();
+    const phrases = BANNED_PHRASES.filter((phrase) => new RegExp(`\\b${phrase}\\b`).test(text));
+
+    return phrases.length > 0 ? [`Filler phrases to reword: ${phrases.map((phrase) => `"${phrase}"`).join(", ")}`] : [];
 }
 
 async function draft() {
@@ -230,6 +266,9 @@ queued?.markDone();
 
 console.log(`Saved ${file} (${model}): "${post.title}"`);
 
+const notes = warnings(post);
+notes.forEach((note) => console.warn(`Heads up: ${note}`));
+
 // Picked up by the workflow to name the branch and the pull request
 if (process.env.GITHUB_OUTPUT) {
     appendFileSync(process.env.GITHUB_OUTPUT, [
@@ -238,6 +277,10 @@ if (process.env.GITHUB_OUTPUT) {
         `model=${model}`,
         `title=${post.title.replace(/\r?\n/g, " ")}`,
         `topic=${(topic ?? "Picked by Gemini").replace(/\r?\n/g, " ")}`,
+        // Multiline value: shown as a list in the pull request
+        "notes<<NOTES",
+        ...(notes.length > 0 ? notes.map((note) => `- ⚠️ ${note}`) : ["- Nothing flagged by the automatic checks"]),
+        "NOTES",
         "",
     ].join("\n"));
 }
