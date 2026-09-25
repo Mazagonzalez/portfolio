@@ -102,7 +102,7 @@ const groups: { label: string; items: Item[] }[] = [
                 placeholder="Search pages, projects, actions…"
                 autocomplete="off"
                 spellcheck="false"
-                class="w-full bg-transparent py-4 text-sm outline-none placeholder:text-white/40"
+                class="w-full bg-transparent py-4 text-sm outline-none placeholder:text-white/50"
             />
 
             <kbd class:list={[kbd, "hidden sm:block"]}>esc</kbd>
@@ -111,7 +111,7 @@ const groups: { label: string; items: Item[] }[] = [
         <div id="cmdkList" role="listbox" aria-label="Results" class="max-h-[min(22rem,55vh)] overflow-y-auto scrollbar p-2">
             {groups.filter((group) => group.items.length > 0).map((group, g) => (
                 <div role="group" aria-labelledby={`cmdk-group-${g}`} class="cmdk-group">
-                    <p id={`cmdk-group-${g}`} class="px-2.5 pt-2 pb-1.5 text-[11px] uppercase tracking-wider text-white/40">
+                    <p id={`cmdk-group-${g}`} class="px-2.5 pt-2 pb-1.5 text-[11px] uppercase tracking-wider text-white/50">
                         {group.label}
                     </p>
 
@@ -130,7 +130,7 @@ const groups: { label: string; items: Item[] }[] = [
                         >
                             <item.icon class="size-4 shrink-0 stroke-muted" />
                             <span class="cmdk-label truncate">{item.label}</span>
-                            {item.hint && <span class="cmdk-hint ml-auto truncate text-xs text-white/40">{item.hint}</span>}
+                            {item.hint && <span class="cmdk-hint ml-auto truncate text-xs text-white/50">{item.hint}</span>}
                             {item.external && <span class="sr-only">(opens in a new tab)</span>}
                         </div>
                     ))}
@@ -142,7 +142,7 @@ const groups: { label: string; items: Item[] }[] = [
             </p>
         </div>
 
-        <div class="hidden sm:flex items-center gap-4 px-4 py-2.5 border-t border-white/10 text-[11px] text-white/40" aria-hidden="true">
+        <div class="hidden sm:flex items-center gap-4 px-4 py-2.5 border-t border-white/10 text-[11px] text-white/50" aria-hidden="true">
             <span class="row items-center gap-1.5"><kbd class={kbd}>↑</kbd><kbd class={kbd}>↓</kbd> navigate</span>
             <span class="row items-center gap-1.5"><kbd class={kbd}>↵</kbd> open</span>
             <span class="row items-center gap-1.5 ml-auto"><kbd class={kbd} data-cmdk-shortcut>Ctrl K</kbd> toggle</span>

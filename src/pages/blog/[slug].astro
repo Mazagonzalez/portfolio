@@ -78,7 +78,7 @@ const siblings = [
             {toc.length > 1 && (
                 <aside class="hidden lg:block">
                     <nav id="toc" aria-labelledby="toc-title" class="sticky top-28 col gap-3 border-l border-white/10 pl-4">
-                        <p id="toc-title" class="text-xs uppercase tracking-wider text-white/40">On this page</p>
+                        <p id="toc-title" class="text-xs uppercase tracking-wider text-white/50">On this page</p>
 
                         <ul class="col gap-2 text-sm">
                             {toc.map((heading) => (
@@ -99,7 +99,7 @@ const siblings = [
 
         <footer class="mt-16 col gap-6 max-w-3xl">
             {data.ai && (
-                <p class="text-xs text-white/40 leading-relaxed">
+                <p class="text-xs text-white/50 leading-relaxed">
                     This post was drafted with the help of AI (Gemini) and reviewed by me before publishing.
                     Spotted a mistake? <a href={`mailto:${email}`} class="underline underline-offset-4 hover:text-white">Let me know</a>.
                 </p>
@@ -128,7 +128,7 @@ const siblings = [
                                 label === "Newer" && "sm:col-start-2 sm:text-right",
                             ]}
                         >
-                            <span class="text-xs uppercase tracking-wider text-white/40">{label}</span>
+                            <span class="text-xs uppercase tracking-wider text-white/50">{label}</span>
                             <span class="font-semibold line-clamp-2 group-hover:text-white">{sibling.data.title}</span>
                         </a>
                     ))}

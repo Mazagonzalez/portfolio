@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig, envField } from 'astro/config';
+import { defineConfig, envField, fontProviders } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
@@ -28,6 +28,19 @@ export default defineConfig({
   },
 
   integrations: [react(), sitemap()],
+
+  // Geist is downloaded at build time and served from this domain (no
+  // render-blocking request to Google), with a metric-matched fallback
+  fonts: [
+    {
+      provider: fontProviders.google(),
+      name: "Geist",
+      cssVariable: "--font-geist",
+      weights: ["100 900"],
+      subsets: ["latin"],
+      fallbacks: ["sans-serif"],
+    },
+  ],
 
   markdown: {
     // Code blocks in blog posts and case studies
