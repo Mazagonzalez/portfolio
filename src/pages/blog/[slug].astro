@@ -42,7 +42,7 @@ const siblings = [
 
     <article class="size-screen mt-32 pb-20" aria-labelledby="post-title">
         <header class="col gap-4 max-w-3xl">
-            <a href="/blog" class="row items-center gap-1 w-fit text-sm text-muted hover:text-white stroke-muted hover:stroke-white transition-colors">
+            <a href="/blog" class="row items-center gap-1 w-fit py-2 -my-2 text-sm text-muted hover:text-white stroke-muted hover:stroke-white transition-colors">
                 <IconChevron class="size-4 rotate-180" />
                 <span>All posts</span>
             </a>
@@ -70,7 +70,8 @@ const siblings = [
             </div>
         </header>
 
-        <div class="mt-12 grid lg:grid-cols-[minmax(0,1fr)_220px] gap-12">
+        <!-- minmax(0, 1fr): wide code blocks scroll inside the column instead of widening the page -->
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px] gap-12">
             <div class="prose-case max-w-3xl! md:text-[17px]">
                 <Content />
             </div>

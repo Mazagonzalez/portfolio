@@ -61,14 +61,14 @@ const { images = [], alt = "", transitionName } = Astro.props;
     </div>
 
     {images.length > 1 && (
-        <div id="carouselDots" role="group" aria-label="Choose screenshot" class="row justify-center gap-2">
+        <div id="carouselDots" role="group" aria-label="Choose screenshot" class="row justify-center">
             {images.map((_, i) => (
                 <button
                     type="button"
                     data-index={i}
                     aria-label={`Go to image ${i + 1}`}
                     aria-current={i === 0 ? "true" : undefined}
-                    class:list={["size-1.5 rounded-full transition-colors cursor-pointer", i === 0 ? "bg-white/70" : "bg-white/20"]}
+                    class="size-6 center-content cursor-pointer before:size-1.5 before:rounded-full before:bg-white/20 before:transition-colors hover:before:bg-white/40 aria-[current=true]:before:bg-white/70"
                 ></button>
             ))}
         </div>
@@ -97,10 +97,25 @@ const { images = [], alt = "", transitionName } = Astro.props;
                 dots.forEach((dot, di) => {
                     if (di === index) dot.setAttribute("aria-current", "true");
                     else dot.removeAttribute("aria-current");
-                    dot.classList.toggle("bg-white/70", di === index);
-                    dot.classList.toggle("bg-white/20", di !== index);
                 });
             };
+
+            // Swipe on touch screens
+            let startX = 0;
+            let startY = 0;
+
+            track.addEventListener("touchstart", (event) => {
+                startX = event.touches[0].clientX;
+                startY = event.touches[0].clientY;
+            }, { passive: true });
+
+            track.addEventListener("touchend", (event) => {
+                const dx = event.changedTouches[0].clientX - startX;
+                const dy = event.changedTouches[0].clientY - startY;
+
+                // Mostly horizontal and long enough, so vertical scrolling still works
+                if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) goTo(index + (dx < 0 ? 1 : -1));
+            });
 
             prevBtn?.addEventListener("click", () => goTo(index - 1));
             nextBtn?.addEventListener("click", () => goTo(index + 1));

@@ -96,7 +96,7 @@
 
 /* Code blocks (colored by Shiki; its inline background is replaced) */
 .prose-case pre{
-    @apply rounded-lg border border-white/10 bg-black/40! p-4 text-sm leading-relaxed overflow-x-auto
+    @apply rounded-lg border border-white/10 bg-black/40! p-4 text-[13px] sm:text-sm leading-relaxed overflow-x-auto
 }
 
 .prose-case pre code{
