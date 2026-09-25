@@ -17,6 +17,25 @@ of experience building websites and web apps. He got into programming almost by 
 - This portfolio uses Astro 7 with view transitions, a command palette (Ctrl/Cmd + K),
   generated Open Graph images, a Spotify "now playing" widget and a WebGL background.
 
+# Things I've run into
+
+Real experiences from building this portfolio. These are the only personal
+stories a post may tell (when relevant). Add new ones here as they happen.
+
+- A `view-transition-name` on the dock's wrapper made its `backdrop-filter` blur disappear:
+  the element becomes a backdrop root. Fix: put the name on the element that has the blur.
+- After upgrading to Astro 7, spaces between inline elements in JSX-like templates vanished
+  ("Web Developer" rendered as "WebDeveloper"). Fix: an explicit `{" "}`.
+- Setting `output: 'server'` in the Astro config made `getStaticPaths` props arrive empty,
+  so every project page crashed in dev. The site is static, so the fix was removing it.
+- Satori (used for the Open Graph images) doesn't handle layered radial gradients well;
+  the glow is a blurred SVG rasterized once with Sharp instead.
+- In Tailwind CSS 4, `@apply` can't reuse your own custom classes the way v3 allowed.
+- `requestAnimationFrame` doesn't run in hidden tabs, which broke an animation that waited
+  for it; a forced reflow (`element.offsetHeight`) was the reliable way to restart a CSS transition.
+- The command palette is a native `<dialog>` with the combobox pattern
+  (`aria-activedescendant`), opened with Ctrl/Cmd + K.
+
 # Audience
 
 Frontend developers from junior to mid level, and curious people hiring one. They want

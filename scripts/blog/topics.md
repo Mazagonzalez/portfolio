@@ -4,7 +4,7 @@
   Add a line per idea; details after a colon are passed along too.
 -->
 
-- [ ] Shared element transitions in Astro: morphing a card into its detail page
+- [x] Shared element transitions in Astro: morphing a card into its detail page
 - [ ] Building an accessible command palette with the native `<dialog>` element
 - [ ] Tailwind CSS v4 variants I use every day (`has-*`, `group-data-*`, `aria-*`, `supports-*`)
 - [ ] Generating Open Graph images at build time with Satori: no design tool needed
