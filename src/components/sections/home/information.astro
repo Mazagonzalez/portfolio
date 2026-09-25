@@ -18,18 +18,19 @@ const projects = await getProjects();
 ---
 
 <div class="size-screen py-25 col gap-5">
-    <div class="grid md:grid-cols-2 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <!-- Skills -->
         <Card
             title="Skills"
             link="/skills"
             component={IconStart}
         >
-            <div slot="content" class="center-content col gap-4" aria-hidden="true">
+            <!-- Icons are sized for the widest row (5) so they all shrink together on small screens -->
+            <div slot="content" class="center-content col gap-2 sm:gap-4" aria-hidden="true">
                 {featuredSkills.map((row) => (
-                    <div class="center-content gap-4">
+                    <div class="w-full center-content gap-2 sm:gap-4">
                         {row.map(({ icon: Icon, accent }) => (
-                            <div class={`box-gen size-15 center-content ${accent}`}>
+                            <div class={`box-gen aspect-square w-[calc((100%-2rem)/5)] sm:w-[calc((100%-4rem)/5)] max-w-15 center-content ${accent}`}>
                                 <Icon class="size-5" />
                             </div>
                         ))}
@@ -51,15 +52,15 @@ const projects = await getProjects();
                     const endIsYear = !Number.isNaN(Number(end));
 
                     return (
-                        <li class="row items-center justify-between py-4">
-                            <div class="row items-center gap-2.5">
+                        <li class="row items-center justify-between gap-3 py-4">
+                            <div class="row items-center gap-2.5 min-w-0">
                                 <img
                                     src={item.logo}
                                     alt=""
                                     width="32"
                                     height="32"
                                     loading="lazy"
-                                    class="rounded-lg"
+                                    class="size-8 shrink-0 rounded-lg"
                                 />
 
                                 <p>
@@ -67,13 +68,13 @@ const projects = await getProjects();
                                         {item.company}
                                     </span>
                                     {" "}
-                                    <span class="ml-2 text-xs text-muted">
+                                    <span class="block lg:inline lg:ml-2 text-xs text-muted">
                                         {item.role}
                                     </span>
                                 </p>
                             </div>
 
-                            <span class="text-xs text-muted">
+                            <span class="shrink-0 text-xs text-muted">
                                 <time datetime={start}>{start}</time>
                                 {" - "}
                                 {endIsYear ?<time datetime={end}>{end}</time> : end}
@@ -93,7 +94,7 @@ const projects = await getProjects();
         </Card>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         <!-- Projects -->
         <Card
             title="Projects"
@@ -172,16 +173,19 @@ const projects = await getProjects();
                 headerContent={false}
                 overflow={false}
             >
-                <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg">
+                <!-- Hover on desktop; on touch screens, press and hold (:active) -->
+                <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg select-none [-webkit-touch-callout:none]">
                     <Hyperspace client:only="react" />
 
-                    <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0">
+                    <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0">
                         <span class="text-2xl font-bold tracking-wide">AMG</span>
-                        <span class="text-[10px] uppercase tracking-[0.2em] text-white/50">Hover to jump to lightspeed</span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-white/50">
+                            <span class="pointer-coarse:hidden">Hover</span><span class="hidden pointer-coarse:inline">Hold</span> to jump to lightspeed
+                        </span>
                     </div>
 
                     <!-- Easter egg hint: shows up once the stars reach lightspeed -->
-                    <p class="absolute inset-x-0 bottom-5 text-center text-[11px] tracking-[0.35em] text-white/35 pointer-events-none opacity-0 blur-sm transition-all duration-700 group-hover:opacity-100 group-hover:blur-none group-hover:delay-700">
+                    <p class="absolute inset-x-0 bottom-5 text-center text-[11px] tracking-[0.35em] text-white/35 pointer-events-none opacity-0 blur-sm transition-all duration-700 group-hover:opacity-100 group-hover:blur-none group-hover:delay-700 group-active:opacity-100 group-active:blur-none group-active:delay-700">
                         ↑ ↑ ↓ ↓ ← → ← → B A
                     </p>
                 </div>
