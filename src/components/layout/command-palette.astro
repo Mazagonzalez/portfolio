@@ -8,8 +8,10 @@ import IconCode from "@/components/icons/icon-code.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
 import IconMusic from "@/components/icons/icon-music.astro";
+import IconBook from "@/components/icons/icon-book.astro";
 
 import { getProjects } from "@/data/projects";
+import { getPosts, formatDate } from "@/data/blog";
 import { email, socialLinks } from "@/data/social";
 
 interface Item {
@@ -28,6 +30,7 @@ interface Item {
 const kbd = "min-w-5 px-1.5 py-0.5 rounded border border-white/10 bg-white/5 font-[inherit] text-center text-[10px] text-white/50";
 
 const projects = await getProjects();
+const posts = await getPosts();
 
 const groups: { label: string; items: Item[] }[] = [
     {
@@ -37,6 +40,7 @@ const groups: { label: string; items: Item[] }[] = [
             { label: "About", href: "/about", icon: IconUser, keywords: "me story bio" },
             { label: "Projects", href: "/projects", icon: IconProjects, keywords: "work portfolio" },
             { label: "Skills", href: "/skills", icon: IconStart, keywords: "stack tech tools" },
+            { label: "Blog", href: "/blog", icon: IconBook, keywords: "posts articles notes writing" },
         ],
     },
     {
@@ -47,6 +51,16 @@ const groups: { label: string; items: Item[] }[] = [
             icon: IconCode,
             hint: data.stack.slice(0, 3).join(" · "),
             keywords: `project ${data.category} ${data.stack.join(" ")}`,
+        })),
+    },
+    {
+        label: "Blog",
+        items: posts.slice(0, 6).map(({ id, data }) => ({
+            label: data.title,
+            href: `/blog/${id}`,
+            icon: IconBook,
+            hint: formatDate(data.pubDate),
+            keywords: `post article ${data.tags.join(" ")}`,
         })),
     },
     {
@@ -95,7 +109,7 @@ const groups: { label: string; items: Item[] }[] = [
         </div>
 
         <div id="cmdkList" role="listbox" aria-label="Results" class="max-h-[min(22rem,55vh)] overflow-y-auto scrollbar p-2">
-            {groups.map((group, g) => (
+            {groups.filter((group) => group.items.length > 0).map((group, g) => (
                 <div role="group" aria-labelledby={`cmdk-group-${g}`} class="cmdk-group">
                     <p id={`cmdk-group-${g}`} class="px-2.5 pt-2 pb-1.5 text-[11px] uppercase tracking-wider text-white/40">
                         {group.label}

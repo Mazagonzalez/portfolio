@@ -8,19 +8,11 @@
 // The refresh token is printed in this terminal only; copy it into .env
 // and into Vercel's environment variables. Nothing is sent anywhere else.
 import { createServer } from "node:http";
-import { readFileSync, existsSync } from "node:fs";
+import "./load-env.mjs";
 
 const PORT = 8888;
 const REDIRECT_URI = `http://127.0.0.1:${PORT}/callback`;
 const SCOPES = "user-read-currently-playing user-read-recently-played";
-
-// Minimal .env reader so the script has no dependencies
-if (existsSync(".env")) {
-    for (const line of readFileSync(".env", "utf8").split(/\r?\n/)) {
-        const match = line.match(/^\s*([A-Z_]+)\s*=\s*"?([^"]*)"?\s*$/);
-        if (match && !process.env[match[1]]) process.env[match[1]] = match[2];
-    }
-}
 
 const { SPOTIFY_CLIENT_ID: clientId, SPOTIFY_CLIENT_SECRET: clientSecret } = process.env;
 

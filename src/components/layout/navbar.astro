@@ -5,12 +5,14 @@ import IconProjects from "@/components/icons/icon-projects.astro";
 import IconStart from "@/components/icons/icon-start.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
 import IconSearch from "@/components/icons/icon-search.astro";
+import IconBook from "@/components/icons/icon-book.astro";
 import { email } from "@/data/social";
 
 const items = [
     { href: "/", label: "Home", icon: IconHome },
     { href: "/about", label: "About", icon: IconUser },
     { href: "/projects", label: "Projects", icon: IconProjects },
+    { href: "/blog", label: "Blog", icon: IconBook },
     { href: "/skills", label: "Skills", icon: IconStart },
     { href: `mailto:${email}`, label: "Contact", icon: IconContact },
 ];
@@ -19,7 +21,7 @@ const path = Astro.url.pathname;
 ---
 
 <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" aria-label="Main">
-    <ul id="dock" class="box-gen row items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3" transition:name="dock">
+    <ul id="dock" class="box-gen row items-center gap-1.5 sm:gap-3 px-3 sm:px-6 py-3" transition:name="dock">
         {items.map((item) => {
             const isActive = item.href === "/"
                 ? path === "/"

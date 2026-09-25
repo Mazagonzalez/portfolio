@@ -58,6 +58,18 @@
       transform: scaleY(1);
     }
   }
+
+  /* Blog post: reading progress bar, driven by the page scroll (animate-reading-progress) */
+  --animate-reading-progress: reading-progress linear both;
+
+  @keyframes reading-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
 }
 
 /* Page transitions: smoother morph for shared elements (project cover, title, dock) */

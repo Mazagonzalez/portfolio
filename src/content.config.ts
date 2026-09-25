@@ -21,4 +21,20 @@ const projects = defineCollection({
         }),
 });
 
-export const collections = { projects };
+const blog = defineCollection({
+    loader: glob({ pattern: "[^_]*.md", base: "./src/content/blog" }),
+    schema: z.object({
+        title: z.string(),
+        // Shown in lists, the meta description and the Open Graph image
+        description: z.string(),
+        pubDate: z.coerce.date(),
+        updatedDate: z.coerce.date().optional(),
+        tags: z.array(z.string()).default([]),
+        // Drafts are visible in `npm run dev` but never built
+        draft: z.boolean().default(false),
+        // Posts drafted by the Gemini workflow (scripts/blog) get a small label
+        ai: z.boolean().default(false),
+    }),
+});
+
+export const collections = { projects, blog };
