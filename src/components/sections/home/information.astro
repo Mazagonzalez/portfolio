@@ -6,6 +6,8 @@ import IconStart from "@/components/icons/icon-start.astro";
 import IconProjects from "@/components/icons/icon-projects.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
 import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
+import IconEmail from "@/components/icons/icon-email.astro";
+import IconCopy from "@/components/icons/icon-copy.astro";
 import Hyperspace from "@/components/backgrounds/hyperspace.jsx";
 import MusicPlayer from "@/components/music/music-player.astro";
 
@@ -162,9 +164,28 @@ const projects = await getProjects();
                         {__("Let's talk about your next project!")}
                     </p>
 
-                    <a href={`mailto:${email}`} class="button-main mt-8">
-                        {__("Send an email")}
-                    </a>
+                    <!-- mailto does nothing without a mail app, so the address can also be copied -->
+                    <div class="row gap-2 mt-8">
+                        <a href={`mailto:${email}`} class="button-main">
+                            <IconEmail class="size-4 stroke-zinc-400" />
+
+                            <span class="text-sm">{__("Send an email")}</span>
+                        </a>
+
+                        <button
+                            type="button"
+                            id="copyEmail"
+                            data-email={email}
+                            data-copied={__("Copied!")}
+                            data-copy-failed={__("Couldn't copy")}
+                            title={email}
+                            class="button-main"
+                        >
+                            <IconCopy class="size-4 stroke-zinc-400" />
+
+                            <span class="text-sm" aria-live="polite">{__("Copy email")}</span>
+                        </button>
+                    </div>
                 </div>
             </Card>
         </div>
@@ -196,3 +217,24 @@ const projects = await getProjects();
         </div>
     </div>
 </div>
+
+<script>
+    import { copyText } from "@/scripts/clipboard";
+
+    document.addEventListener("astro:page-load", () => {
+        const button = document.getElementById("copyEmail");
+        const label = button?.querySelector("span");
+        if (!button || !label) return;
+
+        const original = label.textContent;
+        let timer: ReturnType<typeof setTimeout>;
+
+        button.addEventListener("click", async () => {
+            const copied = await copyText(button.dataset.email!);
+            label.textContent = copied ? button.dataset.copied! : button.dataset.copyFailed!;
+
+            clearTimeout(timer);
+            timer = setTimeout(() => (label.textContent = original), 2000);
+        });
+    });
+</script>
