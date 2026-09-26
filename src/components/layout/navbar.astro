@@ -39,6 +39,7 @@ const path = stripLocale(Astro.url.pathname);
 
                     <a
                         href={localizePath(item.href, Astro.currentLocale)}
+                        data-astro-prefetch="viewport"
                         aria-label={item.label}
                         aria-current={isActive ? "page" : undefined}
                         class:list={[

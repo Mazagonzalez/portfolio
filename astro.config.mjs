@@ -27,6 +27,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
+  // Pages are downloaded when a link is hovered or focused, so the click
+  // navigates right away (the dock uses "viewport" to also help on phones)
+  prefetch: { prefetchAll: true, defaultStrategy: "hover" },
+
   // English lives at the root and Spanish under /es (texts in src/i18n)
   i18n: {
     locales: ["en", "es"],
