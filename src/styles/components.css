@@ -49,6 +49,13 @@
     @apply bg-[#18181b33] backdrop-blur-lg rounded-lg border border-[#ffffff1a] outline outline-black/25
 }
 
+/* Only the outer card blurs. A box inside another one (icons, pills, list
+   items) would blur what is already blurred: it looks the same, but every
+   blur is redone on each frame of the animated aurora behind them */
+.box-gen .box-gen{
+    @apply backdrop-blur-none
+}
+
 .icon{
     @apply size-6 stroke-zinc-500 hover:stroke-zinc-400 hover:scale-105 transition-all cursor-pointer outline-none
 }

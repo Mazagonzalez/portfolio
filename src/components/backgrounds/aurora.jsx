@@ -174,8 +174,15 @@ export default function Aurora(props) {
       renderer.render({ scene: mesh });
     };
 
+    // 30 fps is plenty for a slow gradient, and every frame also makes the
+    // browser redo the blur of the cards on top of it
+    const FRAME_MS = 1000 / 30;
+    let lastFrame = 0;
+
     const update = t => {
       animateId = requestAnimationFrame(update);
+      if (t - lastFrame < FRAME_MS - 1) return;
+      lastFrame = t;
       draw(t);
     };
 
