@@ -7,7 +7,9 @@ import Footer from "@/components/layout/footer.astro";
 import VercelInsights from "@/components/layout/vercel-insights.astro";
 import CommandPalette from "@/components/layout/command-palette.astro";
 import EasterEgg from "@/components/layout/easter-egg.astro";
+import LanguageSwitcher from "@/components/layout/language-switcher.astro";
 import { email, socialLinks } from "@/data/social";
+import { useTranslations, getLocale, defaultLocale, localeCodes, locales, localizePath, stripLocale, isTranslated } from "@/i18n";
 
 import "../styles/global.css";
 
@@ -20,12 +22,23 @@ interface Props {
 	article?: { headline: string; publishedTime: Date; modifiedTime?: Date; tags: string[] };
 }
 
-// Each page gets its generated Open Graph image: /about -> /og/about.png
-const ogPath = Astro.url.pathname.replace(/\/$/, "") || "/index";
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
+const page = stripLocale(Astro.url.pathname);
+
+// Blog posts are only written in English: their /es page (Spanish interface)
+// points search engines to the English one, and shares its Open Graph image
+const englishArticle = Boolean(Astro.props.article) && locale !== defaultLocale;
+
+// Each page gets its generated Open Graph image: /about -> /og/about.png, /es/about -> /og/es/about.png
+const ogPrefix = locale === defaultLocale || englishArticle ? "" : `/${locale}`;
+const ogPath = `${ogPrefix}${page.replace(/\/$/, "") || "/index"}`;
+
+const siteDescription = __("Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.");
 
 const {
 	title = "AMG - devel",
-	description = "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
+	description = siteDescription,
 	image = { src: `/og${ogPath}.png`, width: 1200, height: 630, type: "image/png" },
 	imageAlt = title,
 	noindex = false,
@@ -33,9 +46,16 @@ const {
 	article,
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(englishArticle ? page : Astro.url.pathname, Astro.site);
 const siteURL = new URL("/", Astro.site).href;
 const imageURL = new URL(image.src, Astro.site).href;
+
+// The same page in every language, for the language switcher and hreflang
+const alternates = !noindex && isTranslated(page)
+	? locales.map((code) => ({ locale: code, href: new URL(localizePath(page, code), Astro.site).href }))
+	: [];
+const hreflangs = Astro.props.article ? [] : alternates;
+const ogLocale = (code: string) => localeCodes[getLocale(code)].replace("-", "_");
 
 const jsonLd = {
 	"@context": "https://schema.org",
@@ -47,7 +67,7 @@ const jsonLd = {
 			jobTitle: "Frontend Developer",
 			url: siteURL,
 			email: `mailto:${email}`,
-			description: "Carlos Maza — frontend developer from Barranquilla, Colombia building fast, thoughtful web experiences.",
+			description: siteDescription,
 			sameAs: socialLinks.filter((link) => link.target).map((link) => link.url),
 		},
 		{
@@ -63,6 +83,7 @@ const jsonLd = {
 			url: canonicalURL.href,
 			name: title,
 			description,
+			inLanguage: localeCodes[locale],
 			isPartOf: { "@id": `${siteURL}#website` },
 			about: { "@id": `${siteURL}#person` },
 		},
@@ -71,6 +92,7 @@ const jsonLd = {
 				"@type": "BlogPosting",
 				"@id": `${canonicalURL.href}#article`,
 				headline: article.headline,
+				inLanguage: localeCodes[defaultLocale],
 				description,
 				image: imageURL,
 				datePublished: article.publishedTime.toISOString(),
@@ -86,7 +108,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang="en" class="has-[#cmdk[open]]:overflow-hidden">
+<html lang={locale} class="has-[#cmdk[open]]:overflow-hidden">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -94,6 +116,8 @@ const jsonLd = {
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
+		{hreflangs.map((alternate) => <link rel="alternate" hreflang={alternate.locale} href={alternate.href} />)}
+		{hreflangs.length > 0 && <link rel="alternate" hreflang="x-default" href={hreflangs[0].href} />}
 		{noindex && <meta name="robots" content="noindex" />}
 		<ClientRouter transition:persist />
 
@@ -108,7 +132,8 @@ const jsonLd = {
 		<link rel="alternate" type="application/rss+xml" title="AMG - devel blog" href={new URL("/rss.xml", Astro.site)} />
 
 		<!-- Open Graph -->
-		<meta property="og:locale" content="en_US">
+		<meta property="og:locale" content={ogLocale(locale)}>
+		{hreflangs.filter((alternate) => alternate.locale !== locale).map((alternate) => <meta property="og:locale:alternate" content={ogLocale(alternate.locale)}>)}
 		<meta property="og:type" content={article ? "article" : "website"}>
 		{article && <meta property="article:published_time" content={article.publishedTime.toISOString()}>}
 		{article?.tags.map((tag) => <meta property="article:tag" content={tag}>)}
@@ -137,7 +162,7 @@ const jsonLd = {
 			href="#main"
 			class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-lg focus:bg-black focus:px-4 focus:py-2 focus:text-sm"
 		>
-			Skip to content
+			{__("Skip to content")}
 		</a>
 
 		<div class="fixed top-0 left-0 w-screen h-screen" aria-hidden="true" transition:persist="aurora">
@@ -149,6 +174,8 @@ const jsonLd = {
 				speed={0.3}
 			/>
 		</div>
+
+		<LanguageSwitcher alternates={alternates} />
 
 		<Navbar />
 

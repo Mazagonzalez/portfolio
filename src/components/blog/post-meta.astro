@@ -1,6 +1,7 @@
 ---
 // Date · reading time · "AI-assisted" label, shared by the list and the post
 import { formatDate, readingTime, type Post } from "@/data/blog";
+import { useTranslations, getLocale, localeCodes } from "@/i18n";
 
 interface Props {
     post: Post;
@@ -9,19 +10,22 @@ interface Props {
 
 const { post, class: className } = Astro.props;
 const { pubDate, ai } = post.data;
+
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
 ---
 
 <p class:list={["row flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/50", className]}>
-    <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
+    <time datetime={pubDate.toISOString()}>{formatDate(pubDate, localeCodes[locale])}</time>
     <span aria-hidden="true">·</span>
-    <span>{readingTime(post.body)} min read</span>
+    <span>{__(":minutes min read", { minutes: readingTime(post.body) })}</span>
 
     {ai && (
         <span
-            title="Drafted with AI (Gemini) and reviewed before publishing"
+            title={__("Drafted with AI (Gemini) and reviewed before publishing")}
             class="ml-1 rounded-full border border-violet-400/25 bg-violet-400/10 px-2 py-0.5 text-[10px] uppercase tracking-wider text-violet-200/80"
         >
-            AI-assisted
+            {__("AI-assisted")}
         </span>
     )}
 </p>

@@ -7,20 +7,24 @@ import IconContact from "@/components/icons/icon-contact.astro";
 import IconSearch from "@/components/icons/icon-search.astro";
 import IconBook from "@/components/icons/icon-book.astro";
 import { email } from "@/data/social";
+import { useTranslations, localizePath, stripLocale } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 
 const items = [
-    { href: "/", label: "Home", icon: IconHome },
-    { href: "/about", label: "About", icon: IconUser },
-    { href: "/projects", label: "Projects", icon: IconProjects },
-    { href: "/blog", label: "Blog", icon: IconBook },
-    { href: "/skills", label: "Skills", icon: IconStart },
-    { href: `mailto:${email}`, label: "Contact", icon: IconContact },
+    { href: "/", label: __("Home"), icon: IconHome },
+    { href: "/about", label: __("About"), icon: IconUser },
+    { href: "/projects", label: __("Projects"), icon: IconProjects },
+    { href: "/blog", label: __("Blog"), icon: IconBook },
+    { href: "/skills", label: __("Skills"), icon: IconStart },
+    { href: `mailto:${email}`, label: __("Contact"), icon: IconContact },
 ];
 
-const path = Astro.url.pathname;
+// Compared without the /es prefix, so the same item is active in both languages
+const path = stripLocale(Astro.url.pathname);
 ---
 
-<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" aria-label="Main">
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50" aria-label={__("Main")}>
     <ul id="dock" class="box-gen row items-center gap-1.5 sm:gap-3 px-3 sm:px-6 py-3" transition:name="dock">
         {items.map((item) => {
             const isActive = item.href === "/"
@@ -34,7 +38,7 @@ const path = Astro.url.pathname;
                     </span>
 
                     <a
-                        href={item.href}
+                        href={localizePath(item.href, Astro.currentLocale)}
                         aria-label={item.label}
                         aria-current={isActive ? "page" : undefined}
                         class:list={[
@@ -50,13 +54,13 @@ const path = Astro.url.pathname;
 
         <li class="dock-item relative group">
             <span aria-hidden="true" class="tooltip pointer-events-none absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-black/80 backdrop-blur px-2.5 py-1 text-xs text-white opacity-0 scale-90 transition-all duration-200 group-hover:opacity-100 group-hover:scale-100">
-                Search <span data-cmdk-shortcut class="text-white/50">Ctrl K</span>
+                {__("Search")} <span data-cmdk-shortcut class="text-white/50">Ctrl K</span>
             </span>
 
             <button
                 type="button"
                 data-cmdk-open
-                aria-label="Search"
+                aria-label={__("Search")}
                 aria-haspopup="dialog"
                 aria-keyshortcuts="Control+K Meta+K"
                 class="dock-icon center-content size-10 sm:size-11 rounded-full transition-colors duration-300 stroke-muted hover:stroke-white cursor-pointer"

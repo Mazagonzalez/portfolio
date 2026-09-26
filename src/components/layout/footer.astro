@@ -1,5 +1,8 @@
 ---
 import { socialLinks } from "@/data/social";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 
 const year = new Date().getFullYear();
 ---
@@ -14,18 +17,18 @@ const year = new Date().getFullYear();
                 </p>
 
                 <p class="text-sm text-muted">
-                    Frontend developer building fast, thoughtful web experiences.
+                    {__("Frontend developer building fast, thoughtful web experiences.")}
                 </p>
             </div>
 
-            <ul class="row items-center gap-5" aria-label="Social links">
+            <ul class="row items-center gap-5" aria-label={__("Social links")}>
                 {socialLinks.map(({ url, label, icon: Icon, target }) => (
                     <li>
                         <a
                             href={url}
                             target={target === false ? "_self" : "_blank"}
                             rel="noopener noreferrer"
-                            aria-label={label}
+                            aria-label={__(label)}
                         >
                             <Icon class="icon" />
                         </a>
@@ -37,7 +40,7 @@ const year = new Date().getFullYear();
         <hr class="h-px w-full border-0 bg-white/10" />
 
         <p class="text-xs text-muted text-end">
-            <small class="text-xs">&copy; {year} Carlos Maza. All rights reserved.</small>
+            <small class="text-xs">&copy; {year} Carlos Maza. {__("All rights reserved.")}</small>
         </p>
     </div>
 </footer>

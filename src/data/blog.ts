@@ -9,6 +9,17 @@ export async function getPosts() {
     return posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 }
 
+// getStaticPaths of /blog/<slug>, shared with /es/blog/<slug>.
+// Posts are newest first: "newer" is the one before, "older" the one after
+export async function getPostPaths() {
+    const posts = await getPosts();
+
+    return posts.map((post, i) => ({
+        params: { slug: post.id },
+        props: { post, newer: posts[i - 1], older: posts[i + 1] },
+    }));
+}
+
 // Every tag with how many posts use it, most used first
 export function getTags(posts: Post[]) {
     const counts = new Map<string, number>();
@@ -28,8 +39,8 @@ export function readingTime(body = "") {
     return Math.max(1, Math.round(words / 220));
 }
 
-export const formatDate = (date: Date) =>
-    date.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
+export const formatDate = (date: Date, locale = "en-US") =>
+    date.toLocaleDateString(locale, { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
 
 // The title in the list morphs into the heading of the post
 export const postTransition = (id: string) => `post-title-${id}`;

@@ -1,5 +1,8 @@
 ---
 // Konami code (↑ ↑ ↓ ↓ ← → ← → B A) jumps the whole page to lightspeed
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 ---
 
 <div
@@ -14,6 +17,8 @@
 <p
     id="lightspeedToast"
     role="status"
+    data-unlocked={__("🚀 Lightspeed unlocked")}
+    data-found={__("🚀 Lightspeed unlocked. You found the secret!")}
     class="fixed top-6 left-1/2 z-101 -translate-x-1/2 box-gen bg-zinc-900/85! px-4 py-2 text-sm whitespace-nowrap pointer-events-none opacity-0 -translate-y-2 transition-all duration-300 data-active:opacity-100 data-active:translate-y-0"
 ></p>
 
@@ -28,11 +33,12 @@
 
     const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    async function showToast(message: string) {
+    // The messages come translated in the toast's data-* attributes
+    async function showToast(message: "unlocked" | "found") {
         const toast = document.getElementById("lightspeedToast");
         if (!toast) return;
 
-        toast.textContent = message;
+        toast.textContent = toast.dataset[message] ?? "";
         toast.dataset.active = "";
         await wait(3200);
         delete toast.dataset.active;
@@ -47,7 +53,7 @@
 
         // Respect reduced motion: skip the animation, keep the reward
         if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            await showToast("🚀 Lightspeed unlocked");
+            await showToast("unlocked");
             running = false;
             return;
         }
@@ -69,7 +75,7 @@
         void overlay.offsetHeight;
         overlay.dataset.active = "";
         starfield.warp(true);
-        showToast("🚀 Lightspeed unlocked. You found the secret!");
+        showToast("found");
 
         await wait(WARP_MS);
         starfield.warp(false);

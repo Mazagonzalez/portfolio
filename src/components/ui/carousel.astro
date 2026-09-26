@@ -3,6 +3,7 @@ import IconChevronLeft from "@/components/icons/icon-chevron-left.astro";
 import IconChevronRight from "@/components/icons/icon-chevron-right.astro";
 import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
+import { useTranslations } from "@/i18n";
 
 interface Props {
     images?: ImageMetadata[];
@@ -11,9 +12,10 @@ interface Props {
 }
 
 const { images = [], alt = "", transitionName } = Astro.props;
+const __ = useTranslations(Astro.currentLocale);
 ---
 
-<section class="col gap-3" aria-roledescription="carousel" aria-label={`${alt} screenshots`}>
+<section class="col gap-3" aria-roledescription="carousel" aria-label={__(":name screenshots", { name: alt })}>
     <div class="box-gen relative aspect-video overflow-hidden" transition:name={transitionName}>
         {images.length > 0 ? (
             <>
@@ -21,7 +23,7 @@ const { images = [], alt = "", transitionName } = Astro.props;
                     {images.map((src, i) => (
                         <Image
                             src={src}
-                            alt={`${alt} — screenshot ${i + 1} of ${images.length}`}
+                            alt={__(":name — screenshot :number of :total", { name: alt, number: i + 1, total: images.length })}
                             aria-hidden={i === 0 ? undefined : "true"}
                             widths={[640, 1100, 1920]}
                             sizes="(min-width: 1100px) 1100px, 100vw"
@@ -36,7 +38,7 @@ const { images = [], alt = "", transitionName } = Astro.props;
                         <button
                             id="carouselPrev"
                             type="button"
-                            aria-label="Previous image"
+                            aria-label={__("Previous image")}
                             class="absolute-center-y left-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
                         >
                             <IconChevronLeft class="size-4" />
@@ -45,7 +47,7 @@ const { images = [], alt = "", transitionName } = Astro.props;
                         <button
                             id="carouselNext"
                             type="button"
-                            aria-label="Next image"
+                            aria-label={__("Next image")}
                             class="absolute-center-y right-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
                         >
                             <IconChevronRight class="size-4" />
@@ -55,18 +57,18 @@ const { images = [], alt = "", transitionName } = Astro.props;
             </>
         ) : (
             <div class="size-full center-content">
-                <p class="text-sm text-muted">Preview images coming soon.</p>
+                <p class="text-sm text-muted">{__("Preview images coming soon.")}</p>
             </div>
         )}
     </div>
 
     {images.length > 1 && (
-        <div id="carouselDots" role="group" aria-label="Choose screenshot" class="row justify-center">
+        <div id="carouselDots" role="group" aria-label={__("Choose screenshot")} class="row justify-center">
             {images.map((_, i) => (
                 <button
                     type="button"
                     data-index={i}
-                    aria-label={`Go to image ${i + 1}`}
+                    aria-label={__("Go to image :number", { number: i + 1 })}
                     aria-current={i === 0 ? "true" : undefined}
                     class="size-6 center-content cursor-pointer before:size-1.5 before:rounded-full before:bg-white/20 before:transition-colors hover:before:bg-white/40 aria-[current=true]:before:bg-white/70"
                 ></button>

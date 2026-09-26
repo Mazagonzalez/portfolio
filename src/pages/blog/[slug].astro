@@ -5,18 +5,18 @@ import IconChevron from "@/components/icons/icon-chevron.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import { render } from "astro:content";
 
-import { getPosts, postTransition } from "@/data/blog";
+import { getPostPaths, postTransition } from "@/data/blog";
 import { email } from "@/data/social";
+import { useTranslations, getLocale, defaultLocale, localizePath } from "@/i18n";
 
-export async function getStaticPaths() {
-    const posts = await getPosts();
+export const getStaticPaths = getPostPaths;
 
-    // Posts are newest first: "newer" is the one before, "older" the one after
-    return posts.map((post, i) => ({
-        params: { slug: post.id },
-        props: { post, newer: posts[i - 1], older: posts[i + 1] },
-    }));
-}
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
+
+// Posts are written in English. On /es the interface is translated and
+// the post's own text is marked with lang="en"
+const postLang = locale === defaultLocale ? undefined : defaultLocale;
 
 const { post, newer, older } = Astro.props;
 const { data } = post;
@@ -24,9 +24,9 @@ const { Content, headings } = await render(post);
 
 const toc = headings.filter((heading) => heading.depth <= 3);
 const siblings = [
-    older && { label: "Older", post: older },
-    newer && { label: "Newer", post: newer },
-].filter(Boolean) as { label: string; post: typeof post }[];
+    older && { label: __("Older"), post: older, newer: false },
+    newer && { label: __("Newer"), post: newer, newer: true },
+].filter(Boolean) as { label: string; post: typeof post; newer: boolean }[];
 ---
 
 <Layout
@@ -42,16 +42,16 @@ const siblings = [
 
     <article class="size-screen mt-32 pb-20" aria-labelledby="post-title">
         <header class="col gap-4 max-w-3xl">
-            <a href="/blog" class="row items-center gap-1 w-fit py-2 -my-2 text-sm text-muted hover:text-white stroke-muted hover:stroke-white transition-colors">
+            <a href={localizePath("/blog", locale)} class="row items-center gap-1 w-fit py-2 -my-2 text-sm text-muted hover:text-white stroke-muted hover:stroke-white transition-colors">
                 <IconChevron class="size-4 rotate-180" />
-                <span>All posts</span>
+                <span>{__("All posts")}</span>
             </a>
 
-            <h1 id="post-title" class="text-3xl md:text-5xl font-bold leading-tight text-balance w-fit" transition:name={postTransition(post.id)}>
+            <h1 id="post-title" lang={postLang} class="text-3xl md:text-5xl font-bold leading-tight text-balance w-fit" transition:name={postTransition(post.id)}>
                 {data.title}
             </h1>
 
-            <p class="text-white/80 font-light md:text-lg leading-relaxed">
+            <p lang={postLang} class="text-white/80 font-light md:text-lg leading-relaxed">
                 {data.description}
             </p>
 
@@ -59,7 +59,7 @@ const siblings = [
                 <PostMeta post={post} />
 
                 {data.tags.length > 0 && (
-                    <ul class="row flex-wrap gap-1.5" aria-label="Topics">
+                    <ul class="row flex-wrap gap-1.5" aria-label={__("Topics")}>
                         {data.tags.map((tag) => (
                             <li class="box-gen rounded-full! text-[10px] leading-3.75 text-muted py-0.5 px-2">
                                 {tag}
@@ -68,20 +68,26 @@ const siblings = [
                     </ul>
                 )}
             </div>
+
+            {postLang && (
+                <p class="w-fit rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white/70">
+                    {__("This post is only available in English.")}
+                </p>
+            )}
         </header>
 
         <!-- minmax(0, 1fr): wide code blocks scroll inside the column instead of widening the page -->
         <div class="mt-12 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_220px] gap-12">
-            <div class="prose-case max-w-3xl! md:text-[17px]">
+            <div lang={postLang} class="prose-case max-w-3xl! md:text-[17px]">
                 <Content />
             </div>
 
             {toc.length > 1 && (
                 <aside class="hidden lg:block">
                     <nav id="toc" aria-labelledby="toc-title" class="sticky top-28 col gap-3 border-l border-white/10 pl-4">
-                        <p id="toc-title" class="text-xs uppercase tracking-wider text-white/50">On this page</p>
+                        <p id="toc-title" class="text-xs uppercase tracking-wider text-white/50">{__("On this page")}</p>
 
-                        <ul class="col gap-2 text-sm">
+                        <ul lang={postLang} class="col gap-2 text-sm">
                             {toc.map((heading) => (
                                 <li class:list={[heading.depth === 3 && "pl-3"]}>
                                     <a
@@ -101,36 +107,36 @@ const siblings = [
         <footer class="mt-16 col gap-6 max-w-3xl">
             {data.ai && (
                 <p class="text-xs text-white/50 leading-relaxed">
-                    This post was drafted with the help of AI (Gemini) and reviewed by me before publishing.
-                    Spotted a mistake? <a href={`mailto:${email}`} class="underline underline-offset-4 hover:text-white">Let me know</a>.
+                    {__("This post was drafted with the help of AI (Gemini) and reviewed by me before publishing.")}
+                    {" "}{__("Spotted a mistake?")} <a href={`mailto:${email}`} class="underline underline-offset-4 hover:text-white">{__("Let me know")}</a>.
                 </p>
             )}
 
             <a
-                href={`mailto:${email}?subject=${encodeURIComponent(`About "${data.title}"`)}`}
+                href={`mailto:${email}?subject=${encodeURIComponent(__("About \":title\"", { title: data.title }))}`}
                 class="group box-gen p-5 row items-center gap-4 transition-colors duration-300 hover:border-white/20!"
             >
                 <span class="center-content size-10 shrink-0 rounded-full bg-white/5 stroke-muted group-hover:stroke-white transition-colors">
                     <IconEmail class="size-5" />
                 </span>
                 <span class="col">
-                    <span class="font-semibold">Enjoyed it? Say hi</span>
-                    <span class="text-sm text-muted">Questions, ideas or a project in mind, my inbox is open.</span>
+                    <span class="font-semibold">{__("Enjoyed it? Say hi")}</span>
+                    <span class="text-sm text-muted">{__("Questions, ideas or a project in mind, my inbox is open.")}</span>
                 </span>
             </a>
 
             {siblings.length > 0 && (
-                <nav aria-label="More posts" class="grid sm:grid-cols-2 gap-4">
-                    {siblings.map(({ label, post: sibling }) => (
+                <nav aria-label={__("More posts")} class="grid sm:grid-cols-2 gap-4">
+                    {siblings.map(({ label, post: sibling, newer }) => (
                         <a
-                            href={`/blog/${sibling.id}`}
+                            href={localizePath(`/blog/${sibling.id}`, locale)}
                             class:list={[
                                 "group box-gen p-5 col gap-1 transition-colors duration-300 hover:border-white/20!",
-                                label === "Newer" && "sm:col-start-2 sm:text-right",
+                                newer && "sm:col-start-2 sm:text-right",
                             ]}
                         >
                             <span class="text-xs uppercase tracking-wider text-white/50">{label}</span>
-                            <span class="font-semibold line-clamp-2 group-hover:text-white">{sibling.data.title}</span>
+                            <span lang={postLang} class="font-semibold line-clamp-2 group-hover:text-white">{sibling.data.title}</span>
                         </a>
                     ))}
                 </nav>

@@ -1,0 +1,9 @@
+---
+// Same page as "/blog/<slug>", with Astro.currentLocale = "es"
+import Post from "@/pages/blog/[slug].astro";
+import { getPostPaths } from "@/data/blog";
+
+export const getStaticPaths = getPostPaths;
+---
+
+<Post {...Astro.props} />

@@ -6,6 +6,9 @@ import IconBook from "@/components/icons/icon-book.astro";
 import IconWorkflow from "@/components/icons/icon-workflow.astro";
 import IconCoffee from "@/components/icons/icon-coffee.astro";
 import IconImage from "@/components/icons/icon-image.astro";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 
 const hobbies = [
     "Music",
@@ -24,8 +27,8 @@ const stats = [
 ---
 
 <Layout
-    title="About — AMG"
-    description="How Carlos Maza went from planning to study Accounting to becoming a frontend developer, almost by accident."
+    title={`${__("About")} — AMG`}
+    description={__("How Carlos Maza went from planning to study Accounting to becoming a frontend developer, almost by accident.")}
 >
     <section class="size-screen mt-32" aria-labelledby="about-title">
         <div class="col gap-2">
@@ -33,13 +36,12 @@ const stats = [
                 <IconUser class="size-7 stroke-white" />
 
                 <h1 id="about-title" class="text-3xl font-bold">
-                    About Me
+                    {__("About Me")}
                 </h1>
             </div>
 
             <p class="text-white/80 font-light max-w-sm">
-                The short version: I fell into code by accident
-                and never left. Here's the long version.
+                {__("The short version: I fell into code by accident and never left. Here's the long version.")}
             </p>
         </div>
 
@@ -47,20 +49,14 @@ const stats = [
             <!-- Row 1: Story + Photo -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="lg:col-span-2">
-                    <Card title="My Story" component={IconBook} height="h-full" overflow={false}>
+                    <Card title={__("My Story")} component={IconBook} height="h-full" overflow={false}>
                         <div slot="content" class="col gap-4">
                             <p class="text-sm text-muted leading-relaxed">
-                                I'm a web developer from Barranquilla, Colombia, with about three years of
-                                experience building modern apps and websites. Funny thing is, I never
-                                planned to end up here — my original plan was to study Accounting.
+                                {__("I'm a web developer from Barranquilla, Colombia, with about three years of experience building modern apps and websites. Funny thing is, I never planned to end up here — my original plan was to study Accounting.")}
                             </p>
 
                             <p class="text-sm text-muted leading-relaxed">
-                                A friend of mine was studying programming, and out of curiosity I started
-                                messing around with a few exercises. When it was time to apply to
-                                sena, I picked programming as a backup option, almost as a joke...
-                                and got in. What started as an unexpected turn became one of the best
-                                decisions of my life.
+                                {__("A friend of mine was studying programming, and out of curiosity I started messing around with a few exercises. When it was time to apply to SENA, I picked programming as a backup option, almost as a joke... and got in. What started as an unexpected turn became one of the best decisions of my life.")}
                             </p>
                         </div>
                     </Card>
@@ -70,7 +66,7 @@ const stats = [
                     <div slot="content" class="relative h-68 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2" aria-hidden="true">
                         <div class="col items-center gap-2 text-center">
                             <IconImage class="size-6 stroke-white/20" />
-                            <span class="text-xs text-white/50">Photo coming soon</span>
+                            <span class="text-xs text-white/50">{__("Photo coming soon")}</span>
                         </div>
                     </div>
                 </Card>
@@ -85,23 +81,19 @@ const stats = [
                         </blockquote>
 
                         <figcaption class="text-xs text-white/50">
-                            Through hardships, to the stars — the line I keep coming back to.
+                            {__("Through hardships, to the stars — the line I keep coming back to.")}
                         </figcaption>
                     </figure>
                 </Card>
 
-                <Card title="What I Do Today" component={IconWorkflow}>
+                <Card title={__("What I Do Today")} component={IconWorkflow}>
                     <div slot="content" class="col gap-3">
                         <p class="text-sm text-muted leading-relaxed">
-                            These days I especially enjoy frontend development — mixing logic with
-                            design to build interfaces that feel intuitive and look good. I care about
-                            solving problems, keeping my code clean, and sweating the small visual
-                            details that make an experience feel finished.
+                            {__("These days I especially enjoy frontend development — mixing logic with design to build interfaces that feel intuitive and look good. I care about solving problems, keeping my code clean, and sweating the small visual details that make an experience feel finished.")}
                         </p>
 
                         <p class="text-sm text-muted leading-relaxed">
-                            I'm always learning new tech and trying to get better at what I do, because
-                            constant learning is just part of building better products.
+                            {__("I'm always learning new tech and trying to get better at what I do, because constant learning is just part of building better products.")}
                         </p>
                     </div>
                 </Card>
@@ -111,7 +103,7 @@ const stats = [
                         <div slot="content" class="relative h-68 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2" aria-hidden="true">
                             <div class="col items-center gap-2 text-center">
                                 <IconImage class="size-6 stroke-white/20" />
-                                <span class="text-xs text-white/50">Photo coming soon</span>
+                                <span class="text-xs text-white/50">{__("Photo coming soon")}</span>
                             </div>
                         </div>
                     </Card>
@@ -121,19 +113,16 @@ const stats = [
             <!-- Row 3: Hobbies + Photo/Stats -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="lg:col-span-2">
-                    <Card title="Off the Clock" component={IconCoffee} height="h-fit" overflow={false}>
+                    <Card title={__("Off the Clock")} component={IconCoffee} height="h-fit" overflow={false}>
                         <div slot="content" class="col gap-4">
                             <p class="text-sm text-muted leading-relaxed">
-                                When I'm not coding: music always playing, deep in a video game, binging
-                                a new series, or re-watching Star Wars for the hundredth time (yes, I'm
-                                that fan). I'm pretty easygoing — always down for good food and even
-                                better company.
+                                {__("When I'm not coding: music always playing, deep in a video game, binging a new series, or re-watching Star Wars for the hundredth time (yes, I'm that fan). I'm pretty easygoing — always down for good food and even better company.")}
                             </p>
 
-                            <ul class="row flex-wrap gap-1.5" aria-label="Hobbies">
+                            <ul class="row flex-wrap gap-1.5" aria-label={__("Hobbies")}>
                                 {hobbies.map((hobby) => (
                                     <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
-                                        {hobby}
+                                        {__(hobby)}
                                     </li>
                                 ))}
                             </ul>
@@ -146,7 +135,7 @@ const stats = [
                         <div slot="content" class="relative h-full w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2" aria-hidden="true">
                             <div class="col items-center gap-2 text-center">
                                 <IconImage class="size-6 stroke-white/20" />
-                                <span class="text-xs text-white/50">Photo coming soon</span>
+                                <span class="text-xs text-white/50">{__("Photo coming soon")}</span>
                             </div>
                         </div>
                     </Card>
@@ -155,8 +144,8 @@ const stats = [
                         <dl slot="content" class="h-full col justify-center gap-3">
                             {stats.map((stat) => (
                                 <div class="row-reverse items-baseline justify-between gap-2">
-                                    <dt class="text-xs text-muted text-right">{stat.label}</dt>
-                                    <dd class="text-lg font-bold">{stat.value}</dd>
+                                    <dt class="text-xs text-muted text-right">{__(stat.label)}</dt>
+                                    <dd class="text-lg font-bold">{__(stat.value)}</dd>
                                 </div>
                             ))}
                         </dl>
