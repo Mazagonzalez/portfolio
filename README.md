@@ -27,10 +27,8 @@ npm run preview   # serve the production build
 
 ```text
 public/
-├── images/
-│   ├── companies/  logos for the experience list
-│   └── music/      album covers
-└── music/          audio tracks
+└── images/
+    └── companies/  logos for the experience list
 src/
 ├── assets/
 │   └── projects/   project screenshots (optimized by Astro)
