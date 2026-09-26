@@ -11,7 +11,8 @@ export default defineConfig({
   site: "https://amg-devel.vercel.app",
 
   // Pages stay static; only routes with `prerender = false` (the Spotify
-  // endpoint) run as Vercel functions
+  // endpoint and the 404, which picks its language from the URL) run as
+  // Vercel functions
   adapter: vercel(),
 
   env: {

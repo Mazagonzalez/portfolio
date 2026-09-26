@@ -27,10 +27,8 @@ npm run preview   # serve the production build
 
 ```text
 public/
-├── images/
-│   ├── companies/  logos for the experience list
-│   └── music/      album covers
-└── music/          audio tracks
+└── images/
+    └── companies/  logos for the experience list
 src/
 ├── assets/
 │   └── projects/   project screenshots (optimized by Astro)
@@ -54,8 +52,8 @@ src/
 ## Spotify "now playing"
 
 The hero shows what I'm listening to on Spotify (or the last track played),
-served by `src/pages/api/now-playing.ts`, the only route that runs as a
-Vercel function. Without credentials the widget just stays hidden.
+served by `src/pages/api/now-playing.ts`, which runs as a Vercel function
+(like the 404 page). Without credentials the widget just stays hidden.
 
 1. Create an app at the [Spotify dashboard](https://developer.spotify.com/dashboard)
    with the Redirect URI `http://127.0.0.1:8888/callback`.

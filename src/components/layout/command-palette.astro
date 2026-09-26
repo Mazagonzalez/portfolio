@@ -171,6 +171,7 @@ const groups: { label: string; items: Item[] }[] = [
 
 <script>
     import { navigate } from "astro:transitions/client";
+    import { copyText } from "@/scripts/clipboard";
 
     // The dialog is persisted across navigations within a language. When the
     // language changes, a new (translated) dialog arrives and setup() wires it
@@ -243,30 +244,13 @@ const groups: { label: string; items: Item[] }[] = [
         if (dialog.open) dialog.close();
     }
 
-    async function copyText(text: string) {
-        try {
-            await navigator.clipboard.writeText(text);
-            return true;
-        } catch {
-            // Fallback for browsers or contexts that block the Clipboard API
-            const field = document.createElement("textarea");
-            field.value = text;
-            field.setAttribute("readonly", "");
-            field.style.cssText = "position:fixed;opacity:0";
-            dialog.append(field);
-            field.select();
-            const copied = document.execCommand("copy");
-            field.remove();
-            input.focus();
-            return copied;
-        }
-    }
-
     async function copyEmail(option: HTMLElement) {
         const hint = option.querySelector(".cmdk-hint");
         const address = hint?.textContent ?? "";
 
-        if (hint) hint.textContent = (await copyText(address)) ? dialog.dataset.copied! : dialog.dataset.copyFailed!;
+        const copied = await copyText(address, dialog);
+        input.focus();
+        if (hint) hint.textContent = copied ? dialog.dataset.copied! : dialog.dataset.copyFailed!;
 
         setTimeout(() => {
             close();
