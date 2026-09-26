@@ -5,11 +5,13 @@ import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 import { Image } from "astro:assets";
 
 import { getProjects, projectTransition } from "@/data/projects";
+import { useTranslations, localizePath } from "@/i18n";
 
+const __ = useTranslations(Astro.currentLocale);
 const projects = await getProjects();
 
 const filters = [
-    { label: "All", value: "all" },
+    { label: __("All"), value: "all" },
     { label: "Landings", value: "landing" },
     { label: "Apps", value: "app" },
     { label: "Ecommerce", value: "ecommerce" },
@@ -17,8 +19,8 @@ const filters = [
 ---
 
 <Layout
-    title="Projects — AMG"
-    description="A selection of products and platforms I've helped build, from landing pages to full apps and ecommerce sites."
+    title={`${__("Projects")} — AMG`}
+    description={__("A selection of products and platforms I've helped build, from landing pages to full apps and ecommerce sites.")}
 >
     <section class="size-screen mt-32" aria-labelledby="projects-title">
         <div class="col gap-2">
@@ -26,18 +28,16 @@ const filters = [
                 <IconProjects class="size-7 stroke-white" />
 
                 <h1 id="projects-title" class="text-3xl font-bold">
-                    Projects
+                    {__("Projects")}
                 </h1>
             </div>
 
             <p class="text-white/80 font-light max-w-md">
-                A selection of products and platforms I've helped build.
-                Each one reflects a different stack, industry, and set of
-                challenges I worked through with the team.
+                {__("A selection of products and platforms I've helped build. Each one reflects a different stack, industry, and set of challenges I worked through with the team.")}
             </p>
         </div>
 
-        <div id="projectFilters" role="group" aria-label="Filter projects by category" class="row flex-wrap gap-2 mt-8">
+        <div id="projectFilters" role="group" aria-label={__("Filter projects by category")} class="row flex-wrap gap-2 mt-8">
             {filters.map((filter, i) => (
                 <button
                     type="button"
@@ -57,7 +57,7 @@ const filters = [
             {projects.map(({ id, data: project }, i) => (
                 <li data-category={project.category}>
                 <a
-                    href={`/projects/${id}`}
+                    href={localizePath(`/projects/${id}`, Astro.currentLocale)}
                     class="group box-gen p-4 md:p-5 grid md:grid-cols-5 items-center gap-5 transition-all duration-300 hover:border-white/20!"
                 >
                     <div class="md:col-span-2 aspect-video rounded-lg overflow-hidden bg-white/5 relative" transition:name={projectTransition(id).cover}>
@@ -90,11 +90,11 @@ const filters = [
 
                         {project.description && (
                             <p class="text-sm text-muted leading-relaxed line-clamp-2">
-                                {project.description}
+                                {__(project.description)}
                             </p>
                         )}
 
-                        <ul class="row flex-wrap gap-1.5 mt-1" aria-label="Stack">
+                        <ul class="row flex-wrap gap-1.5 mt-1" aria-label={__("Stack")}>
                             {project.stack.map((tech) => (
                                 <li class="box-gen rounded-full! text-[10px] leading-3.75 text-muted py-0.5 px-2">
                                     {tech}

@@ -2,6 +2,9 @@
 import NowPlaying from "@/components/sections/home/now-playing.astro";
 import LocalTime from "@/components/sections/home/local-time.astro";
 import { socialLinks } from "@/data/social";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 ---
 
 <section class="size-screen mt-32" aria-labelledby="hero-title">
@@ -9,14 +12,14 @@ import { socialLinks } from "@/data/social";
     
     <div class="col gap-2 mt-3">
         <h1 id="hero-title" class="text-3xl font-bold">
-            Hi, I am Carlos Maza
+            {__("Hi, I am Carlos Maza")}
         </h1>
 
-        <p class="text-white/80 font-light max-w-104 [&>strong]:font-bold">
-            <strong>Frontend developer</strong> capable of creating, modifying
-            and optimizing functions, ensuring high performance
-            and <strong>an excellent user experience.</strong>
-        </p>
+        <!-- set:html is Astro's version of Blade's {!! !!}: the translation keeps its <strong> tags -->
+        <p
+            class="text-white/80 font-light max-w-104 [&>strong]:font-bold"
+            set:html={__("<strong>Frontend developer</strong> capable of creating, modifying and optimizing functions, ensuring high performance and <strong>an excellent user experience.</strong>")}
+        />
     </div>
 
     <div class="col gap-3 mt-6">
@@ -27,7 +30,7 @@ import { socialLinks } from "@/data/social";
             </span>
 
             <span class="text-sm font-semibold">
-                Available for new projects
+                {__("Available for new projects")}
             </span>
 
             <span class="hidden sm:block w-px h-4 bg-white/15" aria-hidden="true"></span>
@@ -38,14 +41,14 @@ import { socialLinks } from "@/data/social";
         <NowPlaying />
     </div>
 
-    <ul class="row items-center gap-7 mt-7" aria-label="Social links">
+    <ul class="row items-center gap-7 mt-7" aria-label={__("Social links")}>
         {socialLinks.map(({ url, label, icon: Icon, target }) => (
             <li>
                 <a 
                     href={url} 
                     target={target === false ? "_self" : "_blank"} 
                     rel="noopener noreferrer"
-                    aria-label={label}
+                    aria-label={__(label)}
                 >
                     <Icon class="icon" />
                 </a>

@@ -2,16 +2,25 @@
 // Carlos's local time, plus how it compares to the visitor's.
 // The page is static, so the time is filled in by the browser;
 // until then (or without JS) it just shows the city.
+import { useTranslations, getLocale, localeCodes } from "@/i18n";
+
 const TIME_ZONE = "America/Bogota";
+
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
 ---
 
 <span
     id="localTime"
     data-time-zone={TIME_ZONE}
+    data-locale={localeCodes[locale]}
+    data-same={__("· same time as you")}
+    data-ahead={__("· :hours ahead of you")}
+    data-behind={__("· :hours behind you")}
     class="row items-center gap-1.5 text-sm text-white/60"
 >
-    <time data-lt="time" class="font-semibold text-white tabular-nums">Local time</time>
-    <span>in Barranquilla</span>
+    <time data-lt="time" class="font-semibold text-white tabular-nums">{__("Local time")}</time>
+    <span>{__("in Barranquilla")}</span>
     <span data-lt="diff" class="hidden sm:inline text-white/50"></span>
 </span>
 
@@ -26,10 +35,11 @@ const TIME_ZONE = "America/Bogota";
         return Math.round(((local.getTime() - visitor.getTime()) / 36e5) * 2) / 2;
     }
 
-    function describe(hours: number) {
-        if (hours === 0) return "· same time as you";
-        const amount = `${Math.abs(hours)}h`;
-        return hours > 0 ? `· ${amount} ahead of you` : `· ${amount} behind you`;
+    // The sentences come translated in the data-* attributes
+    function describe(hours: number, texts: DOMStringMap) {
+        if (hours === 0) return texts.same!;
+        const sentence = hours > 0 ? texts.ahead! : texts.behind!;
+        return sentence.replace(":hours", `${Math.abs(hours)}h`);
     }
 
     function update() {
@@ -40,10 +50,10 @@ const TIME_ZONE = "America/Bogota";
         const now = new Date();
 
         const time = root.querySelector<HTMLTimeElement>("[data-lt='time']")!;
-        time.textContent = now.toLocaleTimeString("en-US", { timeZone, hour: "numeric", minute: "2-digit" });
+        time.textContent = now.toLocaleTimeString(root.dataset.locale, { timeZone, hour: "numeric", minute: "2-digit" });
         time.dateTime = now.toISOString();
 
-        root.querySelector("[data-lt='diff']")!.textContent = describe(offsetHours(timeZone, now));
+        root.querySelector("[data-lt='diff']")!.textContent = describe(offsetHours(timeZone, now), root.dataset);
 
         // Tick right when the next minute starts
         timer = setTimeout(update, 60_000 - (now.getTime() % 60_000));

@@ -27,7 +27,22 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [react(), sitemap()],
+  // English lives at the root and Spanish under /es (texts in src/i18n)
+  i18n: {
+    locales: ["en", "es"],
+    defaultLocale: "en",
+    routing: { prefixDefaultLocale: false },
+  },
+
+  integrations: [
+    react(),
+    sitemap({
+      // hreflang alternates between /about and /es/about
+      i18n: { defaultLocale: "en", locales: { en: "en-US", es: "es-CO" } },
+      // /es/blog/<post> only translates the interface and points to the English post
+      filter: (page) => !/\/es\/blog\/[^/]+\/?$/.test(page),
+    }),
+  ],
 
   // Geist is downloaded at build time and served from this domain (no
   // render-blocking request to Google), with a metric-matched fallback

@@ -1,14 +1,16 @@
 // Branded Open Graph images (1200×630), generated at build time.
-// /og/index.png, /og/about.png, /og/projects/<slug>.png, …
+// /og/index.png, /og/about.png, /og/projects/<slug>.png, … and the Spanish
+// ones under /og/es/ (texts translated with src/i18n, like the pages)
 import type { APIRoute, GetStaticPaths, ImageMetadata } from "astro";
 import { readFile } from "node:fs/promises";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import sharp from "sharp";
 
-import { getProjects } from "@/data/projects";
+import { getProjects, categoryLabels } from "@/data/projects";
 import { getPosts, getTags, formatDate } from "@/data/blog";
 import { featuredSkills } from "@/data/skills";
+import { useTranslations, defaultLocale, locales, type Locale } from "@/i18n";
 
 interface OgPage {
     eyebrow: string;
@@ -28,83 +30,90 @@ interface OgPage {
 // rendered without the screenshot.
 const sourcePath = (image?: ImageMetadata) => (image as (ImageMetadata & { fsPath?: string }) | undefined)?.fsPath;
 
-const CATEGORY = { landing: "Landing page", app: "Web app", ecommerce: "Ecommerce" } as const;
-
 export const getStaticPaths = (async () => {
     const projects = await getProjects();
     const posts = await getPosts();
     const topSkills = featuredSkills[0].map((skill) => skill.name);
 
-    const pages: { slug: string; page: OgPage }[] = [
-        {
-            slug: "index",
-            page: {
-                eyebrow: "Frontend Developer",
-                title: "Carlos Maza",
-                description: "Building fast, thoughtful web experiences from Barranquilla, Colombia.",
-                tags: topSkills,
-                signature: false,
-            },
-        },
-        {
-            slug: "about",
-            page: {
-                eyebrow: "About",
-                title: "The long version",
-                description: "From planning to study Accounting to becoming a frontend developer, almost by accident.",
-                tags: ["Barranquilla, CO", "Frontend", "Per aspera ad astra"],
-            },
-        },
-        {
-            slug: "projects",
-            page: {
-                eyebrow: "Projects",
-                title: "Things I've built",
-                description: "Products and platforms from landing pages to full apps and ecommerce sites.",
-                tags: ["Landings", "Apps", "Ecommerce"],
-            },
-        },
-        {
-            slug: "skills",
-            page: {
-                eyebrow: "Skills",
-                title: "My toolbox",
-                description: "Technologies and tools I use day-to-day, from frontend frameworks to AI-assisted workflows.",
-                tags: featuredSkills.flat().slice(0, 6).map((skill) => skill.name),
-            },
-        },
-        {
-            slug: "blog",
-            page: {
-                eyebrow: "Blog",
-                title: "Notes & write-ups",
-                description: "Frontend, the tools I use every day and the small details that make an interface feel finished.",
-                tags: getTags(posts).slice(0, 5),
-            },
-        },
-        ...posts.map(({ id, data }) => ({
-            slug: `blog/${id}`,
-            page: {
-                eyebrow: `Blog · ${formatDate(data.pubDate)}`,
-                title: data.title,
-                description: data.description,
-                tags: data.tags,
-                compact: true,
-            },
-        })),
-        ...projects.map(({ id, data }) => ({
-            slug: `projects/${id}`,
-            page: {
-                eyebrow: CATEGORY[data.category],
-                title: data.name,
-                description: data.description,
-                tags: data.stack,
-                cover: sourcePath(data.images[0]),
-            },
-        })),
-    ];
+    // Every page in one language. Blog posts are written in English, so
+    // their /es page reuses the English image
+    const pagesIn = (locale: Locale): { slug: string; page: OgPage }[] => {
+        const __ = useTranslations(locale);
 
-    return pages.map(({ slug, page }) => ({ params: { slug }, props: { page } }));
+        return [
+            {
+                slug: "index",
+                page: {
+                    eyebrow: __("Frontend Developer"),
+                    title: "Carlos Maza",
+                    description: __("Building fast, thoughtful web experiences from Barranquilla, Colombia."),
+                    tags: topSkills,
+                    signature: false,
+                },
+            },
+            {
+                slug: "about",
+                page: {
+                    eyebrow: __("About"),
+                    title: __("The long version"),
+                    description: __("From planning to study Accounting to becoming a frontend developer, almost by accident."),
+                    tags: ["Barranquilla, CO", "Frontend", "Per aspera ad astra"],
+                },
+            },
+            {
+                slug: "projects",
+                page: {
+                    eyebrow: __("Projects"),
+                    title: __("Things I've built"),
+                    description: __("Products and platforms from landing pages to full apps and ecommerce sites."),
+                    tags: ["Landings", "Apps", "Ecommerce"],
+                },
+            },
+            {
+                slug: "skills",
+                page: {
+                    eyebrow: __("Skills"),
+                    title: __("My toolbox"),
+                    description: __("Technologies and tools I use day-to-day, from frontend frameworks to AI-assisted workflows."),
+                    tags: featuredSkills.flat().slice(0, 6).map((skill) => skill.name),
+                },
+            },
+            {
+                slug: "blog",
+                page: {
+                    eyebrow: "Blog",
+                    title: __("Notes & write-ups"),
+                    description: __("Frontend, the tools I use every day and the small details that make an interface feel finished."),
+                    tags: getTags(posts).slice(0, 5),
+                },
+            },
+            ...(locale === defaultLocale ? posts : []).map(({ id, data }) => ({
+                slug: `blog/${id}`,
+                page: {
+                    eyebrow: `Blog · ${formatDate(data.pubDate)}`,
+                    title: data.title,
+                    description: data.description,
+                    tags: data.tags,
+                    compact: true,
+                },
+            })),
+            ...projects.map(({ id, data }) => ({
+                slug: `projects/${id}`,
+                page: {
+                    eyebrow: __(categoryLabels[data.category]),
+                    title: data.name,
+                    description: data.description && __(data.description),
+                    tags: data.stack,
+                    cover: sourcePath(data.images[0]),
+                },
+            })),
+        ];
+    };
+
+    return locales.flatMap((locale) => {
+        const prefix = locale === defaultLocale ? "" : `${locale}/`;
+        return pagesIn(locale).map(({ slug, page }) => ({ params: { slug: `${prefix}${slug}` }, props: { page } }));
+    });
 }) satisfies GetStaticPaths;
 
 // Minimal element helper: satori takes React-like { type, props } objects

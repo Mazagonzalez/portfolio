@@ -1,6 +1,9 @@
 ---
 // Live "now playing" pill fed by /api/now-playing. Hidden until there is data,
 // so it never shows up empty (or at all, if Spotify isn't configured).
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 ---
 
 <a
@@ -8,6 +11,8 @@
     hidden
     target="_blank"
     rel="noopener noreferrer"
+    data-now-playing={__("Now playing")}
+    data-last-played={__("Last played")}
     class="group box-gen w-fit max-w-full row items-center gap-3 py-1.5 pl-1.5 pr-4 transition-colors duration-300 hover:border-white/20!"
 >
     <img
@@ -27,7 +32,7 @@
                 <span class="w-0.5 h-full rounded-full bg-lime-400 origin-bottom animate-equalizer [animation-delay:-0.7s] motion-reduce:animate-none"></span>
             </span>
 
-            <span data-np="status">Last played</span>
+            <span data-np="status">{__("Last played")}</span>
             <span aria-hidden="true">· Spotify</span>
         </span>
 
@@ -38,7 +43,7 @@
         </span>
     </span>
 
-    <span class="sr-only">(opens in a new tab)</span>
+    <span class="sr-only">{__("(opens in a new tab)")}</span>
 </a>
 
 <script>
@@ -61,7 +66,7 @@
             pill.href = track.url;
             field("title").textContent = track.title;
             field("artist").textContent = track.artist;
-            field("status").textContent = track.isPlaying ? "Now playing" : "Last played";
+            field("status").textContent = track.isPlaying ? pill.dataset.nowPlaying! : pill.dataset.lastPlayed!;
             (field("cover") as HTMLImageElement).src = track.cover ?? "";
             pill.toggleAttribute("data-playing", track.isPlaying);
             pill.hidden = false;

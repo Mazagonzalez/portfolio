@@ -6,16 +6,13 @@ import IconChevron from "@/components/icons/icon-chevron.astro";
 import IconGithub from "@/components/icons/icon-github.astro";
 import { render } from "astro:content";
 
-import { getProjects, projectTransition } from "@/data/projects";
+import { getProjectPaths, projectTransition, categoryLabels } from "@/data/projects";
+import { useTranslations, getLocale, defaultLocale, localizePath } from "@/i18n";
 
-export async function getStaticPaths() {
-    const projects = await getProjects();
+export const getStaticPaths = getProjectPaths;
 
-    return projects.map((project) => ({
-        params: { slug: project.id },
-        props: { project },
-    }));
-}
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
 
 const { project } = Astro.props;
 const { data } = project;
@@ -23,23 +20,25 @@ const transition = projectTransition(project.id);
 const { Content } = await render(project);
 const hasContent = Boolean(project.body?.trim());
 
+const description = data.description ? __(data.description) : __(":name — a project by Carlos Maza.", { name: data.name });
+
 const details = [
-    { label: "Year", value: data.year },
-    { label: "Role", value: data.role },
-    { label: "Type", value: { landing: "Landing page", app: "Web app", ecommerce: "Ecommerce" }[data.category] },
+    { label: __("Year"), value: data.year },
+    { label: __("Role"), value: data.role && __(data.role) },
+    { label: __("Type"), value: __(categoryLabels[data.category]) },
 ].filter((detail) => detail.value);
 ---
 
 <Layout
     title={`${data.name} — AMG`}
-    description={data.description || `${data.name} — a project by Carlos Maza.`}
+    description={description}
 >
     <article class="size-screen mt-32 col gap-6" aria-labelledby="project-title">
         <div class="col gap-3">
             <div class="row items-center flex-wrap gap-4">
                 <a
-                    href="/projects"
-                    aria-label="Back to projects"
+                    href={localizePath("/projects", locale)}
+                    aria-label={__("Back to projects")}
                     class="rotate-180 -mr-2"
                 >
                     <IconChevron class="size-6 stroke-muted hover:stroke-white" />
@@ -56,8 +55,8 @@ const details = [
                         rel="noopener noreferrer"
                         class="button-main w-fit! px-5 stroke-muted hover:stroke-white"
                     >
-                        <span>Visit site</span>
-                        <span class="sr-only">(opens in a new tab)</span>
+                        <span>{__("Visit site")}</span>
+                        <span class="sr-only">{__("(opens in a new tab)")}</span>
                         <IconArrowUpRight class="size-4" />
                     </a>
                 )}
@@ -70,19 +69,19 @@ const details = [
                         class="button-main w-fit! px-5 stroke-muted hover:stroke-white"
                     >
                         <IconGithub class="size-4" />
-                        <span>Source code</span>
-                        <span class="sr-only">(opens in a new tab)</span>
+                        <span>{__("Source code")}</span>
+                        <span class="sr-only">{__("(opens in a new tab)")}</span>
                     </a>
                 )}
             </div>
 
             {data.description && (
                 <p class="text-white/80 font-light max-w-2xl">
-                    {data.description}
+                    {description}
                 </p>
             )}
 
-            <ul class="row flex-wrap gap-1.5" aria-label="Stack">
+            <ul class="row flex-wrap gap-1.5" aria-label={__("Stack")}>
                 {data.stack.map((tech) => (
                     <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
                         {tech}
@@ -107,8 +106,9 @@ const details = [
                 </dl>
             )}
 
+            <!-- Case studies are written in English -->
             {hasContent && (
-                <div class="prose-case md:col-span-3">
+                <div class="prose-case md:col-span-3" lang={locale === defaultLocale ? undefined : defaultLocale}>
                     <Content />
                 </div>
             )}

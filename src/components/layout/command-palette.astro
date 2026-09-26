@@ -9,23 +9,29 @@ import IconEmail from "@/components/icons/icon-email.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
 import IconMusic from "@/components/icons/icon-music.astro";
 import IconBook from "@/components/icons/icon-book.astro";
+import IconLanguage from "@/components/icons/icon-language.astro";
 
 import { getProjects } from "@/data/projects";
 import { getPosts, formatDate } from "@/data/blog";
 import { email, socialLinks } from "@/data/social";
+import { useTranslations, getLocale, localizePath } from "@/i18n";
 
 interface Item {
     label: string;
     icon: (props: Record<string, any>) => any;
     href?: string;
-    action?: "copy-email" | "toggle-music";
+    action?: "copy-email" | "toggle-music" | "switch-language";
     hint?: string;
     keywords?: string;
     download?: boolean;
     external?: boolean;
     // Only shown when that element exists on the current page
-    requires?: "player";
+    requires?: "player" | "switcher";
 }
+
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
+const link = (path: string) => localizePath(path, locale);
 
 const kbd = "min-w-5 px-1.5 py-0.5 rounded border border-white/10 bg-white/5 font-[inherit] text-center text-[10px] text-white/50";
 
@@ -34,20 +40,20 @@ const posts = await getPosts();
 
 const groups: { label: string; items: Item[] }[] = [
     {
-        label: "Pages",
+        label: __("Pages"),
         items: [
-            { label: "Home", href: "/", icon: IconHome, keywords: "start index" },
-            { label: "About", href: "/about", icon: IconUser, keywords: "me story bio" },
-            { label: "Projects", href: "/projects", icon: IconProjects, keywords: "work portfolio" },
-            { label: "Skills", href: "/skills", icon: IconStart, keywords: "stack tech tools" },
-            { label: "Blog", href: "/blog", icon: IconBook, keywords: "posts articles notes writing" },
+            { label: __("Home"), href: link("/"), icon: IconHome, keywords: "home start index" },
+            { label: __("About"), href: link("/about"), icon: IconUser, keywords: "about me story bio" },
+            { label: __("Projects"), href: link("/projects"), icon: IconProjects, keywords: "projects work portfolio" },
+            { label: __("Skills"), href: link("/skills"), icon: IconStart, keywords: "skills stack tech tools" },
+            { label: __("Blog"), href: link("/blog"), icon: IconBook, keywords: "posts articles notes writing" },
         ],
     },
     {
-        label: "Projects",
+        label: __("Projects"),
         items: projects.map(({ id, data }) => ({
             label: data.name,
-            href: `/projects/${id}`,
+            href: link(`/projects/${id}`),
             icon: IconCode,
             hint: data.stack.slice(0, 3).join(" · "),
             keywords: `project ${data.category} ${data.stack.join(" ")}`,
@@ -57,34 +63,47 @@ const groups: { label: string; items: Item[] }[] = [
         label: "Blog",
         items: posts.slice(0, 6).map(({ id, data }) => ({
             label: data.title,
-            href: `/blog/${id}`,
+            href: link(`/blog/${id}`),
             icon: IconBook,
             hint: formatDate(data.pubDate),
             keywords: `post article ${data.tags.join(" ")}`,
         })),
     },
     {
-        label: "Actions",
+        label: __("Actions"),
         items: [
-            { label: "Copy email", action: "copy-email", icon: IconEmail, hint: email, keywords: "contact mail" },
-            { label: "Send an email", href: `mailto:${email}`, icon: IconEmail, keywords: "contact mail write" },
-            { label: "Download CV", href: "/Carlos-Maza-CV.pdf", download: true, icon: IconDownload, keywords: "resume curriculum pdf" },
-            { label: "Play music", action: "toggle-music", icon: IconMusic, keywords: "song player pause audio", requires: "player" },
+            { label: __("Copy email"), action: "copy-email", icon: IconEmail, hint: email, keywords: "copy contact mail" },
+            { label: __("Send an email"), href: `mailto:${email}`, icon: IconEmail, keywords: "send contact mail write" },
+            { label: __("Download CV"), href: "/Carlos-Maza-CV.pdf", download: true, icon: IconDownload, keywords: "download resume curriculum pdf" },
+            { label: __("Play music"), action: "toggle-music", icon: IconMusic, keywords: "play song player pause audio", requires: "player" },
+            // Always written in the other language, so it can be found by whoever needs it
+            {
+                label: locale === "es" ? "View in English" : "Ver en español",
+                action: "switch-language",
+                icon: IconLanguage,
+                keywords: "language idioma english inglés spanish español translate traducir",
+                requires: "switcher",
+            },
         ],
     },
     {
-        label: "Social",
+        label: __("Social"),
         items: socialLinks
             .filter((link) => link.target)
-            .map(({ label, url, icon }) => ({ label, href: url, external: true, icon, keywords: "social profile" })),
+            .map(({ label, url, icon }) => ({ label: __(label), href: url, external: true, icon, keywords: "social profile" })),
     },
 ];
 ---
 
+<!-- Persisted between pages of the same language; switching languages swaps it for the translated one -->
 <dialog
     id="cmdk"
-    aria-label="Command palette"
-    transition:persist="command-palette"
+    aria-label={__("Command palette")}
+    transition:persist={`command-palette-${locale}`}
+    data-copied={__("Copied!")}
+    data-copy-failed={__("Couldn't copy")}
+    data-play={__("Play music")}
+    data-pause={__("Pause music")}
     class="w-[min(560px,calc(100%-32px))] max-w-none mx-auto mt-[15vh] p-0 bg-transparent text-white overflow-visible backdrop:bg-black/50 backdrop:backdrop-blur-xs backdrop:animate-overlay-in motion-reduce:backdrop:animate-none"
 >
     <div class="box-gen bg-zinc-900/85! overflow-hidden shadow-2xl shadow-black/50 animate-pop-in motion-reduce:animate-none">
@@ -98,8 +117,8 @@ const groups: { label: string; items: Item[] }[] = [
                 aria-expanded="true"
                 aria-controls="cmdkList"
                 aria-autocomplete="list"
-                aria-label="Search pages, projects and actions"
-                placeholder="Search pages, projects, actions…"
+                aria-label={__("Search pages, projects and actions")}
+                placeholder={__("Search pages, projects, actions…")}
                 autocomplete="off"
                 spellcheck="false"
                 class="w-full bg-transparent py-4 text-sm outline-none placeholder:text-white/50"
@@ -108,7 +127,7 @@ const groups: { label: string; items: Item[] }[] = [
             <kbd class:list={[kbd, "hidden sm:block"]}>esc</kbd>
         </div>
 
-        <div id="cmdkList" role="listbox" aria-label="Results" class="max-h-[min(22rem,55vh)] overflow-y-auto scrollbar p-2">
+        <div id="cmdkList" role="listbox" aria-label={__("Results")} class="max-h-[min(22rem,55vh)] overflow-y-auto scrollbar p-2">
             {groups.filter((group) => group.items.length > 0).map((group, g) => (
                 <div role="group" aria-labelledby={`cmdk-group-${g}`} class="cmdk-group">
                     <p id={`cmdk-group-${g}`} class="px-2.5 pt-2 pb-1.5 text-[11px] uppercase tracking-wider text-white/50">
@@ -131,21 +150,21 @@ const groups: { label: string; items: Item[] }[] = [
                             <item.icon class="size-4 shrink-0 stroke-muted" />
                             <span class="cmdk-label truncate">{item.label}</span>
                             {item.hint && <span class="cmdk-hint ml-auto truncate text-xs text-white/50">{item.hint}</span>}
-                            {item.external && <span class="sr-only">(opens in a new tab)</span>}
+                            {item.external && <span class="sr-only">{__("(opens in a new tab)")}</span>}
                         </div>
                     ))}
                 </div>
             ))}
 
             <p id="cmdkEmpty" hidden class="py-10 text-center text-sm text-muted">
-                No results
+                {__("No results")}
             </p>
         </div>
 
         <div class="hidden sm:flex items-center gap-4 px-4 py-2.5 border-t border-white/10 text-[11px] text-white/50" aria-hidden="true">
-            <span class="row items-center gap-1.5"><kbd class={kbd}>↑</kbd><kbd class={kbd}>↓</kbd> navigate</span>
-            <span class="row items-center gap-1.5"><kbd class={kbd}>↵</kbd> open</span>
-            <span class="row items-center gap-1.5 ml-auto"><kbd class={kbd} data-cmdk-shortcut>Ctrl K</kbd> toggle</span>
+            <span class="row items-center gap-1.5"><kbd class={kbd}>↑</kbd><kbd class={kbd}>↓</kbd> {__("navigate")}</span>
+            <span class="row items-center gap-1.5"><kbd class={kbd}>↵</kbd> {__("open")}</span>
+            <span class="row items-center gap-1.5 ml-auto"><kbd class={kbd} data-cmdk-shortcut>Ctrl K</kbd> {__("toggle")}</span>
         </div>
     </div>
 </dialog>
@@ -153,12 +172,13 @@ const groups: { label: string; items: Item[] }[] = [
 <script>
     import { navigate } from "astro:transitions/client";
 
-    // The dialog is persisted across navigations, so this runs once
-    const dialog = document.getElementById("cmdk") as HTMLDialogElement;
-    const input = document.getElementById("cmdkInput") as HTMLInputElement;
-    const empty = document.getElementById("cmdkEmpty") as HTMLElement;
-    const groups = Array.from(dialog.querySelectorAll<HTMLElement>(".cmdk-group"));
-    const options = Array.from(dialog.querySelectorAll<HTMLElement>("[role='option']"));
+    // The dialog is persisted across navigations within a language. When the
+    // language changes, a new (translated) dialog arrives and setup() wires it
+    let dialog: HTMLDialogElement;
+    let input: HTMLInputElement;
+    let empty: HTMLElement;
+    let groups: HTMLElement[] = [];
+    let options: HTMLElement[] = [];
 
     const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
     let activeIndex = -1;
@@ -184,11 +204,15 @@ const groups: { label: string; items: Item[] }[] = [
 
     function filter(query: string) {
         const words = query.toLowerCase().split(/\s+/).filter(Boolean);
-        const hasPlayer = Boolean(document.getElementById("playBtn"));
+        const present = {
+            player: Boolean(document.getElementById("playBtn")),
+            switcher: Boolean(document.querySelector("[data-switch-locale]")),
+        };
 
         options.forEach((option) => {
             const matches = words.every((word) => option.dataset.search!.includes(word));
-            const available = option.dataset.requires !== "player" || hasPlayer;
+            const requires = option.dataset.requires as keyof typeof present | undefined;
+            const available = !requires || present[requires];
             option.hidden = !matches || !available;
         });
 
@@ -203,7 +227,7 @@ const groups: { label: string; items: Item[] }[] = [
     function updateMusicLabel() {
         const player = document.getElementById("player") as HTMLAudioElement | null;
         const label = dialog.querySelector("[data-action='toggle-music'] .cmdk-label");
-        if (label) label.textContent = player && !player.paused ? "Pause music" : "Play music";
+        if (label) label.textContent = player && !player.paused ? dialog.dataset.pause! : dialog.dataset.play!;
     }
 
     function open() {
@@ -242,7 +266,7 @@ const groups: { label: string; items: Item[] }[] = [
         const hint = option.querySelector(".cmdk-hint");
         const address = hint?.textContent ?? "";
 
-        if (hint) hint.textContent = (await copyText(address)) ? "Copied!" : "Couldn't copy";
+        if (hint) hint.textContent = (await copyText(address)) ? dialog.dataset.copied! : dialog.dataset.copyFailed!;
 
         setTimeout(() => {
             close();
@@ -263,6 +287,8 @@ const groups: { label: string; items: Item[] }[] = [
 
         if (action === "toggle-music") {
             document.getElementById("playBtn")?.click();
+        } else if (action === "switch-language") {
+            document.querySelector<HTMLAnchorElement>("[data-switch-locale]")?.click();
         } else if (href && "download" in option.dataset) {
             const link = document.createElement("a");
             link.href = href;
@@ -290,38 +316,55 @@ const groups: { label: string; items: Item[] }[] = [
         if ((event.target as HTMLElement).closest("[data-cmdk-open]")) open();
     });
 
-    input.addEventListener("input", () => filter(input.value));
-
-    input.addEventListener("keydown", (event) => {
-        if (event.key === "ArrowDown") {
-            event.preventDefault();
-            setActive(activeIndex + 1);
-        } else if (event.key === "ArrowUp") {
-            event.preventDefault();
-            setActive(activeIndex - 1);
-        } else if (event.key === "Enter") {
-            event.preventDefault();
-            run(visibleOptions()[activeIndex]);
-        }
-    });
-
-    options.forEach((option) => {
-        option.addEventListener("mousemove", () => {
-            const index = visibleOptions().indexOf(option);
-            if (index !== activeIndex) setActive(index);
-        });
-        option.addEventListener("click", () => run(option));
-    });
-
-    // Clicking the backdrop (outside the panel) closes it
-    dialog.addEventListener("click", (event) => {
-        if (event.target === dialog) close();
-    });
-
     document.addEventListener("astro:before-swap", close);
 
-    // Show ⌘K on Apple devices; runs on every page since the dock is re-rendered
+    function setup() {
+        const current = document.getElementById("cmdk") as HTMLDialogElement | null;
+        // Same (persisted) dialog as before: already wired
+        if (!current || current === dialog) return;
+
+        dialog = current;
+        input = dialog.querySelector("#cmdkInput")!;
+        empty = dialog.querySelector("#cmdkEmpty")!;
+        groups = Array.from(dialog.querySelectorAll<HTMLElement>(".cmdk-group"));
+        options = Array.from(dialog.querySelectorAll<HTMLElement>("[role='option']"));
+        activeIndex = -1;
+
+        input.addEventListener("input", () => filter(input.value));
+
+        input.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                setActive(activeIndex + 1);
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                setActive(activeIndex - 1);
+            } else if (event.key === "Enter") {
+                event.preventDefault();
+                run(visibleOptions()[activeIndex]);
+            }
+        });
+
+        options.forEach((option) => {
+            option.addEventListener("mousemove", () => {
+                const index = visibleOptions().indexOf(option);
+                if (index !== activeIndex) setActive(index);
+            });
+            option.addEventListener("click", () => run(option));
+        });
+
+        // Clicking the backdrop (outside the panel) closes it
+        dialog.addEventListener("click", (event) => {
+            if (event.target === dialog) close();
+        });
+    }
+
+    setup();
+
     document.addEventListener("astro:page-load", () => {
+        setup();
+
+        // Show ⌘K on Apple devices; runs on every page since the dock is re-rendered
         if (!isMac) return;
         document.querySelectorAll("[data-cmdk-shortcut]").forEach((el) => {
             el.textContent = "⌘K";

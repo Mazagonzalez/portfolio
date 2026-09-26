@@ -1,0 +1,40 @@
+---
+// EN / ES toggle in the top right corner. Only rendered on pages that
+// exist in both languages (the layout passes an empty list otherwise).
+// It's anchored to the top of the page, not to the first section: the
+// hero's top margin collapses into <body> and would push it down.
+import { getLocale, useTranslations } from "@/i18n";
+
+interface Props {
+    alternates: { locale: string; href: string }[];
+}
+
+const { alternates } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const __ = useTranslations(locale);
+
+const names: Record<string, string> = { en: "English", es: "Español" };
+---
+
+{alternates.length > 0 && (
+    <div class="absolute inset-x-0 top-6 z-20 size-screen row justify-end pointer-events-none">
+        <nav
+            aria-label={__("Language")}
+            class="pointer-events-auto box-gen rounded-full! row items-center p-1 text-xs font-medium"
+        >
+            {alternates.map(({ locale: code, href }) => (
+                <a
+                    href={new URL(href).pathname}
+                    hreflang={code}
+                    lang={code}
+                    aria-current={code === locale ? "true" : undefined}
+                    data-switch-locale={code === locale ? undefined : code}
+                    class="px-3 py-1.5 rounded-full uppercase tracking-wider text-white/50 transition-colors duration-300 hover:text-white aria-[current=true]:bg-white/10 aria-[current=true]:text-white"
+                >
+                    <span aria-hidden="true">{code}</span>
+                    <span class="sr-only">{names[code]}</span>
+                </a>
+            ))}
+        </nav>
+    </div>
+)}

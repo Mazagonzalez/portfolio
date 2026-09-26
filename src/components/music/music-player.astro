@@ -2,10 +2,14 @@
 import Disk from "@/components/music/disk.astro";
 
 import { tracks } from "@/data/tracks";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
+const labels = { play: __("Play"), pause: __("Pause") };
 ---
 
 <section class="row gap-5 items-center" aria-labelledby="player-title">
-    <h2 id="player-title" class="sr-only">Music player</h2>
+    <h2 id="player-title" class="sr-only">{__("Music player")}</h2>
 
     <Disk
         id="diskImg"
@@ -21,7 +25,7 @@ import { tracks } from "@/data/tracks";
             <div
                 id="progressBar"
                 role="progressbar"
-                aria-label="Track progress"
+                aria-label={__("Track progress")}
                 aria-valuemin="0"
                 aria-valuemax="100"
                 aria-valuenow="0"
@@ -39,7 +43,7 @@ import { tracks } from "@/data/tracks";
             id="playBtn"
             type="button"
             class="size-8! center-content button-main"
-            aria-label="Play"
+            aria-label={labels.play}
         >
             <span id="playIcon" aria-hidden="true">▶</span>
         </button>
@@ -48,7 +52,7 @@ import { tracks } from "@/data/tracks";
             id="nextBtn"
             type="button"
             class="size-8! center-content button-main"
-            aria-label="Next track"
+            aria-label={__("Next track")}
         >
             <span aria-hidden="true">|▶</span>
         </button>
@@ -57,7 +61,7 @@ import { tracks } from "@/data/tracks";
 
 <audio id="player" preload="none"></audio>
 
-<script define:vars={{ tracks }}>
+<script define:vars={{ tracks, labels }}>
     const audio = document.getElementById("player");
 
     const titleEl = document.getElementById("trackTitle");
@@ -74,7 +78,7 @@ import { tracks } from "@/data/tracks";
 
     function setPlaying(playing) {
         playIcon.textContent = playing ? "⏸" : "▶";
-        playBtn.setAttribute("aria-label", playing ? "Pause" : "Play");
+        playBtn.setAttribute("aria-label", playing ? labels.pause : labels.play);
     }
 
     function loadTrack(i) {

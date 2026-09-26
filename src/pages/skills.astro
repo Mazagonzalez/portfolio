@@ -9,6 +9,9 @@ import Layout from "@/layouts/layout.astro";
 import Card from "@/components/ui/card.astro";
 
 import { skills } from "@/data/skills";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
 
 const types = [...new Set(skills.map((skill) => skill.type))];
 
@@ -22,8 +25,8 @@ const typeIcons: Record<string, typeof IconCode> = {
 ---
 
 <Layout
-    title="Skills — AMG"
-    description="Technologies and tools I use day-to-day, from frontend frameworks to AI-assisted workflows."
+    title={`${__("Skills")} — AMG`}
+    description={__("Technologies and tools I use day-to-day, from frontend frameworks to AI-assisted workflows.")}
 >
     <section class="size-screen mt-32" aria-labelledby="skills-title">
         <div class="col gap-2">
@@ -31,21 +34,19 @@ const typeIcons: Record<string, typeof IconCode> = {
                 <IconStart class="size-7 stroke-white" />
 
                 <h1 id="skills-title" class="text-3xl font-bold">
-                    Skills
+                    {__("Skills")}
                 </h1>
             </div>
-            
+
             <p class="text-white/80 font-light max-w-lg">
-                Technologies and tools that I use in my day-to-day work.
-                Some are part of the stack of the projects I work on, while
-                others support my personal development workflow and productivity.
+                {__("Technologies and tools that I use in my day-to-day work. Some are part of the stack of the projects I work on, while others support my personal development workflow and productivity.")}
             </p>
         </div>
 
         <div class="py-20 col gap-5">
             {types.map((type) => (
                 <Card
-                    title={type}
+                    title={__(type)}
                     component={typeIcons[type]}
                     height="h-fit"
                     overflow={false}
@@ -65,7 +66,7 @@ const typeIcons: Record<string, typeof IconCode> = {
                                         </h3>
 
                                         <p class="text-xs text-muted leading-snug">
-                                            {description}
+                                            {__(description)}
                                         </p>
                                     </div>
                                 </li>

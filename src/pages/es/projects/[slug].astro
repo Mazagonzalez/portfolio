@@ -1,0 +1,9 @@
+---
+// Same page as "/projects/<slug>", with Astro.currentLocale = "es"
+import Project from "@/pages/projects/[slug].astro";
+import { getProjectPaths } from "@/data/projects";
+
+export const getStaticPaths = getProjectPaths;
+---
+
+<Project {...Astro.props} />
