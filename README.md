@@ -96,7 +96,9 @@ One-time setup in GitHub (Settings → Secrets and variables → Actions):
    secret `BLOG_BOT_TOKEN`. Without it, GitHub doesn't run the `Check`
    workflow on the bot's PRs, and they can only be merged by bypassing the rules.
 4. Optional: the variable `GEMINI_MODEL` to use a specific model. By default
-   it tries `gemini-3.8-flash` and falls back to older Flash models.
+   it tries `gemini-3.8-flash` and falls back to older Flash models. When a
+   model is overloaded (503) or rate limited (429), it waits and asks again
+   before moving on to the next one.
 
 Note: on the free tier, Google may use prompts and responses to improve its
 products. The script only sends public info (the persona and post titles).

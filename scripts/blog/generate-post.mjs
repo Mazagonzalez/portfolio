@@ -13,10 +13,22 @@ const BLOG_DIR = "src/content/blog";
 const PERSONA_FILE = "scripts/blog/persona.md";
 const TOPICS_FILE = "scripts/blog/topics.md";
 
-// Tried in order: a model can be retired or rate limited, the next one takes over.
+// Tried in order: a model can be retired or overloaded, the next one takes over.
 // GEMINI_MODEL (a repository variable in GitHub) goes first when set.
-const MODELS = [process.env.GEMINI_MODEL, "gemini-3.8-flash", "gemini-3.5-flash", "gemini-2.5-flash"]
-    .filter((model, i, all) => model && all.indexOf(model) === i);
+// "gemini-flash-latest" always points to Google's current Flash model
+const MODELS = [
+    process.env.GEMINI_MODEL,
+    "gemini-3.8-flash",
+    "gemini-3.7-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-flash-latest",
+].filter((model, i, all) => model && all.indexOf(model) === i);
+
+// Overloaded (503) or rate limited (429): usually over in seconds, so the same
+// model is asked again after these pauses before moving on to the next one
+const TRANSIENT_ERRORS = new Set([429, 500, 503]);
+const RETRY_DELAYS_MS = [15_000, 45_000];
 
 const MIN_WORDS = 600;
 
@@ -28,7 +40,7 @@ const BANNED_PHRASES = [
     "feels premium", "literally", "state-of-the-art", "cutting-edge", "effortless", "effortlessly",
     "revolutionize", "harness the power", "look no further", "buckle up", "without further ado",
 ];
-const ATTEMPTS = 2;
+const ATTEMPTS = RETRY_DELAYS_MS.length + 1;
 
 const { GEMINI_API_KEY: apiKey } = process.env;
 
@@ -213,9 +225,16 @@ async function draft() {
                 errors.push(`${model} (attempt ${attempt}): ${issues.join(", ")}`);
             } catch (error) {
                 errors.push(error.message);
-                // Model retired, rate limited or overloaded: move on to the next one.
-                // Anything else (a malformed answer) gets another attempt
-                if (error.status) break;
+
+                // A malformed answer gets another attempt right away
+                if (!error.status) continue;
+
+                // Retired, forbidden or out of attempts: move on to the next model
+                if (!TRANSIENT_ERRORS.has(error.status) || attempt === ATTEMPTS) break;
+
+                const delay = RETRY_DELAYS_MS[attempt - 1];
+                console.warn(`${model} is busy (${error.status}), trying again in ${delay / 1000}s`);
+                await new Promise((resolve) => setTimeout(resolve, delay));
             }
         }
     }
