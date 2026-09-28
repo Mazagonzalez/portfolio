@@ -5,9 +5,9 @@ name: Blog post
 # Run it by hand from Actions → Blog post → Run workflow, optionally with a topic.
 on:
   schedule:
-    # Mondays, 10:30 in Barranquilla (UTC-5). Not on the hour: GitHub delays or
+    # Mondays, 11:07 in Barranquilla (UTC-5). Not on the hour: GitHub delays or
     # drops scheduled runs at :00, when most crons in the world fire at once
-    - cron: "30 15 * * 1"
+    - cron: "7 16 * * 1"
   workflow_dispatch:
     inputs:
       topic:
