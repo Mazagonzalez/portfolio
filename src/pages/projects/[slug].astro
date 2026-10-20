@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/layout.astro";
 import Carousel from "@/components/ui/carousel.astro";
+import PhoneGallery from "@/components/ui/phone-gallery.astro";
 import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 import IconChevron from "@/components/icons/icon-chevron.astro";
 import IconGithub from "@/components/icons/icon-github.astro";
@@ -33,7 +34,7 @@ const details = [
     title={`${data.name} — AMG`}
     description={description}
 >
-    <article class="size-screen mt-32 col gap-6" aria-labelledby="project-title">
+    <article class="size-screen mt-32 pb-20 col gap-6" aria-labelledby="project-title">
         <div class="col gap-3">
             <div class="row items-center flex-wrap gap-4">
                 <a
@@ -80,31 +81,43 @@ const details = [
                     {description}
                 </p>
             )}
+        </div>
 
-            <ul class="row flex-wrap gap-1.5" aria-label={__("Stack")}>
-                {data.stack.map((tech) => (
-                    <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
-                        {tech}
-                    </li>
+        <!-- Same brand-color backdrop as the cover in the lists, so one morphs into the other -->
+        <div
+            class="relative mt-6 overflow-hidden rounded-xl px-3 pt-3 sm:px-8 sm:pt-8 md:px-12 md:pt-12 pb-1 bg-[color-mix(in_oklab,var(--accent)_38%,#0f0f12)]"
+            style={`--accent: ${data.accent}`}
+            transition:name={transition.cover}
+        >
+            <div class="absolute inset-0 bg-[radial-gradient(130%_110%_at_0%_0%,var(--accent),transparent_70%)]"></div>
+
+            <div class="relative">
+                <Carousel images={data.images} alt={data.name} url={data.url} />
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            <dl class="col gap-5 md:order-last">
+                {details.map((detail) => (
+                    <div class="col gap-1">
+                        <dt class="text-xs text-muted uppercase tracking-wider">{detail.label}</dt>
+                        <dd class="text-sm">{detail.value}</dd>
+                    </div>
                 ))}
-            </ul>
-        </div>
 
-        <div class="pt-6">
-            <Carousel images={data.images} alt={data.name} transitionName={transition.cover} />
-        </div>
-
-        <div class="grid md:grid-cols-4 gap-8 pb-20">
-            {details.length > 0 && (
-                <dl class="col gap-4 md:order-last">
-                    {details.map((detail) => (
-                        <div class="col gap-1">
-                            <dt class="text-xs text-muted uppercase tracking-wider">{detail.label}</dt>
-                            <dd class="text-sm">{detail.value}</dd>
-                        </div>
-                    ))}
-                </dl>
-            )}
+                <div class="col gap-2">
+                    <dt class="text-xs text-muted uppercase tracking-wider">{__("Stack")}</dt>
+                    <dd>
+                        <ul class="row flex-wrap gap-1.5">
+                            {data.stack.map((tech) => (
+                                <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
+                                    {tech}
+                                </li>
+                            ))}
+                        </ul>
+                    </dd>
+                </div>
+            </dl>
 
             <!-- Case studies are written in English -->
             {hasContent && (
@@ -113,5 +126,11 @@ const details = [
                 </div>
             )}
         </div>
+
+        {data.mobile.length > 0 && (
+            <div class="pt-8">
+                <PhoneGallery images={data.mobile} alt={data.name} />
+            </div>
+        )}
     </article>
 </Layout>

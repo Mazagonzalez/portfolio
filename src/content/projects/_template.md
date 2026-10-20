@@ -9,10 +9,14 @@ role: Frontend developer # optional
 url: https://example.com # optional, "Visit site" button
 repo: https://github.com/Mazagonzalez/example # optional, "Source code" button
 stack: [Astro, Tailwind]
+accent: "#6366f1" # brand color behind the screenshots (cover and carousel)
 # Screenshots live in src/assets/projects/<slug>/ (PNG/JPG/WebP, any size;
 # Astro optimizes them). The first one is the cover and the Open Graph image.
 images:
   - ../../assets/projects/example/1.png
+# Optional phone screenshots (390x844 at 2x), shown in phone frames
+mobile:
+  - ../../assets/projects/example/mobile-1.png
 ---
 
 ## The challenge
