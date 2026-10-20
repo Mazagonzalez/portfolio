@@ -6,23 +6,23 @@ import IconBook from "@/components/icons/icon-book.astro";
 import IconWorkflow from "@/components/icons/icon-workflow.astro";
 import IconCoffee from "@/components/icons/icon-coffee.astro";
 import IconImage from "@/components/icons/icon-image.astro";
+import IconEmail from "@/components/icons/icon-email.astro";
+import IconDownload from "@/components/icons/icon-download.astro";
 import { useTranslations } from "@/i18n";
+import { experience } from "@/data/experience";
+import { email } from "@/data/social";
+import { getProjects } from "@/data/projects";
 
 const __ = useTranslations(Astro.currentLocale);
 
-const hobbies = [
-    "Music",
-    "Gaming",
-    "Movies & Series",
-    "Star Wars fan",
-    "Good food",
-    "Always down to hang out",
-];
+// Counted from the data, so they stay true as experience and projects grow
+const firstYear = Math.min(...experience.map((item) => Number(item.period.slice(0, 4))));
+const projects = await getProjects();
 
 const stats = [
-    { value: "3", label: "Years writing code" },
-    { value: "Many", label: "Cups of coffee" },
-    { value: "1,000+", label: "Bugs squashed (a few still hiding)" },
+    { value: `${new Date().getFullYear() - firstYear}+`, label: "Years building for the web" },
+    { value: String(projects.length), label: "Projects shipped" },
+    { value: String(new Set(experience.map((item) => item.company)).size), label: "Companies I've worked with" },
 ];
 ---
 
@@ -56,7 +56,7 @@ const stats = [
                             </p>
 
                             <p class="text-sm text-muted leading-relaxed">
-                                {__("A friend of mine was studying programming, and out of curiosity I started messing around with a few exercises. When it was time to apply to SENA, I picked programming as a backup option, almost as a joke... and got in. What started as an unexpected turn became one of the best decisions of my life.")}
+                                {__("A friend of mine was studying programming, and out of curiosity I started messing around with a few exercises. When it was time to apply to SENA (Colombia's national training service), I picked programming as a backup option, almost as a joke... and got in. What started as an unexpected turn became one of the best decisions of my life.")}
                             </p>
                         </div>
                     </Card>
@@ -74,7 +74,7 @@ const stats = [
 
             <!-- Row 2: Quote + Today + Photo -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <Card headerContent={false}>
+                <Card headerContent={false} height="h-40 md:h-80">
                     <figure slot="content" class="size-full center-content col gap-2 text-center px-7 absolute-center">
                         <blockquote lang="la" class="text-xl font-semibold tracking-wide">
                             <p>"Per Aspera Ad Astra"</p>
@@ -110,48 +110,59 @@ const stats = [
                 </div>
             </div>
 
-            <!-- Row 3: Hobbies + Photo/Stats -->
+            <!-- Row 3: Numbers -->
+            <dl class="grid grid-cols-3 gap-3 md:gap-5">
+                {stats.map((stat) => (
+                    <div class="box-gen p-4 md:p-5 col-reverse justify-end gap-1">
+                        <dt class="text-xs text-muted leading-snug">{__(stat.label)}</dt>
+                        <dd class="text-2xl md:text-3xl font-bold">{stat.value}</dd>
+                    </div>
+                ))}
+            </dl>
+
+            <!-- Row 4: Off the clock + Photo -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <div class="lg:col-span-2">
-                    <Card title={__("Off the Clock")} component={IconCoffee} height="h-fit" overflow={false}>
+                    <Card title={__("Off the Clock")} component={IconCoffee} height="h-full" overflow={false}>
                         <div slot="content" class="col gap-4">
                             <p class="text-sm text-muted leading-relaxed">
                                 {__("When I'm not coding: music always playing, deep in a video game, binging a new series, or re-watching Star Wars for the hundredth time (yes, I'm that fan). I'm pretty easygoing — always down for good food and even better company.")}
                             </p>
-
-                            <ul class="row flex-wrap gap-1.5" aria-label={__("Hobbies")}>
-                                {hobbies.map((hobby) => (
-                                    <li class="box-gen rounded-full! text-xs text-muted py-1 px-3">
-                                        {__(hobby)}
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
                     </Card>
                 </div>
 
-                <div class="col gap-5">
-                    <Card headerContent={false} overflow={false} height="h-[45%]">
-                        <div slot="content" class="relative h-full w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2" aria-hidden="true">
-                            <div class="col items-center gap-2 text-center">
-                                <IconImage class="size-6 stroke-white/20" />
-                                <span class="text-xs text-white/50">{__("Photo coming soon")}</span>
-                            </div>
+                <Card headerContent={false} overflow={false} height="h-fit">
+                    <div slot="content" class="relative h-40 w-full center-content overflow-hidden rounded-lg border border-dashed border-white/15 bg-white/2" aria-hidden="true">
+                        <div class="col items-center gap-2 text-center">
+                            <IconImage class="size-6 stroke-white/20" />
+                            <span class="text-xs text-white/50">{__("Photo coming soon")}</span>
                         </div>
-                    </Card>
-
-                    <Card headerContent={false} height="h-[55%]">
-                        <dl slot="content" class="h-full col justify-center gap-3">
-                            {stats.map((stat) => (
-                                <div class="row-reverse items-baseline justify-between gap-2">
-                                    <dt class="text-xs text-muted text-right">{__(stat.label)}</dt>
-                                    <dd class="text-lg font-bold">{__(stat.value)}</dd>
-                                </div>
-                            ))}
-                        </dl>
-                    </Card>
-                </div>
+                    </div>
+                </Card>
             </div>
+
+            <!-- Row 5: Call to action -->
+            <Card headerContent={false} height="h-fit">
+                <div slot="content" class="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+                    <div class="col gap-1">
+                        <h2 class="text-xl font-semibold">{__("Want to build something together?")}</h2>
+                        <p class="text-sm text-muted">{__("I'm open to new projects and teams. Tell me what you have in mind.")}</p>
+                    </div>
+
+                    <div class="row flex-wrap gap-2 shrink-0">
+                        <a href={`mailto:${email}`} class="button-main w-fit! px-5">
+                            <IconEmail class="size-4 stroke-zinc-400" />
+                            <span class="text-sm">{__("Send an email")}</span>
+                        </a>
+
+                        <a href="/Carlos-Maza-CV.pdf" download class="button-main w-fit! px-5">
+                            <IconDownload class="size-4 stroke-zinc-400" />
+                            <span class="text-sm">{__("Download CV")}</span>
+                        </a>
+                    </div>
+                </div>
+            </Card>
         </div>
     </section>
 </Layout>
