@@ -9,57 +9,77 @@ interface Props {
     images?: ImageMetadata[];
     alt?: string;
     transitionName?: string;
+    // Shown in the address bar of the browser frame
+    url?: string;
 }
 
-const { images = [], alt = "", transitionName } = Astro.props;
+const { images = [], alt = "", transitionName, url } = Astro.props;
 const __ = useTranslations(Astro.currentLocale);
+
+const host = url ? new URL(url).hostname.replace(/^www\./, "") : undefined;
+// Screenshots are shown whole, so the frame takes the ratio of the first one
+const ratio = images[0] ? `${images[0].width} / ${images[0].height}` : undefined;
 ---
 
 <section class="col gap-3" aria-roledescription="carousel" aria-label={__(":name screenshots", { name: alt })}>
-    <div class="box-gen relative aspect-video overflow-hidden" transition:name={transitionName}>
-        {images.length > 0 ? (
-            <>
-                <div id="carouselTrack" class="row h-full transition-transform duration-500 ease-out">
-                    {images.map((src, i) => (
-                        <Image
-                            src={src}
-                            alt={__(":name — screenshot :number of :total", { name: alt, number: i + 1, total: images.length })}
-                            aria-hidden={i === 0 ? undefined : "true"}
-                            widths={[640, 1100, 1920]}
-                            sizes="(min-width: 1100px) 1100px, 100vw"
-                            loading={i === 0 ? "eager" : "lazy"}
-                            class="h-full w-full shrink-0 object-cover"
-                        />
-                    ))}
-                </div>
-
-                {images.length > 1 && (
-                    <>
-                        <button
-                            id="carouselPrev"
-                            type="button"
-                            aria-label={__("Previous image")}
-                            class="absolute-center-y left-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
-                        >
-                            <IconChevronLeft class="size-4" />
-                        </button>
-
-                        <button
-                            id="carouselNext"
-                            type="button"
-                            aria-label={__("Next image")}
-                            class="absolute-center-y right-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
-                        >
-                            <IconChevronRight class="size-4" />
-                        </button>
-                    </>
-                )}
-            </>
-        ) : (
-            <div class="size-full center-content">
-                <p class="text-sm text-muted">{__("Preview images coming soon.")}</p>
+    <div class="box-gen overflow-hidden" transition:name={transitionName}>
+        <div class="row items-center gap-3 h-9 px-4 border-b border-white/10 bg-white/3" aria-hidden="true">
+            <div class="row gap-1.5 w-12 shrink-0">
+                <span class="size-2.5 rounded-full bg-white/15"></span>
+                <span class="size-2.5 rounded-full bg-white/15"></span>
+                <span class="size-2.5 rounded-full bg-white/15"></span>
             </div>
-        )}
+            <div class="flex-1 min-w-0 row justify-center">
+                {host && <span class="max-w-full truncate rounded-md bg-white/5 px-3 py-0.5 text-xs text-muted">{host}</span>}
+            </div>
+            <div class="w-12 shrink-0"></div>
+        </div>
+
+        <div class="relative aspect-video overflow-hidden" style={ratio && `aspect-ratio: ${ratio}`}>
+            {images.length > 0 ? (
+                <>
+                    <div id="carouselTrack" class="row h-full transition-transform duration-500 ease-out">
+                        {images.map((src, i) => (
+                            <Image
+                                src={src}
+                                alt={__(":name — screenshot :number of :total", { name: alt, number: i + 1, total: images.length })}
+                                aria-hidden={i === 0 ? undefined : "true"}
+                                widths={[640, 1100, 1920]}
+                                sizes="(min-width: 1100px) 1100px, 100vw"
+                                loading={i === 0 ? "eager" : "lazy"}
+                                class="h-full w-full shrink-0 object-cover"
+                            />
+                        ))}
+                    </div>
+
+                    {images.length > 1 && (
+                        <>
+                            <button
+                                id="carouselPrev"
+                                type="button"
+                                aria-label={__("Previous image")}
+                                class="absolute-center-y left-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
+                            >
+                                <IconChevronLeft class="size-4" />
+                            </button>
+
+                            <button
+                                id="carouselNext"
+                                type="button"
+                                aria-label={__("Next image")}
+                                class="absolute-center-y right-3 size-9 center-content rounded-full bg-black/50 backdrop-blur border border-white/10 hover:bg-black/70 transition-colors cursor-pointer"
+                            >
+                                <IconChevronRight class="size-4" />
+                            </button>
+                        </>
+                    )}
+                </>
+            ) : (
+                <div class="size-full center-content">
+                    <p class="text-sm text-muted">{__("Preview images coming soon.")}</p>
+                </div>
+            )}
+        </div>
     </div>
 
     {images.length > 1 && (

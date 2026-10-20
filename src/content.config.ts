@@ -18,6 +18,10 @@ const projects = defineCollection({
             stack: z.array(z.string()),
             // First image is used as the cover and the Open Graph image
             images: z.array(image()).default([]),
+            // Phone screenshots (390x844 at 2x), shown in phone frames below the case study
+            mobile: z.array(image()).default([]),
+            // Brand color behind the screenshots in the cover and the carousel
+            accent: z.string().default("#52525b"),
         }),
 });
 
