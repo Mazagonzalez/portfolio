@@ -2,13 +2,22 @@
 import NowPlaying from "@/components/sections/home/now-playing.astro";
 import LocalTime from "@/components/sections/home/local-time.astro";
 import { socialLinks } from "@/data/social";
+import { Image } from "astro:assets";
+import avatar from "@/assets/profile/avatar.webp";
 import { useTranslations } from "@/i18n";
 
 const __ = useTranslations(Astro.currentLocale);
 ---
 
 <section class="size-screen mt-32" aria-labelledby="hero-title">
-    <div class="bg-zinc-800 rounded-full size-20" aria-hidden="true"></div>
+    <Image
+        src={avatar}
+        alt={__("Illustrated portrait of Carlos Maza")}
+        widths={[96, 192, 288]}
+        sizes="(min-width: 768px) 96px, 80px"
+        loading="eager"
+        class="size-20 md:size-24 rounded-full bg-zinc-800 object-cover outline outline-white/10"
+    />
     
     <div class="col gap-2 mt-3">
         <h1 id="hero-title" class="text-3xl font-bold">
