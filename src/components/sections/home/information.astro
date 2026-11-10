@@ -2,13 +2,11 @@
 import Card from "@/components/ui/card.astro";
 import IconSuitcase from "@/components/icons/icon-suitcase.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
-import IconStart from "@/components/icons/icon-start.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import IconCopy from "@/components/icons/icon-copy.astro";
 
 import { experience } from "@/data/experience";
-import { featuredSkills } from "@/data/skills";
 import { email } from "@/data/social";
 import { useTranslations, localizePath } from "@/i18n";
 
@@ -17,26 +15,6 @@ const __ = useTranslations(Astro.currentLocale);
 
 <div class="size-screen py-25 col gap-5">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Skills -->
-        <Card
-            title={__("Skills")}
-            link={localizePath("/skills", Astro.currentLocale)}
-            component={IconStart}
-        >
-            <!-- Icons are sized for the widest row (5) so they all shrink together on small screens -->
-            <div slot="content" class="center-content col gap-2 sm:gap-4" aria-hidden="true">
-                {featuredSkills.map((row) => (
-                    <div class="w-full center-content gap-2 sm:gap-4">
-                        {row.map(({ icon: Icon, accent }) => (
-                            <div class={`box-gen aspect-square w-[calc((100%-2rem)/5)] sm:w-[calc((100%-4rem)/5)] max-w-15 center-content ${accent}`}>
-                                <Icon class="size-5" />
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
-        </Card>
-
         <!-- Experience -->
         <Card
             title={__("Experience")}
@@ -90,9 +68,7 @@ const __ = useTranslations(Astro.currentLocale);
                 </a>
             </div>
         </Card>
-    </div>
 
-    <div class="grid grid-cols-1 gap-5">
         <!-- Contact -->
         <Card
             title={__("Contact")}

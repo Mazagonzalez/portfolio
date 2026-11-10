@@ -1,0 +1,26 @@
+---
+// Header shared by the home sections: the numbered tag, a big title (default
+// slot, usually with a .hollow second line) and a short lead (slot "lead")
+import SectionTag from "@/components/ui/section-tag.astro";
+
+interface Props {
+    id: string;
+    index: string;
+    label: string;
+    aside?: string;
+}
+
+const { id, index, label, aside } = Astro.props;
+---
+
+<SectionTag index={index} label={label} aside={aside} />
+
+<div class="mt-7.5 grid items-end gap-10 lg:grid-cols-[1fr_auto]">
+    <h2 id={id} class="rv text-[clamp(38px,5.6vw,82px)] font-black leading-[0.94] tracking-[0.005em] uppercase">
+        <slot />
+    </h2>
+
+    <p class="rv max-w-125 font-light text-ink/70" style="--d: 0.1s">
+        <slot name="lead" />
+    </p>
+</div>

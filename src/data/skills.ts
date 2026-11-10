@@ -140,9 +140,24 @@ export const skills = [
     }
 ]
 
-/* Rows shown in the Skills card on the home page, by skill name */
+/* Rows of skills used by the generated Open Graph images (src/pages/og), by skill name */
 export const featuredSkills = [
     ["Laravel", "Astro", "React", "JavaScript"],
     ["Tailwind CSS", "Bootstrap", "SCSS", "CSS", "HTML"],
     ["GitHub", "Git", "Sublime Text"],
 ].map((row) => row.map((name) => skills.find((skill) => skill.name === name)!));
+
+/* Groups shown as light sabers on the home page. The blade length follows the
+   number of skills in the group (a few skills is a short blade, eight is a full one) */
+const saberGroups = [
+    { name: "Frontend", types: ["Frontend"], color: "#3da2ff", darkSide: false },
+    { name: "Backend & CMS", types: ["Backend", "CMS"], color: "#35f27a", darkSide: false },
+    { name: "Tools", types: ["Tools"], color: "#b46bff", darkSide: false },
+    { name: "AI", types: ["AI"], color: "#ff3b2f", darkSide: true },
+];
+
+export const sabers = saberGroups.map((group) => {
+    const items = skills.filter((skill) => group.types.includes(skill.type));
+
+    return { ...group, skills: items, length: Math.min(100, Math.round(26 + items.length * 9.3)) };
+});

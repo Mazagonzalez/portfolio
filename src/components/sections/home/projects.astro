@@ -3,7 +3,7 @@
 // selected one. Every project is rendered on the server (so it works without
 // JavaScript and is indexable); the script only decides which one is visible.
 import { Image } from "astro:assets";
-import SectionTag from "@/components/ui/section-tag.astro";
+import SectionHead from "@/components/ui/section-head.astro";
 import { getProjects, categoryLabels, projectTransition } from "@/data/projects";
 import { useTranslations, localizePath } from "@/i18n";
 
@@ -15,17 +15,10 @@ const pad = (n: number) => String(n).padStart(2, "0");
 
 <section id="projects" class="relative pt-37.5 max-lg:pt-27.5" aria-labelledby="projects-heading">
     <div class="wrap">
-        <SectionTag index="02" label={__("Projects")} aside={__("Holotable · :count files", { count: projects.length })} />
-
-        <div class="mt-7.5 grid items-end gap-10 lg:grid-cols-[1fr_auto]">
-            <h2 id="projects-heading" class="rv text-[clamp(38px,5.6vw,82px)] font-black leading-[0.94] tracking-[0.005em] uppercase">
-                {__("Mission")}<br /><span class="hollow">{__("files.")}</span>
-            </h2>
-
-            <p class="rv max-w-125 font-light text-ink/70" style="--d: 0.1s">
-                {__("A selection of products and platforms I've helped build. Pick a file and hover over the hologram to stabilize the signal.")}
-            </p>
-        </div>
+        <SectionHead id="projects-heading" index="02" label={__("Projects")} aside={__("Holotable · :count files", { count: projects.length })}>
+            {__("Mission")}<br /><span class="hollow">{__("files.")}</span>
+            <Fragment slot="lead">{__("A selection of products and platforms I've helped build. Pick a file and hover over the hologram to stabilize the signal.")}</Fragment>
+        </SectionHead>
 
         <div id="holotable" class="mt-15 grid items-center gap-11 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
             <ol class="rv" aria-label={__("Projects")}>

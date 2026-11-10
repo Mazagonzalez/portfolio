@@ -1,0 +1,131 @@
+---
+// Home skills: each group is a light saber whose blade length shows how many
+// technologies it holds. Blades ignite when they scroll into view, a click on
+// the hilt turns one off and on, and sparks fly where the cursor grazes a blade.
+import SectionHead from "@/components/ui/section-head.astro";
+import { sabers } from "@/data/skills";
+import { useTranslations } from "@/i18n";
+
+const __ = useTranslations(Astro.currentLocale);
+const pad = (n: number) => String(n).padStart(2, "0");
+---
+
+<section id="skills" class="relative pt-37.5 max-lg:pt-27.5" aria-labelledby="skills-heading">
+    <div class="wrap">
+        <SectionHead id="skills-heading" index="03" label={__("Skills")} aside={__("Arsenal · :count sabers", { count: sabers.length })}>
+            {__("Choose")}<br /><span class="hollow">{__("your saber.")}</span>
+            <Fragment slot="lead">{__("Each saber is a discipline and its length shows how many technologies make it up. Red is the dark side… used for good.")}</Fragment>
+        </SectionHead>
+
+        <ul id="arsenal" class="mt-16 flex flex-col gap-13">
+            {sabers.map((saber, i) => (
+                <li
+                    data-saber
+                    class="group/saber rv"
+                    style={`--c: ${saber.color}; --len: ${saber.length}%; --d: ${i * 0.1}s; --ig: ${0.25 + i * 0.1}s`}
+                >
+                    <header class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+                        <h3 class="text-[26px] max-sm:text-[22px] font-black tracking-[0.06em] uppercase transition-colors duration-400 group-data-[lit=false]/saber:text-muted">
+                            {__(saber.name)}
+                        </h3>
+
+                        <span class="mono whitespace-nowrap text-muted">
+                            {__(":count technologies", { count: pad(saber.skills.length) })}{saber.darkSide && ` · ${__("dark side")}`}
+                        </span>
+                    </header>
+
+                    <div class="relative mt-5 flex items-center">
+                        <button
+                            type="button"
+                            data-hilt
+                            aria-pressed="true"
+                            aria-label={__("Turn the :name saber on or off", { name: __(saber.name) })}
+                            class="relative h-4.5 w-26 flex-none cursor-pointer rounded-[3px_2px_2px_3px] transition-[filter] duration-300 [background:repeating-linear-gradient(90deg,transparent_0_7px,rgb(0_0_0/0.5)_7px_9px)_26px_0/44px_100%_no-repeat,linear-gradient(#e2e5ea,#8b8f98_42%,#2c2e34_58%,#9a9ea6)] hover:brightness-130 max-sm:w-17.5 before:absolute before:top-1/2 before:left-2.5 before:size-1.25 before:-mt-[2.5px] before:rounded-full before:bg-(--c) before:shadow-[0_0_8px_var(--c)] group-data-[lit=false]/saber:before:bg-[#555] group-data-[lit=false]/saber:before:shadow-none after:absolute after:-top-[3px] after:-right-1.5 after:-bottom-[3px] after:w-3 after:rounded-xs after:[background:linear-gradient(#f1f3f6,#8b8f98_45%,#2c2e34_60%,#a7abb3)]"
+                        ></button>
+
+                        <span class="ml-1.5 flex-1">
+                            <!-- The ::before widens the area that sparks (the blade itself is only 8px tall) -->
+                            <span
+                                data-blade
+                                class="relative block h-2 w-(--len) origin-left scale-x-0 animate-hum rounded-r-lg bg-white shadow-[0_0_5px_1px_#fff,0_0_16px_4px_var(--c),0_0_54px_12px_color-mix(in_srgb,var(--c)_75%,transparent)] transition-transform duration-300 ease-[cubic-bezier(0.6,0,0.9,0.4)] before:absolute before:inset-x-0 before:-inset-y-4.5 before:content-[''] group-hover/saber:[animation-duration:350ms] group-data-[lit=true]/saber:scale-x-100 group-data-[lit=true]/saber:delay-(--ig) group-data-[lit=true]/saber:duration-900 group-data-[lit=true]/saber:ease-saga noscript:scale-x-100 motion-reduce:scale-x-100 motion-reduce:animate-none"
+                            ></span>
+                        </span>
+                    </div>
+
+                    <ul class="mt-5.5 flex flex-wrap gap-1.5 pl-27.5 max-sm:pl-0" aria-label={__(saber.name)}>
+                        {saber.skills.map(({ name }, n) => (
+                            <li
+                                style={`--i: ${n}`}
+                                class="chip border-[color-mix(in_srgb,var(--c)_45%,transparent)] transition-[border-color,color,box-shadow,opacity] duration-350 group-hover/saber:border-(--c) group-hover/saber:text-white group-hover/saber:shadow-[0_0_16px_-5px_var(--c)] group-hover/saber:delay-[calc(var(--i)*45ms)] group-data-[lit=false]/saber:opacity-40 group-data-[lit=false]/saber:group-hover/saber:border-[color-mix(in_srgb,var(--c)_45%,transparent)] group-data-[lit=false]/saber:group-hover/saber:text-ink/70 group-data-[lit=false]/saber:group-hover/saber:shadow-none"
+                            >
+                                {name}
+                            </li>
+                        ))}
+                    </ul>
+                </li>
+            ))}
+        </ul>
+    </div>
+</section>
+
+<script>
+    function init() {
+        const root = document.getElementById("arsenal");
+        if (!root) return;
+
+        const sabers = [...root.querySelectorAll<HTMLElement>("[data-saber]")];
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+
+        function setLit(saber: HTMLElement, lit: boolean) {
+            saber.dataset.lit = String(lit);
+            saber.querySelector("[data-hilt]")!.setAttribute("aria-pressed", String(lit));
+        }
+
+        // Blades ignite one after another as they scroll into view
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (!entry.isIntersecting) continue;
+                    setLit(entry.target as HTMLElement, true);
+                    observer.unobserve(entry.target);
+                }
+            },
+            { rootMargin: "0px 0px -8% 0px" },
+        );
+        sabers.forEach((saber) => observer.observe(saber));
+
+        sabers.forEach((saber) => {
+            const row = saber.querySelector<HTMLElement>("[data-hilt]")!.parentElement!;
+            const blade = saber.querySelector<HTMLElement>("[data-blade]")!;
+            let lastSpark = 0;
+
+            saber.querySelector("[data-hilt]")!.addEventListener("click", () => {
+                observer.unobserve(saber);
+                // After the first ignition there is no reason to wait for the stagger
+                saber.style.setProperty("--ig", "0s");
+                setLit(saber, saber.dataset.lit !== "true");
+            });
+
+            // Sparks fly from the point of the blade the cursor touches
+            blade.addEventListener("pointermove", (event) => {
+                const now = performance.now();
+                if (reduced.matches || saber.dataset.lit !== "true" || now - lastSpark < 45) return;
+                lastSpark = now;
+
+                const box = row.getBoundingClientRect();
+                for (let i = 0; i < 3; i++) {
+                    const spark = document.createElement("span");
+                    spark.className = "pointer-events-none absolute z-2 size-0.75 -m-[1.5px] rounded-full bg-white shadow-[0_0_8px_2px_var(--c)] animate-spark";
+                    spark.style.left = `${event.clientX - box.left}px`;
+                    spark.style.top = `${box.height / 2}px`;
+                    spark.style.setProperty("--dx", `${Math.round(Math.random() * 90 - 45)}px`);
+                    spark.style.setProperty("--dy", `${Math.round(Math.random() * 70 - 35)}px`);
+                    spark.addEventListener("animationend", () => spark.remove());
+                    row.append(spark);
+                }
+            });
+        });
+    }
+
+    document.addEventListener("astro:page-load", init);
+</script>

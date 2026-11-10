@@ -57,6 +57,15 @@
     "View case study": "Ver caso de estudio",
     "Holographic signal · live": "Señal holográfica · en vivo",
 
+    "Arsenal · :count sabers": "Arsenal · :count sables",
+    "Choose": "Elige",
+    "your saber.": "tu sable.",
+    "Each saber is a discipline and its length shows how many technologies make it up. Red is the dark side… used for good.": "Cada sable es una disciplina y su largo, cuántas tecnologías la componen. El rojo es el lado oscuro… usado para el bien.",
+    ":count technologies": ":count tecnologías",
+    "dark side": "lado oscuro",
+    "Turn the :name saber on or off": "Encender o apagar el sable :name",
+    "Backend & CMS": "Backend y CMS",
+
     "Command palette": "Paleta de comandos",
     "Search pages, projects and actions": "Buscar páginas, proyectos y acciones",
     "Search pages, projects, actions…": "Busca páginas, proyectos, acciones…",
