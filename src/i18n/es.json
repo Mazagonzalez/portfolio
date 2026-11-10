@@ -17,11 +17,8 @@
     "Email": "Correo",
     "All rights reserved.": "Todos los derechos reservados.",
 
-    "Hi, I am Carlos Maza": "Hola, soy Carlos Maza",
-    "<strong>Frontend developer</strong> capable of creating, modifying and optimizing functions, ensuring high performance and <strong>an excellent user experience.</strong>": "<strong>Desarrollador frontend</strong> capaz de crear, modificar y optimizar funcionalidades, garantizando un alto rendimiento y <strong>una excelente experiencia de usuario.</strong>",
     "Available for new projects": "Disponible para nuevos proyectos",
     "Local time": "Hora local",
-    "in Barranquilla": "en Barranquilla",
     "· same time as you": "· misma hora que tú",
     "· :hours ahead of you": "· :hours adelante de ti",
     "· :hours behind you": "· :hours atrás de ti",
@@ -40,6 +37,16 @@
     "Creating unique digital experiences.": "Creando experiencias digitales únicas.",
     "Let's talk about your next project!": "¡Hablemos de tu próximo proyecto!",
     "Send an email": "Enviar un correo",
+
+    "Not so long ago, in a very, very Caribbean city…": "Hace no tanto tiempo, en una ciudad muy, muy caribeña…",
+    "Episode IV": "Episodio IV",
+    "A New Deploy": "Un nuevo deploy",
+    "These are troubled times for the web. Slow sites, endless forms and soulless designs rule the galaxy, while users flee without looking back.": "Son tiempos difíciles para la web. Sitios lentos, formularios eternos y diseños sin alma dominan la galaxia, mientras los usuarios huyen sin mirar atrás.",
+    "From Barranquilla, a frontend developer who was going to study Accounting builds fast, clear and well-thought-out interfaces.": "Desde Barranquilla, un desarrollador frontend que iba a estudiar Contaduría construye interfaces rápidas, claras y bien pensadas.",
+    "Armed with Astro, React and Tailwind, CARLOS MAZA seeks his next mission: to restore balance to the user experience…": "Armado con Astro, React y Tailwind, CARLOS MAZA busca su próxima misión: devolver el equilibrio a la experiencia de usuario…",
+    "Frontend developer · Barranquilla, Colombia": "Desarrollador frontend · Barranquilla, Colombia",
+    "Explore projects": "Explorar proyectos",
+    "Sector": "Sector",
 
     "Command palette": "Paleta de comandos",
     "Search pages, projects and actions": "Buscar páginas, proyectos y acciones",

@@ -70,6 +70,44 @@
       transform: scaleX(1);
     }
   }
+
+  /* Home intro: blue line fades in and out, the title recedes into the
+     distance, then the yellow crawl climbs forever (animate-intro, animate-recede, animate-crawl) */
+  --animate-intro: intro 4.4s ease 0.2s both;
+  --animate-recede: recede 6.4s cubic-bezier(0.3, 0.4, 0.4, 1) 4.4s both;
+  --animate-crawl: crawl 62s linear 8.6s infinite;
+
+  @keyframes intro {
+    0% {
+      opacity: 0;
+    }
+    18%, 74% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes recede {
+    0% {
+      opacity: 0;
+      transform: scale(2.3);
+    }
+    5%, 78% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.03);
+    }
+  }
+
+  @keyframes crawl {
+    to {
+      transform: translateY(calc(-100% - 125vh));
+    }
+  }
 }
 
 /* Page transitions: smoother morph for shared elements (project cover, title, dock) */

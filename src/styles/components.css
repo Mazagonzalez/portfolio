@@ -37,6 +37,29 @@
     @apply font-mono text-[11px] tracking-[0.14em] uppercase
 }
 
+/* Outlined text (the stroke width can be changed with --stroke) */
+.hollow{
+    @apply text-transparent;
+    -webkit-text-stroke: var(--stroke, 1.5px) var(--color-saga);
+}
+
+/* Buttons: .btn is the outlined one, .btn-main the yellow one */
+.btn{
+    @apply inline-flex items-center justify-center gap-2.5 h-11.5 px-5.5 rounded-lg border border-white/20 font-mono text-xs tracking-widest uppercase whitespace-nowrap transition-all duration-350 ease-saga hover:border-white/50 hover:bg-white/6
+}
+
+.btn svg{
+    @apply size-3.5 stroke-current transition-transform duration-350 ease-saga
+}
+
+.btn:hover svg{
+    @apply translate-x-0.5 -translate-y-0.5
+}
+
+.btn-main{
+    @apply bg-saga text-black border-transparent font-medium hover:bg-[#ffe27a] hover:border-transparent hover:shadow-[0_0_0_6px_rgb(255_213_61/0.14),0_0_60px_-6px_var(--color-saga)]
+}
+
 /* Otros */
 .br-hidden{
     @apply hidden md:block

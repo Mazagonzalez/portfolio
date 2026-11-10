@@ -1,7 +1,7 @@
 ---
 // Carlos's local time, plus how it compares to the visitor's.
 // The page is static, so the time is filled in by the browser;
-// until then (or without JS) it just shows the city.
+// until then (or without JS) it just shows dashes.
 import { useTranslations, getLocale, localeCodes } from "@/i18n";
 
 const TIME_ZONE = "America/Bogota";
@@ -17,11 +17,9 @@ const __ = useTranslations(locale);
     data-same={__("· same time as you")}
     data-ahead={__("· :hours ahead of you")}
     data-behind={__("· :hours behind you")}
-    class="row items-center gap-1.5 text-sm text-white/60"
 >
-    <time data-lt="time" class="font-semibold text-white tabular-nums">{__("Local time")}</time>
-    <span>{__("in Barranquilla")}</span>
-    <span data-lt="diff" class="hidden sm:inline text-white/50"></span>
+    {__("Local time")} — <time data-lt="time" class="font-medium text-ink tabular-nums">--:--:--</time>
+    <span data-lt="diff"></span>
 </span>
 
 <script>
@@ -50,13 +48,13 @@ const __ = useTranslations(locale);
         const now = new Date();
 
         const time = root.querySelector<HTMLTimeElement>("[data-lt='time']")!;
-        time.textContent = now.toLocaleTimeString(root.dataset.locale, { timeZone, hour: "numeric", minute: "2-digit" });
+        time.textContent = now.toLocaleTimeString(root.dataset.locale, { timeZone, hour12: false });
         time.dateTime = now.toISOString();
 
         root.querySelector("[data-lt='diff']")!.textContent = describe(offsetHours(timeZone, now), root.dataset);
 
-        // Tick right when the next minute starts
-        timer = setTimeout(update, 60_000 - (now.getTime() % 60_000));
+        // Tick right when the next second starts
+        timer = setTimeout(update, 1000 - (now.getTime() % 1000));
     }
 
     document.addEventListener("astro:page-load", () => {

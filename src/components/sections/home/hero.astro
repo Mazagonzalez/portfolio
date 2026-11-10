@@ -1,67 +1,99 @@
 ---
+// Home opening: a blue line, the name receding into the distance, then a
+// yellow crawl climbing in perspective, with the introduction below it.
 import NowPlaying from "@/components/sections/home/now-playing.astro";
 import LocalTime from "@/components/sections/home/local-time.astro";
-import { socialLinks } from "@/data/social";
+import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
+import IconDownload from "@/components/icons/icon-download.astro";
 import { Image } from "astro:assets";
 import avatar from "@/assets/profile/avatar.webp";
-import { useTranslations } from "@/i18n";
+import { useTranslations, localizePath } from "@/i18n";
 
 const __ = useTranslations(Astro.currentLocale);
 ---
 
-<section class="size-screen mt-32" aria-labelledby="hero-title">
-    <Image
-        src={avatar}
-        alt={__("Illustrated portrait of Carlos Maza")}
-        widths={[96, 192, 288]}
-        sizes="(min-width: 768px) 96px, 80px"
-        loading="eager"
-        class="size-20 md:size-24 rounded-full bg-zinc-800 object-cover outline outline-white/10"
-    />
-    
-    <div class="col gap-2 mt-3">
-        <h1 id="hero-title" class="text-3xl font-bold">
-            {__("Hi, I am Carlos Maza")}
-        </h1>
+<section class="relative h-[max(100vh,760px)] overflow-hidden" aria-labelledby="hero-title">
+    <!-- The intro layers are decoration: the introduction below says the same in a few words -->
+    <p
+        class="absolute inset-x-0 top-[30%] z-2 text-center text-[clamp(20px,2.5vw,34px)] leading-[1.4] text-[#4fc3e8] opacity-0 animate-intro motion-reduce:hidden"
+        aria-hidden="true"
+    >
+        {__("Not so long ago, in a very, very Caribbean city…")}
+    </p>
 
-        <!-- set:html is Astro's version of Blade's {!! !!}: the translation keeps its <strong> tags -->
-        <p
-            class="text-white/80 font-light max-w-104 [&>strong]:font-bold"
-            set:html={__("<strong>Frontend developer</strong> capable of creating, modifying and optimizing functions, ensuring high performance and <strong>an excellent user experience.</strong>")}
-        />
+    <div
+        class="absolute inset-x-0 top-0 bottom-75 max-lg:bottom-87.5 z-2 grid place-items-center pointer-events-none opacity-0 animate-recede motion-reduce:hidden"
+        aria-hidden="true"
+    >
+        <span class="hollow [--stroke:3px] max-sm:[--stroke:2px] text-center text-[clamp(70px,13vw,200px)] font-black leading-[0.86] tracking-[0.01em] uppercase">
+            Carlos<br />Maza
+        </span>
     </div>
 
-    <div class="col gap-3 mt-6">
-        <p class="box-gen w-fit max-w-full px-3 py-1 row flex-wrap gap-x-3 gap-y-1 items-center">
-            <span class="relative flex size-2" aria-hidden="true">
-                <span class="absolute size-full animate-ping rounded-full bg-lime-400/75"></span>
-                <span class="relative size-full rounded-full bg-lime-500"></span>
+    <div
+        class="absolute inset-x-0 top-0 bottom-75 max-lg:bottom-87.5 overflow-hidden perspective-[640px] mask-[linear-gradient(to_bottom,transparent_30%,#000_62%,#000_84%,transparent_100%)]"
+        aria-hidden="true"
+    >
+        <div class="absolute bottom-0 left-1/2 h-[230%] w-[min(92vw,1000px)] -translate-x-1/2 origin-bottom rotate-x-[47deg] overflow-hidden">
+            <div class="absolute inset-x-0 top-full text-[clamp(22px,3.3vw,48px)] font-bold leading-[1.45] tracking-[0.02em] text-justify hyphens-auto text-saga animate-crawl motion-reduce:animate-none motion-reduce:-translate-y-[78vh]">
+                <p class="mb-[0.2em] text-center">{__("Episode IV")}</p>
+                <p class="mb-[0.8em] text-center text-[1.9em] font-black leading-[1.05] uppercase">{__("A New Deploy")}</p>
+                <p class="mb-[1.2em]">{__("These are troubled times for the web. Slow sites, endless forms and soulless designs rule the galaxy, while users flee without looking back.")}</p>
+                <p class="mb-[1.2em]">{__("From Barranquilla, a frontend developer who was going to study Accounting builds fast, clear and well-thought-out interfaces.")}</p>
+                <p class="mb-[1.2em]">{__("Armed with Astro, React and Tailwind, CARLOS MAZA seeks his next mission: to restore balance to the user experience…")}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom offset leaves room for the floating dock -->
+    <div class="absolute inset-x-0 bottom-31 z-3 flex flex-col items-center px-4 text-center">
+        <p class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-black/60 py-1.25 pr-3.5 pl-1.25 text-[13px] text-ink/70">
+            <Image
+                src={avatar}
+                alt={__("Illustrated portrait of Carlos Maza")}
+                widths={[28, 56, 84]}
+                sizes="28px"
+                loading="eager"
+                class="size-7 rounded-full object-cover outline outline-white/20"
+            />
+
+            <span class="relative flex size-1.75 shrink-0" aria-hidden="true">
+                <span class="absolute size-full animate-ping rounded-full bg-[#7dff6b]"></span>
+                <span class="relative size-full rounded-full bg-[#7dff6b]"></span>
             </span>
 
-            <span class="text-sm font-semibold">
-                {__("Available for new projects")}
-            </span>
-
-            <span class="hidden sm:block w-px h-4 bg-white/15" aria-hidden="true"></span>
-
-            <LocalTime />
+            {__("Available for new projects")}
         </p>
 
-        <NowPlaying />
+        <h1 id="hero-title" class="mt-4 text-[clamp(30px,3.4vw,46px)] font-black leading-none tracking-[0.06em] uppercase">
+            <span class="hollow">Carlos</span> Maza
+        </h1>
+
+        <p class="mono mt-2.5 text-balance text-ink/70">
+            {__("Frontend developer · Barranquilla, Colombia")}
+        </p>
+
+        <div class="mt-5 flex w-full max-w-72 flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
+            <a href={localizePath("/projects", Astro.currentLocale)} class="btn btn-main">
+                {__("Explore projects")}
+                <IconArrowUpRight />
+            </a>
+
+            <a href="/Carlos-Maza-CV.pdf" download class="btn">
+                <IconDownload />
+                {__("Download CV")}
+            </a>
+        </div>
     </div>
 
-    <ul class="row items-center gap-7 mt-7" aria-label={__("Social links")}>
-        {socialLinks.map(({ url, label, icon: Icon, target }) => (
-            <li>
-                <a 
-                    href={url} 
-                    target={target === false ? "_self" : "_blank"} 
-                    rel="noopener noreferrer"
-                    aria-label={__(label)}
-                >
-                    <Icon class="icon" />
-                </a>
-            </li>
-        ))}
-    </ul>
+    <div class="mono absolute inset-x-7 bottom-6.5 z-3 flex items-end justify-between gap-5 text-muted max-lg:hidden">
+        <div class="flex flex-col gap-1.5">
+            <span>{__("Sector")} 10.9685° N · 74.7813° W</span>
+            <LocalTime />
+        </div>
+
+        <div class="flex flex-col gap-1.5 text-right">
+            <NowPlaying />
+        </div>
+    </div>
 </section>
