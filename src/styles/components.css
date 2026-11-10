@@ -60,6 +60,32 @@
     @apply bg-saga text-black border-transparent font-medium hover:bg-[#ffe27a] hover:border-transparent hover:shadow-[0_0_0_6px_rgb(255_213_61/0.14),0_0_60px_-6px_var(--color-saga)]
 }
 
+/* Page column used by the home sections */
+.wrap{
+    @apply w-[min(1200px,100%-56px)] max-sm:w-[calc(100%-36px)] mx-auto
+}
+
+/* Scroll reveal (see src/scripts/reveal.ts): only hidden when scripting is on and motion is allowed */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference){
+    .rv{
+        @apply opacity-0 translate-y-6 blur-sm transition-[opacity,translate,filter] duration-1000 ease-saga delay-(--d,0s)
+    }
+
+    .rv.in{
+        @apply opacity-100 translate-y-0 blur-none
+    }
+}
+
+/* Chips: small outlined tags (stack, skills) */
+.chip{
+    @apply font-mono text-[10.5px] tracking-[0.08em] uppercase px-2.5 py-1 border border-white/20 rounded-sm text-ink/70
+}
+
+/* Holo button: outlined in the hologram blue */
+.btn-holo{
+    @apply border-holo/55 text-holo-soft hover:border-holo hover:bg-holo/14
+}
+
 /* Otros */
 .br-hidden{
     @apply hidden md:block

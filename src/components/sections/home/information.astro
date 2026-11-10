@@ -3,20 +3,16 @@ import Card from "@/components/ui/card.astro";
 import IconSuitcase from "@/components/icons/icon-suitcase.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
 import IconStart from "@/components/icons/icon-start.astro";
-import IconProjects from "@/components/icons/icon-projects.astro";
 import IconContact from "@/components/icons/icon-contact.astro";
-import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import IconCopy from "@/components/icons/icon-copy.astro";
 
 import { experience } from "@/data/experience";
 import { featuredSkills } from "@/data/skills";
-import { getProjects, projectTransition } from "@/data/projects";
 import { email } from "@/data/social";
 import { useTranslations, localizePath } from "@/i18n";
 
 const __ = useTranslations(Astro.currentLocale);
-const projects = await getProjects();
 ---
 
 <div class="size-screen py-25 col gap-5">
@@ -96,47 +92,7 @@ const projects = await getProjects();
         </Card>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Projects -->
-        <Card
-            title={__("Projects")}
-            component={IconProjects}
-            overflow={false}
-        >
-            <ul slot="content" class="h-54 col gap-3 pr-3">
-                {projects.map(({ id, data: project }) => (
-                    <li>
-                        <a
-                            href={localizePath(`/projects/${id}`, Astro.currentLocale)}
-                            class="group box-gen p-3 col gap-2 transition-all duration-300 hover:border-white/20!"
-                        >
-                            <div class="row items-center justify-between gap-2">
-                                <h3 class="font-medium text-sm group-hover:text-white w-fit" transition:name={projectTransition(id).title}>
-                                    {project.name}
-                                </h3>
-
-                                <span class="stroke-muted transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:stroke-white">
-                                    <IconArrowUpRight class="size-3" />
-                                </span>
-                            </div>
-
-                            <p class="text-xs text-muted leading-snug">
-                                {__(project.description)}
-                            </p>
-
-                            <ul class="row flex-wrap gap-1.5 mt-1" aria-label={__("Stack")}>
-                                {project.stack.map(( tech ) => (
-                                    <li class="box-gen rounded-full! text-[10px] text-muted py-0.5 px-2">
-                                        {tech}
-                                    </li>
-                                ))}
-                            </ul>
-                        </a>
-                    </li>
-                ))}
-            </ul>
-        </Card>
-
+    <div class="grid grid-cols-1 gap-5">
         <!-- Contact -->
         <Card
             title={__("Contact")}

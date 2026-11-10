@@ -1,0 +1,17 @@
+---
+// Section label: "02  Projects ———— Holotable · 7 files"
+interface Props {
+    index: string;
+    label: string;
+    aside?: string;
+}
+
+const { index, label, aside } = Astro.props;
+---
+
+<div class="mono rv flex items-center gap-3.5 text-muted">
+    <b class="font-medium text-saga">{index}</b>
+    <span class="text-ink">{label}</span>
+    <i class="h-px flex-1 bg-white/10"></i>
+    {aside && <span class="max-sm:hidden">{aside}</span>}
+</div>

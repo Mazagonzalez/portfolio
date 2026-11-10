@@ -108,6 +108,40 @@
       transform: translateY(calc(-100% - 125vh));
     }
   }
+
+  /* Holograms: unsteady light and a scan line sweeping down (animate-flicker, animate-scan) */
+  --animate-flicker: flicker 5s steps(1) infinite;
+  --animate-scan: scan 4.5s linear infinite;
+
+  @keyframes flicker {
+    0%, 100% {
+      opacity: 1;
+    }
+    42% {
+      opacity: 0.93;
+    }
+    44% {
+      opacity: 1;
+    }
+    71% {
+      opacity: 0.88;
+    }
+    72% {
+      opacity: 1;
+    }
+    73% {
+      opacity: 0.95;
+    }
+    75% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scan {
+    to {
+      top: 110%;
+    }
+  }
 }
 
 /* Page transitions: smoother morph for shared elements (project cover, title, dock) */
