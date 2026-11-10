@@ -1,0 +1,27 @@
+---
+// Star sky behind every page. The canvas persists across view transitions,
+// so the stars never reset; they jump to hyperspace while a page loads.
+---
+
+<canvas id="sky" aria-hidden="true" class="fixed inset-0 z-0 size-full pointer-events-none" transition:persist="sky"></canvas>
+
+<script>
+    import { createSky } from "@/components/backgrounds/sky";
+
+    const sky = createSky(document.getElementById("sky") as HTMLCanvasElement);
+    let timer: ReturnType<typeof setTimeout>;
+
+    // Jump while a navigation is in flight, and settle shortly after the new page shows
+    document.addEventListener("astro:before-preparation", () => {
+        clearTimeout(timer);
+        sky.warp(true);
+    });
+    document.addEventListener("astro:page-load", () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => sky.warp(false), 450);
+    });
+
+    // Anything else (the easter egg, a hovered button) can ask for a jump:
+    // window.dispatchEvent(new CustomEvent("sky:warp", { detail: true }))
+    window.addEventListener("sky:warp", (event) => sky.warp((event as CustomEvent<boolean>).detail));
+</script>

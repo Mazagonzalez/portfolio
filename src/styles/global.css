@@ -6,10 +6,29 @@
 @import "tw-animate-css";
 
 @theme {
-    /* Self-hosted Geist (see `fonts` in astro.config.mjs) */
-    --font-sans: var(--font-geist);
+    /* Self-hosted fonts (see `fonts` in astro.config.mjs) */
+    --font-sans: var(--font-franklin), ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Code", Consolas, monospace;
 
-    --color-surface: #171717;
-    --color-muted: #a0a0a0;
+    --color-surface: #000;
+    --color-ink: #ecebe6;
+    --color-muted: #7d7f87;
+    --color-saga: #ffd53d;
+    --color-holo: #62dcff;
     --color-scrollbar: #696969;
+
+    --ease-saga: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+    ::selection {
+        background: var(--color-saga);
+        color: #000;
+    }
+
+    :focus-visible {
+        outline: 1px solid var(--color-saga);
+        outline-offset: 4px;
+        border-radius: 4px;
+    }
 }

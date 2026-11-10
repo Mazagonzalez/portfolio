@@ -1,18 +1,9 @@
 ---
-// Konami code (↑ ↑ ↓ ↓ ← → ← → B A) jumps the whole page to lightspeed
+// Konami code (↑ ↑ ↓ ↓ ← → ← → B A) sends the sky to lightspeed
 import { useTranslations } from "@/i18n";
 
 const __ = useTranslations(Astro.currentLocale);
 ---
-
-<div
-    id="lightspeed"
-    hidden
-    aria-hidden="true"
-    class="fixed inset-0 z-100 bg-[#05050a] pointer-events-none opacity-0 transition-opacity duration-500 data-active:opacity-100"
->
-    <canvas class="block"></canvas>
-</div>
 
 <p
     id="lightspeedToast"
@@ -25,13 +16,12 @@ const __ = useTranslations(Astro.currentLocale);
 <script>
     const SEQUENCE = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"];
     const WARP_MS = 2600;
-    const FADE_MS = 500;
 
     const recent: string[] = [];
     let running = false;
-    let cleanup: (() => void) | null = null;
 
     const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const warp = (on: boolean) => window.dispatchEvent(new CustomEvent("sky:warp", { detail: on }));
 
     // The messages come translated in the toast's data-* attributes
     async function showToast(message: "unlocked" | "found") {
@@ -45,44 +35,18 @@ const __ = useTranslations(Astro.currentLocale);
     }
 
     async function jumpToLightspeed() {
-        const overlay = document.getElementById("lightspeed");
-        const canvas = overlay?.querySelector("canvas");
-        if (!overlay || !canvas || running) return;
-
+        if (running) return;
         running = true;
 
-        // Respect reduced motion: skip the animation, keep the reward
-        if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            await showToast("unlocked");
-            running = false;
-            return;
-        }
+        // With reduced motion the sky ignores the jump: keep the reward only
+        const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-        // Loaded on demand: costs nothing until someone finds the secret
-        const { createStarfield } = await import("@/components/backgrounds/starfield");
-
-        overlay.hidden = false;
-        const starfield = createStarfield(overlay, canvas, { starCount: 900, warpSpeed: 32 });
-        cleanup = () => {
-            starfield.destroy();
-            overlay.hidden = true;
-            delete overlay.dataset.active;
-            cleanup = null;
-            running = false;
-        };
-
-        // Force a reflow so the fade-in transition starts from opacity 0
-        void overlay.offsetHeight;
-        overlay.dataset.active = "";
-        starfield.warp(true);
-        showToast("found");
+        warp(true);
+        showToast(reduced ? "unlocked" : "found");
 
         await wait(WARP_MS);
-        starfield.warp(false);
-        delete overlay.dataset.active;
-
-        await wait(FADE_MS);
-        cleanup?.();
+        warp(false);
+        running = false;
     }
 
     document.addEventListener("keydown", (event) => {
@@ -99,9 +63,6 @@ const __ = useTranslations(Astro.currentLocale);
             jumpToLightspeed();
         }
     });
-
-    // Navigating mid-jump removes the overlay, so stop the animation too
-    document.addEventListener("astro:before-swap", () => cleanup?.());
 
     // Kept on one line: the Console Ninja VS Code extension rewrites console
     // calls and breaks Vite's dependency scan when the call spans several lines

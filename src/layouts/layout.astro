@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/navbar.astro";
 import Footer from "@/components/layout/footer.astro";
 import VercelInsights from "@/components/layout/vercel-insights.astro";
 import CommandPalette from "@/components/layout/command-palette.astro";
+import Sky from "@/components/layout/sky.astro";
 import EasterEgg from "@/components/layout/easter-egg.astro";
 import LanguageSwitcher from "@/components/layout/language-switcher.astro";
 import { email, socialLinks } from "@/data/social";
@@ -121,8 +122,8 @@ const jsonLd = {
 		<ClientRouter transition:persist />
 
 		<!-- Fonts (self-hosted, see `fonts` in astro.config.mjs) -->
-		<!-- Only the upright style is preloaded; italics (rare) load on demand -->
-		<Font cssVariable="--font-geist" preload={[{ style: "normal" }]} />
+		<Font cssVariable="--font-franklin" preload={[{ style: "normal", weight: "400" }, { style: "normal", weight: "900" }]} />
+		<Font cssVariable="--font-geist-mono" preload={[{ style: "normal", weight: "400" }]} />
 
 		<!-- Favicon -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -163,6 +164,8 @@ const jsonLd = {
 		>
 			{__("Skip to content")}
 		</a>
+
+		<Sky />
 
 		<LanguageSwitcher alternates={alternates} />
 

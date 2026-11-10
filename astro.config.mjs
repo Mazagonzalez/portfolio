@@ -47,16 +47,24 @@ export default defineConfig({
     }),
   ],
 
-  // Geist is downloaded at build time and served from this domain (no
+  // Fonts are downloaded at build time and served from this domain (no
   // render-blocking request to Google), with a metric-matched fallback
   fonts: [
     {
       provider: fontProviders.google(),
-      name: "Geist",
-      cssVariable: "--font-geist",
-      weights: ["100 900"],
+      name: "Libre Franklin",
+      cssVariable: "--font-franklin",
+      weights: [300, 400, 500, 700, 900],
       subsets: ["latin"],
       fallbacks: ["sans-serif"],
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Geist Mono",
+      cssVariable: "--font-geist-mono",
+      weights: [400, 500],
+      subsets: ["latin"],
+      fallbacks: ["monospace"],
     },
   ],
 
