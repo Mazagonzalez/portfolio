@@ -5,7 +5,7 @@
 //   __("Replies within :time", { time: "24h" })
 //
 // English needs no file, and a missing translation falls back to the English
-// text instead of breaking. `npm run i18n:check` lists missing and unused keys.
+// text instead of breaking. `pnpm i18n:check` lists missing and unused keys.
 import es from "./es.json";
 
 export const locales = ["en", "es"] as const;

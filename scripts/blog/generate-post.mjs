@@ -4,8 +4,8 @@
 // so nothing gets published until that PR is reviewed and merged.
 //
 // Locally: put GEMINI_API_KEY in .env (https://aistudio.google.com/apikey), then
-//   npm run blog:generate                      next idea from topics.md, or Gemini picks
-//   npm run blog:generate -- "Your topic"      a specific topic
+//   pnpm blog:generate                      next idea from topics.md, or Gemini picks
+//   pnpm blog:generate "Your topic"      a specific topic
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync, appendFileSync } from "node:fs";
 import "../load-env.mjs";
 

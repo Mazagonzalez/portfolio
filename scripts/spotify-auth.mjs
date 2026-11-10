@@ -3,7 +3,7 @@
 // 1. Create an app at https://developer.spotify.com/dashboard
 //    and add this Redirect URI: http://127.0.0.1:8888/callback
 // 2. Put SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET in your .env file
-// 3. Run: npm run spotify:auth   and open the URL it prints
+// 3. Run: pnpm spotify:auth   and open the URL it prints
 //
 // The refresh token is printed in this terminal only; copy it into .env
 // and into Vercel's environment variables. Nothing is sent anywhere else.

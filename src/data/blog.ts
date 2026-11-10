@@ -2,7 +2,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 
 export type Post = CollectionEntry<"blog">;
 
-// Newest first. Drafts only show up in `npm run dev`
+// Newest first. Drafts only show up in `pnpm dev`
 export async function getPosts() {
     const posts = await getCollection("blog", ({ data }) => import.meta.env.DEV || !data.draft);
 

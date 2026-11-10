@@ -3,7 +3,7 @@
 //   - placeholders: ":name" in the key but not in the translation, or vice versa (fails)
 //   - unused: in es.json but the text no longer appears anywhere in src (warning)
 //
-//   npm run i18n:check
+//   pnpm i18n:check
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 

@@ -34,7 +34,7 @@ const blog = defineCollection({
         pubDate: z.coerce.date(),
         updatedDate: z.coerce.date().optional(),
         tags: z.array(z.string()).default([]),
-        // Drafts are visible in `npm run dev` but never built
+        // Drafts are visible in `pnpm dev` but never built
         draft: z.boolean().default(false),
         // Posts drafted by the Gemini workflow (scripts/blog) get a small label
         ai: z.boolean().default(false),

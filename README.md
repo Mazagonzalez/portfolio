@@ -16,11 +16,11 @@ Live: [amg-devel.vercel.app](https://amg-devel.vercel.app)
 Requires Node.js 22.12 or newer.
 
 ```sh
-npm install
-npm run dev       # http://localhost:4321
-npm run build     # output in ./.vercel/output
-npm run check     # type-check .astro and .ts files
-npm run preview   # serve the production build
+pnpm install
+pnpm dev       # http://localhost:4321
+pnpm build     # output in ./.vercel/output
+pnpm check     # type-check .astro and .ts files
+pnpm preview   # serve the production build
 ```
 
 ## Project structure
@@ -59,7 +59,7 @@ served by `src/pages/api/now-playing.ts`, which runs as a Vercel function
    with the Redirect URI `http://127.0.0.1:8888/callback`.
 2. Copy `.env.example` to `.env` and fill in `SPOTIFY_CLIENT_ID` and
    `SPOTIFY_CLIENT_SECRET`.
-3. Run `npm run spotify:auth`, open the URL it prints and accept. Paste the
+3. Run `pnpm spotify:auth`, open the URL it prints and accept. Paste the
    refresh token it gives you into `.env`.
 4. Add the three variables in Vercel → Settings → Environment Variables.
 
@@ -81,8 +81,8 @@ this way have `ai: true` and a small "AI-assisted" label.
   When the list runs out, Gemini picks a topic that isn't already covered.
 - **Voice and audience:** `scripts/blog/persona.md`. Edit it to steer the blog.
 - **Run it now:** Actions → Blog post → Run workflow (you can type a topic).
-- **Locally:** put `GEMINI_API_KEY` in `.env` and run `npm run blog:generate`,
-  or `npm run blog:generate -- "Your topic"`.
+- **Locally:** put `GEMINI_API_KEY` in `.env` and run `pnpm blog:generate`,
+  or `pnpm blog:generate "Your topic"`.
 
 One-time setup in GitHub (Settings → Secrets and variables → Actions):
 
@@ -105,8 +105,8 @@ products. The script only sends public info (the persona and post titles).
 
 ## Continuous integration
 
-Every pull request runs `.github/workflows/check.yml`: a clean `npm ci`, a
-type check (`npm run check`) and a full build. If either step fails, the PR
+Every pull request runs `.github/workflows/check.yml`: a clean `pnpm install --frozen-lockfile`, a
+type check (`pnpm check`) and a full build. If either step fails, the PR
 shows a red check before anything reaches `main`.
 
 ## Adding a project
