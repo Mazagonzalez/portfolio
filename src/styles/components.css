@@ -51,7 +51,7 @@
 
 /* Only the outer card blurs. A box inside another one (icons, pills, list
    items) would blur what is already blurred: it looks the same, but every
-   blur is redone on each frame of the animated aurora behind them */
+   blur is redone on each frame of the animated sky behind them */
 .box-gen .box-gen{
     @apply backdrop-blur-none
 }

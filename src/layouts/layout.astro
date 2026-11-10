@@ -1,7 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import { Font } from "astro:assets";
-import Aurora from "@/components/backgrounds/aurora.jsx";
 import Navbar from "@/components/layout/navbar.astro";
 import Footer from "@/components/layout/footer.astro";
 import VercelInsights from "@/components/layout/vercel-insights.astro";
@@ -164,16 +163,6 @@ const jsonLd = {
 		>
 			{__("Skip to content")}
 		</a>
-
-		<div class="fixed top-0 left-0 w-screen h-screen" aria-hidden="true" transition:persist="aurora">
-			<Aurora
-				client:only="react"
-				colorStops={["#7E57C7", "#1D93C2", "#7453ED"]}
-				blend={0.5}
-				amplitude={2.5}
-				speed={0.3}
-			/>
-		</div>
 
 		<LanguageSwitcher alternates={alternates} />
 

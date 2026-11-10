@@ -8,7 +8,6 @@ Live: [amg-devel.vercel.app](https://amg-devel.vercel.app)
 
 - [Astro 7](https://astro.build) with view transitions and content collections
 - [Tailwind CSS 4](https://tailwindcss.com)
-- React islands for the animated backgrounds (`Aurora`, `Hyperspace`, built on [OGL](https://github.com/oframe/ogl))
 - Vercel Web Analytics and Speed Insights (production deployments only)
 
 ## Getting started
@@ -33,17 +32,16 @@ src/
 ├── assets/
 │   └── projects/   project screenshots (optimized by Astro)
 ├── components/
-│   ├── backgrounds/  Aurora and Hyperspace (React + OGL)
+│   ├── backgrounds/  starfield canvas
 │   ├── blog/         post metadata (date, reading time, AI label)
 │   ├── icons/        SVG icons (skills/ for tech logos)
 │   ├── layout/       navbar and footer
-│   ├── music/        music player and its spinning disk
 │   ├── sections/     page sections (home/)
 │   └── ui/           reusable pieces: card, carousel
 ├── content/
 │   ├── blog/       one Markdown file per post
 │   └── projects/   one Markdown file per project (case studies)
-├── data/           content: experience, skills, social links, tracks
+├── data/           content: experience, skills, social links
 ├── layouts/        base layout with SEO / Open Graph metadata
 ├── pages/          home, about, projects, blog, skills, 404, rss.xml
 └── styles/         global Tailwind entry and custom CSS

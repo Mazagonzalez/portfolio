@@ -7,7 +7,6 @@ import IconStart from "@/components/icons/icon-start.astro";
 import IconCode from "@/components/icons/icon-code.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import IconDownload from "@/components/icons/icon-download.astro";
-import IconMusic from "@/components/icons/icon-music.astro";
 import IconBook from "@/components/icons/icon-book.astro";
 import IconLanguage from "@/components/icons/icon-language.astro";
 
@@ -20,13 +19,13 @@ interface Item {
     label: string;
     icon: (props: Record<string, any>) => any;
     href?: string;
-    action?: "copy-email" | "toggle-music" | "switch-language";
+    action?: "copy-email" | "switch-language";
     hint?: string;
     keywords?: string;
     download?: boolean;
     external?: boolean;
     // Only shown when that element exists on the current page
-    requires?: "player" | "switcher";
+    requires?: "switcher";
 }
 
 const locale = getLocale(Astro.currentLocale);
@@ -75,7 +74,6 @@ const groups: { label: string; items: Item[] }[] = [
             { label: __("Copy email"), action: "copy-email", icon: IconEmail, hint: email, keywords: "copy contact mail" },
             { label: __("Send an email"), href: `mailto:${email}`, icon: IconEmail, keywords: "send contact mail write" },
             { label: __("Download CV"), href: "/Carlos-Maza-CV.pdf", download: true, icon: IconDownload, keywords: "download resume curriculum pdf" },
-            { label: __("Play music"), action: "toggle-music", icon: IconMusic, keywords: "play song player pause audio", requires: "player" },
             // Always written in the other language, so it can be found by whoever needs it
             {
                 label: locale === "es" ? "View in English" : "Ver en español",
@@ -102,8 +100,6 @@ const groups: { label: string; items: Item[] }[] = [
     transition:persist={`command-palette-${locale}`}
     data-copied={__("Copied!")}
     data-copy-failed={__("Couldn't copy")}
-    data-play={__("Play music")}
-    data-pause={__("Pause music")}
     class="w-[min(560px,calc(100%-32px))] max-w-none mx-auto mt-[15vh] p-0 bg-transparent text-white overflow-visible backdrop:bg-black/50 backdrop:backdrop-blur-xs backdrop:animate-overlay-in motion-reduce:backdrop:animate-none"
 >
     <div class="box-gen bg-zinc-900/85! overflow-hidden shadow-2xl shadow-black/50 animate-pop-in motion-reduce:animate-none">
@@ -206,7 +202,6 @@ const groups: { label: string; items: Item[] }[] = [
     function filter(query: string) {
         const words = query.toLowerCase().split(/\s+/).filter(Boolean);
         const present = {
-            player: Boolean(document.getElementById("playBtn")),
             switcher: Boolean(document.querySelector("[data-switch-locale]")),
         };
 
@@ -225,16 +220,9 @@ const groups: { label: string; items: Item[] }[] = [
         setActive(0);
     }
 
-    function updateMusicLabel() {
-        const player = document.getElementById("player") as HTMLAudioElement | null;
-        const label = dialog.querySelector("[data-action='toggle-music'] .cmdk-label");
-        if (label) label.textContent = player && !player.paused ? dialog.dataset.pause! : dialog.dataset.play!;
-    }
-
     function open() {
         if (dialog.open) return;
         input.value = "";
-        updateMusicLabel();
         filter("");
         dialog.showModal();
         input.focus();
@@ -269,9 +257,7 @@ const groups: { label: string; items: Item[] }[] = [
 
         close();
 
-        if (action === "toggle-music") {
-            document.getElementById("playBtn")?.click();
-        } else if (action === "switch-language") {
+        if (action === "switch-language") {
             document.querySelector<HTMLAnchorElement>("[data-switch-locale]")?.click();
         } else if (href && "download" in option.dataset) {
             const link = document.createElement("a");

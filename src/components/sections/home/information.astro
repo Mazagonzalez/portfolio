@@ -8,8 +8,6 @@ import IconContact from "@/components/icons/icon-contact.astro";
 import IconArrowUpRight from "@/components/icons/icon-arrow-up-right.astro";
 import IconEmail from "@/components/icons/icon-email.astro";
 import IconCopy from "@/components/icons/icon-copy.astro";
-import Hyperspace from "@/components/backgrounds/hyperspace.jsx";
-import MusicPlayer from "@/components/music/music-player.astro";
 
 import { experience } from "@/data/experience";
 import { featuredSkills } from "@/data/skills";
@@ -98,7 +96,7 @@ const projects = await getProjects();
         </Card>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <!-- Projects -->
         <Card
             title={__("Projects")}
@@ -139,82 +137,45 @@ const projects = await getProjects();
             </ul>
         </Card>
 
-        <div class="col gap-5">
-            <!-- Tracks -->
-            <Card
-                headerContent={false}
-                height="h-[30%]"
-            >
-                <MusicPlayer slot="content" />
-            </Card>
+        <!-- Contact -->
+        <Card
+            title={__("Contact")}
+            component={IconContact}
+        >
+            <p slot="header-extra" class="text-xs text-white/50">
+                {__("Replies within :time", { time: "24h" })}
+            </p>
 
-            <!-- Contact -->
-            <Card
-                title={__("Contact")}
-                component={IconContact}
-                height="h-[70%]"
-            >
-                <p slot="header-extra" class="text-xs text-white/50">
-                    {__("Replies within :time", { time: "24h" })}
+            <div slot="content" class="col">
+                <p class="text-sm text-muted">
+                    {__("Creating unique digital experiences.")} <br>
+                    {__("Let's talk about your next project!")}
                 </p>
 
-                <div slot="content" class="col">
-                    <p class="text-sm text-muted">
-                        {__("Creating unique digital experiences.")} <br>
-                        {__("Let's talk about your next project!")}
-                    </p>
+                <!-- mailto does nothing without a mail app, so the address can also be copied -->
+                <div class="row gap-2 mt-8">
+                    <a href={`mailto:${email}`} class="button-main">
+                        <IconEmail class="size-4 stroke-zinc-400" />
 
-                    <!-- mailto does nothing without a mail app, so the address can also be copied -->
-                    <div class="row gap-2 mt-8">
-                        <a href={`mailto:${email}`} class="button-main">
-                            <IconEmail class="size-4 stroke-zinc-400" />
+                        <span class="text-sm">{__("Send an email")}</span>
+                    </a>
 
-                            <span class="text-sm">{__("Send an email")}</span>
-                        </a>
+                    <button
+                        type="button"
+                        id="copyEmail"
+                        data-email={email}
+                        data-copied={__("Copied!")}
+                        data-copy-failed={__("Couldn't copy")}
+                        title={email}
+                        class="button-main"
+                    >
+                        <IconCopy class="size-4 stroke-zinc-400" />
 
-                        <button
-                            type="button"
-                            id="copyEmail"
-                            data-email={email}
-                            data-copied={__("Copied!")}
-                            data-copy-failed={__("Couldn't copy")}
-                            title={email}
-                            class="button-main"
-                        >
-                            <IconCopy class="size-4 stroke-zinc-400" />
-
-                            <span class="text-sm" aria-live="polite">{__("Copy email")}</span>
-                        </button>
-                    </div>
+                        <span class="text-sm" aria-live="polite">{__("Copy email")}</span>
+                    </button>
                 </div>
-            </Card>
-        </div>
-
-        <!-- Signature -->
-        <div class="md:col-span-2 lg:col-span-1" aria-hidden="true">
-            <Card
-                headerContent={false}
-                overflow={false}
-            >
-                <!-- Hover on desktop; on touch screens, press and hold (:active) -->
-                <div slot="content" class="group relative h-68 w-full center-content overflow-hidden rounded-lg select-none [-webkit-touch-callout:none]">
-                    <Hyperspace client:only="react" />
-
-                    <div class="relative col items-center gap-1 text-center pointer-events-none transition-opacity duration-300 group-hover:opacity-0 group-active:opacity-0">
-                        <span class="text-2xl font-bold tracking-wide">AMG</span>
-                        <span class="text-[10px] uppercase tracking-[0.2em] text-white/50">
-                            <span class="pointer-coarse:hidden">{__("Hover to jump to lightspeed")}</span>
-                            <span class="hidden pointer-coarse:inline">{__("Hold to jump to lightspeed")}</span>
-                        </span>
-                    </div>
-
-                    <!-- Easter egg hint: shows up once the stars reach lightspeed -->
-                    <p class="absolute inset-x-0 bottom-5 text-center text-[11px] tracking-[0.35em] text-white/35 pointer-events-none opacity-0 blur-sm transition-all duration-700 group-hover:opacity-100 group-hover:blur-none group-hover:delay-700 group-active:opacity-100 group-active:blur-none group-active:delay-700">
-                        ↑ ↑ ↓ ↓ ← → ← → B A
-                    </p>
-                </div>
-            </Card>
-        </div>
+            </div>
+        </Card>
     </div>
 </div>
 

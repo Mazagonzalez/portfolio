@@ -2,7 +2,6 @@
 import { defineConfig, envField, fontProviders } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite";
 
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 
@@ -40,7 +39,6 @@ export default defineConfig({
   },
 
   integrations: [
-    react(),
     sitemap({
       // hreflang alternates between /about and /es/about
       i18n: { defaultLocale: "en", locales: { en: "en-US", es: "es-CO" } },
