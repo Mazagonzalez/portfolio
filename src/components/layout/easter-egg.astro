@@ -103,8 +103,8 @@ const __ = useTranslations(Astro.currentLocale);
     // Navigating mid-jump removes the overlay, so stop the animation too
     document.addEventListener("astro:before-swap", () => cleanup?.());
 
-    console.log(
-        "%cpsst… try ↑ ↑ ↓ ↓ ← → ← → B A",
-        "color: #7453ED; font-size: 12px; font-family: monospace;",
-    );
+    // Kept on one line: the Console Ninja VS Code extension rewrites console
+    // calls and breaks Vite's dependency scan when the call spans several lines
+    const hint = "%cpsst… try ↑ ↑ ↓ ↓ ← → ← → B A", hintStyle = "color: #7453ED; font-size: 12px; font-family: monospace;";
+    console.log(hint, hintStyle);
 </script>
